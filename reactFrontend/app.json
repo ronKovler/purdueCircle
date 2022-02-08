@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "purdueCircle",
-    "slug": "purdueCircle",
+    "name": "reactFrontend",
+    "slug": "reactFrontend",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

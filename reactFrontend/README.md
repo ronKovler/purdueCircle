@@ -3,6 +3,8 @@ To run the webpage locally, you will need Node.JS and npm which can be installed
 
 Then run `npm install -g expo-cli` in command line. 
 
+To run the web app, execute `npm run web`.
+
 # Navigation:
 
 https://reactnavigation.org/docs/getting-started
