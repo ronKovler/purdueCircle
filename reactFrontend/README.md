@@ -1,8 +1,9 @@
 # Setup
 To run the webpage locally, you will need Node.JS and npm which can be installed [here](https://nodejs.org/en/download/)
 
-Once installed, navigate to ./purdueCircle and run the command 
-> npm run web
+Then run `npm install -g expo-cli` in command line. 
+
+To run the web app, execute `npm run web`.
 
 # Navigation:
 
