@@ -1,4 +1,3 @@
-
 import { StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
 import React, { useState } from 'react';
 
