@@ -26,7 +26,6 @@ export default function App() {
           component={HomeScreen}
           options={{ title: "PurdueCircle" }} />
         <Stack.Screen name="Login" component={LoginScreen} />
-        
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -39,23 +38,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  loginBox: {
-    backgroundColor: '#545454',
-
-  },
-
-  inputBox: {
-    backgroundColor: '#d9d9d9',
-    textDecorationColor: '#a6a6a6',
-    justifyContent: 'flex-start'
-  },
-
   button: {
     backgroundColor: '#ffde59',
     justifyContent: 'center'
   },
 
-  image: {
-    margin: 40
-  },
 });
