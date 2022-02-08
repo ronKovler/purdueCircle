@@ -7,7 +7,7 @@ export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.loginBox}>
-        <Image style={styles.image} source={require('../assets/logo.png')} />
+        <Image style={styles.image} source={require('../assets/logo.svg')} />
         <Text style={styles.header}>Login</Text>
         <TextInput style={styles.inputBox}
           placeholder='Username/Email'
@@ -21,7 +21,7 @@ export default function LoginScreen({ navigation }) {
   );
 }
 
-//TODO: Adjust sizing of page to resize to display size
+//TODO: Adjust sizing of page to resize to display size? do we want to fix for mobile rn?
 const styles = StyleSheet.create({
   container: {
     //resizeMode: 'contain',
@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
     resizeMode: 'contain',
-    aspectRatio: 1.044,
-    margin: 15,
+    aspectRatio: 1,
+    //margin: 15,
     maxWidth: 968,
   },
 
