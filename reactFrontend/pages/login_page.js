@@ -1,4 +1,6 @@
-import { StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Image, Alert } from 'react-native';
+import { NavigationContainer, StackActions } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 
 export default function LoginScreen({ navigation }) {
@@ -16,6 +18,9 @@ export default function LoginScreen({ navigation }) {
           placeholder='Password'
           secureTextEntry={true}
           onChangeText={password => setPassword(password)} />
+        <View style={styles.button}>
+          <Button title="Login" onPress={() => Alert.alert("bad")}/>
+        </View>
       </View>
     </View>
   );
@@ -24,7 +29,7 @@ export default function LoginScreen({ navigation }) {
 //TODO: Adjust sizing of page to resize to display size? do we want to fix for mobile rn?
 const styles = StyleSheet.create({
   container: {
-    //resizeMode: 'contain',
+    resizeMode: 'contain',
     flex: 1,
     backgroundColor: '#737373',
     alignItems: 'center',
@@ -37,14 +42,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#545454',
     justifyContent: 'center',
     alignContent: 'center',
-    padding: 5,
+    padding: 10,
   },
 
   inputBox: {
     backgroundColor: '#d9d9d9',
     textDecorationColor: '#a6a6a6',
     justifyContent: 'center',
-    padding: 5,
+    padding: 7.5,
     margin: 5,
     minWidth: 200,
   },
@@ -59,10 +64,16 @@ const styles = StyleSheet.create({
     maxWidth: 968,
   },
 
+  button:{
+    margin: 5,
+  },
+
   header: {
     textAlign: 'center',
     color: '#ffc000',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    margin: 5,
+    fontSize: 18,
   },
 }
 )
