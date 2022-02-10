@@ -7,11 +7,24 @@ import LoginScreen from './pages/login_page';
 
 const Stack = createNativeStackNavigator();
 
+const globalScreenOptions = {
+  headerStyle: { backgroundColor: "#ffde59" },
+  headerTitleStyle: { color: "white" },
+  headerTintColor: "white",
+};
+
 function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text>Welcome to Purdue Circle!</Text>
-      <Button title="Login" onPress={() => navigation.navigate('Login')} />
+      <Text style={styles.welcomeTxt}>Welcome to Purdue Circle!</Text>
+      <View style={{ flexDirection: "row" }}>
+        <View style={styles.button}>
+          <Button color="#CEB888" title="Login" onPress={() => navigation.navigate('Login')} />
+        </View>
+        <View style={styles.button}>
+          <Button color="#CEB888" title="Sign up" onPress={() => navigation.navigate('Signup')} />
+        </View>
+      </View>
       <StatusBar style="auto" />
     </View>
   )
@@ -20,7 +33,7 @@ function HomeScreen({ navigation }) {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={globalScreenOptions}>
         <Stack.Screen
           name="Home"
           component={HomeScreen}
@@ -38,9 +51,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  welcomeTxt: {
+    marginBottom: 10
+  },
+
   button: {
-    backgroundColor: '#ffde59',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    margin: 1,
   },
 
 });

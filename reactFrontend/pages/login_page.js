@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Image, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 
 export default function LoginScreen({ navigation }) {
@@ -16,6 +16,11 @@ export default function LoginScreen({ navigation }) {
           placeholder='Password'
           secureTextEntry={true}
           onChangeText={password => setPassword(password)} />
+        <TouchableOpacity 
+          style={styles.loginBtn}
+        >
+          <Text style={styles.loginTxt}>Login</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -63,6 +68,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#ffc000',
     fontWeight: 'bold'
+  },
+
+  loginBtn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#CEB888'
   },
 }
 )
