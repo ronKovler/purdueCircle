@@ -9,7 +9,7 @@
 
 public class Guest {
 
-	public Guest() {}
+    public Guest() {}
 
     /*
     * Class methods
@@ -26,5 +26,5 @@ public class Guest {
     /* show selected user profile */
     public void getUserProfile(User user) {
     }
-	
+    
 }

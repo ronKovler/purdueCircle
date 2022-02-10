@@ -12,27 +12,27 @@ import java.time.LocalDateTime;
 
 public class Post {
 
-	public Post(String content, User user, String topic) {
-		this.content = content;
-		this.user = user;
-		this.topic = topic;
-	}
+    public Post(String content, User user, String topic) {
+        this.content = content;
+        this.user = user;
+        this.topic = topic;
+    }
 
     /*
     * Class variables
     */
 
-	/* Text, picture, or URL data in content */
+    /* Text, picture, or URL data in content */
     private String content;
 
-	/* User that made post */
+    /* User that made post */
     private User user;
 
     private LocalDateTime timePosted;
 
     private int likes;
 
-	/* List of comments on post */
+    /* List of comments on post */
     private ArrayList<Comment> comments;
 
     private String topic;
@@ -66,23 +66,23 @@ public class Post {
     }
 
     public User getUser() {
-    	return user;
+        return user;
     }
 
     public LocalDateTime getTimePosted() {
-    	return timePosted;
+        return timePosted;
     }
 
     public int getLikes() {
-    	return likes;
+        return likes;
     }
 
     public String getTopic() {
-    	return topic;
+        return topic;
     }
 
     public void setTopic(String topic) {
-    	this.topic = topic;
+        this.topic = topic;
     }
-	
+    
 }

@@ -11,22 +11,22 @@ import java.util.ArrayList;
 
 public class User {
 
-	public User(String firstName, String lastName, String email, String username, String password) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-	}
+    public User(String firstName, String lastName, String email, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
 
     /*
     * Class variables
     */
 
-	/* Required user field */
+    /* Required user field */
     private String firstName;
 
-	/* Required user field */
+    /* Required user field */
     private String lastName;
 
     /* Unique to user, cannot be changed, required user field */
@@ -35,7 +35,7 @@ public class User {
     /* Unique to user, requried user field */
     private String username;
 
-	/* Required user field */
+    /* Required user field */
     private String password;
 
     private String phoneNumber;

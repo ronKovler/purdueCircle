@@ -11,19 +11,19 @@ import java.time.LocalDateTime;
 
 public class Comment {
 
-	public Comment(String content, User user) {
-		this.content = content;
-		this.user = user;
-	}
+    public Comment(String content, User user) {
+        this.content = content;
+        this.user = user;
+    }
 
     /*
     * Class variables
     */
 
-	/* Text, picture, or URL data in content */
+    /* Text, picture, or URL data in content */
     private String content;
 
-	/* User that made post */
+    /* User that made post */
     private User user;
 
     private LocalDateTime timePosted;
@@ -41,11 +41,11 @@ public class Comment {
     }
 
     public User getUser() {
-    	return user;
+        return user;
     }
 
     public LocalDateTime getTimePosted() {
-    	return timePosted;
+        return timePosted;
     }
 
 }
