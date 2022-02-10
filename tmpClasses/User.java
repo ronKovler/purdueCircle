@@ -29,7 +29,7 @@ public class User {
     /* Required user field */
     private String lastName;
 
-    /* Unique to user, cannot be changed, required user field */
+    /* Serves as uniqueID, cannot be changed, required user field */
     private String email;
 
     /* Unique to user, requried user field */
