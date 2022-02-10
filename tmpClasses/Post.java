@@ -16,11 +16,15 @@ public class Post {
         this.content = content;
         this.user = user;
         this.topic = topic;
+        setPostID();
     }
 
     /*
     * Class variables
     */
+
+    /* Unique ID for post, set when created */
+    private int postID;
 
     /* Text, picture, or URL data in content */
     private String content;
@@ -56,6 +60,13 @@ public class Post {
     /*
     * Getters and setters
     */
+
+    public int getPostID() {
+        return postID;
+    }
+
+    private void setPostID() {
+    }
 
     public String getContent() {
         return content;
