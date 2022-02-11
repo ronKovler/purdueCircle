@@ -1,6 +1,19 @@
 import { StyleSheet } from "react-native";
 
+const FormInput = (props) =>{
+    return (
+        <TextInput style={styles.accountInputBox}
+            placeholder={props.placeholder}
+            spellCheck={false}
+            autoCorrect={false}/>
+    )
+}
+
 const styles = StyleSheet.create({
+    border:{
+        flex: 1,
+        backgroundColor: '#737373',
+    },
     container: {
         resizeMode: 'contain',
         flex: 1,
@@ -16,7 +29,7 @@ const styles = StyleSheet.create({
         margin: 5,
         fontSize: 18,
     },
-    inputBox: {
+    accountInputBox: {
         backgroundColor: '#d9d9d9',
         textDecorationColor: '#a6a6a6',
         justifyContent: 'center',
@@ -47,4 +60,4 @@ const styles = StyleSheet.create({
 
 })
 
-export { styles };
+export { styles, FormInput };
