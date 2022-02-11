@@ -25,7 +25,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown:false}}>
         <Stack.Screen name="Create Post" component={PostCreation}/>
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} /> 
         <Stack.Screen name="Create Account" component={CreateAccountScreen}/>
         <Stack.Screen
           name="Home"

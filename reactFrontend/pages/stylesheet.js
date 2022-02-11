@@ -57,6 +57,9 @@ const styles = StyleSheet.create({
         //padding: 5, 
         margin: 5,
     },
+    text:{
+        fontFamily: 'Helvetica'
+    }
 
 })
 
