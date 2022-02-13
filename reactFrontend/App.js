@@ -5,8 +5,8 @@ import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import React, { useState } from 'react';
 import LoginScreen from './pages/login_page';
 import CreateAccountScreen from './pages/create_account';
-import { styles as mainStyles } from './pages/stylesheet';
 import PostCreation from './pages/post_creation';
+import { styles as mainStyles } from './pages/stylesheet';
 
 const Stack = createNativeStackNavigator();
 
