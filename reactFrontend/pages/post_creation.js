@@ -12,7 +12,7 @@ export default function PostCreation({ navigation }) {
   const [topic, setTopic] = useState('')
   return (
     <View style={styles.container}>
-      <View style={styles.border} />
+      <View style={styles.border}/>
       <View style={[styles.loginBox]}>
         <Text style={styles.header}>Create Post</Text>
         <View style={pageStyles.buttonContainer}>
