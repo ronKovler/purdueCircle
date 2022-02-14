@@ -15,7 +15,7 @@ function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <Text style = {mainStyles.header}>Welcome to Purdue Circle!</Text>
       <Button title="Login" onPress={() => navigation.navigate('Login')} />
-      <StatusBar style="auto" />
+      <StatusBar style="auto"/>
     </View>
   )
 }
