@@ -10,10 +10,10 @@ export default function LoginScreen({ navigation }) {
       <View style={styles.loginBox}>
         <Image style={styles.image} source={require('../assets/logo.svg')} />
         <Text style={styles.header}>Login</Text>
-        <TextInput style={styles.inputBox}
+        <TextInput style={styles.accountInputBox}
           placeholder='Username/Email'
           onChangeText={email => setEmail(email)} />
-        <TextInput style={styles.inputBox}
+        <TextInput style={styles.accountInputBox}
           placeholder='Password'
           secureTextEntry={true}
           onChangeText={password => setPassword(password)} />
@@ -21,7 +21,7 @@ export default function LoginScreen({ navigation }) {
           <Button title="Login" onPress={() => Alert.alert("bad")}/>
         </View>
         <View style={styles.button}>
-          <Button title="Create Account" onPress={navigation.navigate("Create Account")}/>
+          <Button title="Create Account" onPress={() => navigation.navigate("Create Account")}/>
         </View>
       </View>
     </View>

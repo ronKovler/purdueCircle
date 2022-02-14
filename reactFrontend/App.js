@@ -5,15 +5,17 @@ import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import React, { useState } from 'react';
 import LoginScreen from './pages/login_page';
 import CreateAccountScreen from './pages/create_account';
+import PostCreation from './pages/post_creation';
+import { styles as mainStyles } from './pages/stylesheet';
 
 const Stack = createNativeStackNavigator();
 
 function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style = {{margin: 10}}>Welcome to Purdue Circle!</Text>
+      <Text style = {mainStyles.header}>Welcome to Purdue Circle!</Text>
       <Button title="Login" onPress={() => navigation.navigate('Login')} />
-      <StatusBar style="auto" />
+      <StatusBar style="auto"/>
     </View>
   )
 }
@@ -21,9 +23,10 @@ function HomeScreen({ navigation }) {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown:false}}>
+        <Stack.Screen name="Create Post" component={PostCreation}/>
+        <Stack.Screen name="Login" component={LoginScreen} /> 
         <Stack.Screen name="Create Account" component={CreateAccountScreen}/>
-        <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen
           name="Home"
           component={HomeScreen}
