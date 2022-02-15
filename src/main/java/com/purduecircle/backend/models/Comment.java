@@ -1,4 +1,4 @@
-/**
+package com.purduecircle.backend.models; /**
 *
 * Represents a commment on a post
 *

@@ -1,3 +1,5 @@
+package com.purduecircle.backend.models;
+
 /**
 *
 * Represents a guest user of the app (no account)

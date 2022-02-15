@@ -1,3 +1,4 @@
+package com.purduecircle.backend.models;
 /**
 *
 * Represents a user of the app (has account)

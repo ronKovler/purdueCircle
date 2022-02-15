@@ -1,4 +1,4 @@
-/**
+package com.purduecircle.backend.models; /**
 *
 * Represents a single post
 *
