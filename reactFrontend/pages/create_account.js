@@ -1,6 +1,6 @@
-import { Text, TextInput, View, Button, Image, Alert } from 'react-native';
+import { Text, TextInput, View, Button, Alert } from 'react-native';
 import React, { useState } from 'react'
-import { styles } from './stylesheet';
+import { styles, Logo } from './stylesheet';
 
 export default function CreateAccountScreen ({navigation}) {
   const [email, setEmail] = useState('');
@@ -8,7 +8,7 @@ export default function CreateAccountScreen ({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.loginBox}>
-        <Image style={styles.image} source={require("../assets/logo.svg")} />
+        <Logo/>
         <Text style={styles.header}>Create Account</Text>
         <TextInput style={styles.accountInputBox}
           placeholder="Name"/>

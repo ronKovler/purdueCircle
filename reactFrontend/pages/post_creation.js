@@ -1,10 +1,7 @@
 import { Text, TextInput, Button, View, StyleSheet } from 'react-native'
 import { useState } from 'react'
 import { styles } from './stylesheet'
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncCreatableSelect from 'react-select/async-creatable'
-
-const Stack = createNativeStackNavigator()
 
 //TODO: Integrate topic selection with database
 export default function PostCreation({ navigation }) {
