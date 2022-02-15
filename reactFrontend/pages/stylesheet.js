@@ -22,6 +22,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         //transform: [{scale: 1.25}],
     },
+    wideViewContainer: {
+        resizeMode: 'contain',
+        flex: 1,
+        backgroundColor: '#545454',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: "row",
+        //transform: [{scale: 1.25}],
+    },
     header: {
         textAlign: 'center',
         color: '#ffc000',
@@ -43,6 +52,22 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignContent: 'center',
         padding: 10,
+    },
+    sideBar: {
+        resizeMode: 'contain',
+        backgroundColor: '#545454',
+        justifyContent: 'center',
+        alignContent: 'center',
+        padding: 10,
+        minWidth: 200,
+        minHeight: 300,
+    },
+    profileBox: {
+        backgroundColor: '#d9d9d9',
+        textDecorationColor: '#a6a6a6',
+        justifyContent: 'center',
+        minWidth: 300,
+        minHeight: 300,
     },
     image: {
         flex: 1,
