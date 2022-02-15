@@ -2,9 +2,7 @@ import { Text, TextInput, View, Button, Image, Alert } from 'react-native';
 import React, { useState } from 'react'
 import { styles } from './stylesheet';
 
-export default function CreateAccountScreen ({navigation}) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export default function ProfilePage ({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.wideViewContainer}>
