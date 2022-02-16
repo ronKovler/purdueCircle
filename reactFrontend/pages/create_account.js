@@ -1,10 +1,27 @@
 import { Text, TextInput, View, Button, Alert } from 'react-native';
 import React, { useState } from 'react'
-import { styles, Logo } from './stylesheet';
+import {styles, Logo, YellowButton} from './stylesheet';
 
 export default function CreateAccountScreen ({navigation}) {
+  const [name, setName] = useState('')
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+
+  //TODO: Encrypt password before POST, insert URL
+  function register(){
+    fetch("",{
+      method: "POST",
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        username: username,
+        password: password
+      })
+    })
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.loginBox}>
@@ -24,9 +41,7 @@ export default function CreateAccountScreen ({navigation}) {
         <TextInput style={styles.accountInputBox}
           placeholder="Re-enter Password"
           secureTextEntry={true}/>
-        <View style={styles.button}>
-          <Button title="Register" onPress={() => Alert.alert("do nothing")}/>
-        </View>
+        <YellowButton style={{margin:5}} title="Register" onPress={() => Alert.alert("do nothing")}/>
       </View>
     </View>
   )

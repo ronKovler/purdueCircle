@@ -1,6 +1,6 @@
-import { Text, TextInput, Button, View, StyleSheet } from 'react-native'
+import { Text, TextInput, Button, View } from 'react-native'
 import { useState } from 'react'
-import { styles } from './stylesheet'
+import {styles, YellowButton} from './stylesheet'
 import AsyncCreatableSelect from 'react-select/async-creatable'
 
 //TODO: Integrate topic selection with database
@@ -12,19 +12,30 @@ export default function PostCreation({ navigation }) {
       <View style={styles.border}/>
       <View style={[styles.loginBox]}>
         <Text style={styles.header}>Create Post</Text>
-        <View style={pageStyles.buttonContainer}>
-          <View style={[styles.button, {flex: 1}]}><Button color="#ffde59" title="Link" onPress={() => CreateURLPost()}/></View>
-          <View style={[styles.button, {flex: 1}]}><Button color="#ffde59" title="Image" onPress={() => CreateImagePost()}/></View>
+        <View style={styles.buttonContainer}>
+          <YellowButton title="Link" onPress={() => CreateURLPost()}/>
+          <YellowButton title="Image" onPress={() => CreateImagePost()}/>
         </View>
         <View style={[styles.button, styles.text]}>
           <AsyncCreatableSelect placeholder="Topic"/>
         </View>
         <TextInput style={styles.accountInputBox} placeholder='Text' onChangeText={() => setInputtedText(inputtedText)} />
-        <View style={styles.button}><Button color="#ffde59" title="Create" onPress={() => CreateImagePost()}/></View>
+        <View style={styles.button}><Button color="#ffde59" title="Create" onPress={() => sendPost(topic, '', '', inputtedText)}/></View>
       </View>
       <View style={styles.border}/>
     </View>
   )
+}
+
+// TODO: Get post URL from API and updated for images and URLs next sprint
+function sendPost(topic, text){
+  fetch("", {
+    method: 'POST',
+    body: JSON.stringify({
+      topic: topic,
+      content: text
+    })
+  })
 }
 
 function CreateURLPost(){
@@ -40,12 +51,3 @@ function CreateImagePost(){
     <Text>Placeholder</Text>
   )
 }
-
-const pageStyles = StyleSheet.create({
-    buttonContainer: {
-      flexDirection:'row',
-      flex: 1,
-      justifyContent: 'space-evenly',
-    }
-  }
-)
