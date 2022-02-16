@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import LoginScreen from './pages/login_page';
+import ProfilePage from './pages/profile_page';
 import CreateAccountScreen from './pages/create_account';
 import PostCreation from './pages/post_creation';
 import HomeScreen from './pages/home_page';
@@ -14,6 +15,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown:false}}>
+        <Stack.Screen name="Profile Page" component={ProfilePage}/>
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: "PurdueCircle" }} />
         <Stack.Screen name="Create Post" component={PostCreation}/>
         <Stack.Screen name="Login" component={LoginScreen} />
