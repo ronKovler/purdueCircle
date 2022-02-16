@@ -1,18 +1,17 @@
-import {Image, StyleSheet} from "react-native";
+import {Button, Image, StyleSheet, View} from "react-native";
 import React from "react";
-
-const FormInput = (props) =>{
-    return (
-        <TextInput style={styles.accountInputBox}
-            placeholder={props.placeholder}
-            spellCheck={false}
-            autoCorrect={false}/>
-    )
-}
 
 const Logo = ({navigation}, props) => {
     return(
         <Image style={styles.image} source={require('../assets/logo.svg')} onClick={() => navigation.navigate("Home")}/>
+    )
+}
+
+const YellowButton = ({navigation}, props) => {
+    return(
+      <View style={props.style}>
+          <Button color="#ffde59" title={props.title} onPress={(props.onPress())}/>
+      </View>
     )
 }
 
@@ -88,11 +87,16 @@ const styles = StyleSheet.create({
     button: {
         //padding: 5, 
         margin: 5,
+        flex: 1,
     },
     text:{
         fontFamily: 'Helvetica'
+    },
+    buttonContainer: {
+        flexDirection:'row',
+        flex: 1,
+        justifyContent: 'space-evenly',
     }
-
 })
 
-export { styles, FormInput, Logo };
+export { styles, Logo, YellowButton };
