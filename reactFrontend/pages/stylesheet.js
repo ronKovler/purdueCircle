@@ -1,4 +1,5 @@
-import { StyleSheet } from "react-native";
+import {Image, StyleSheet} from "react-native";
+import React from "react";
 
 const FormInput = (props) =>{
     return (
@@ -6,6 +7,12 @@ const FormInput = (props) =>{
             placeholder={props.placeholder}
             spellCheck={false}
             autoCorrect={false}/>
+    )
+}
+
+const Logo = ({navigation}, props) => {
+    return(
+        <Image style={styles.image} source={require('../assets/logo.svg')} onClick={() => navigation.navigate("Home")}/>
     )
 }
 
@@ -88,4 +95,4 @@ const styles = StyleSheet.create({
 
 })
 
-export { styles, FormInput };
+export { styles, FormInput, Logo };
