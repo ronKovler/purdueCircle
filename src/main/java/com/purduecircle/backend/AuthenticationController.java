@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-
-public class ServerController {
+@RestController("/api/auth/")
+public class AuthController {
 
 
     @GetMapping("/checkConnection")
@@ -27,7 +26,7 @@ public class ServerController {
         return "Add Code here to handle home page";
     }
 
-    @PostMapping("/api/auth/login/")
+    @PostMapping("login/")
     public String tryLogin() {
         
     }
