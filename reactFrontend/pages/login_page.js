@@ -1,10 +1,23 @@
 import { Text, TextInput, View, Button, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { styles, Logo } from './stylesheet';
+import hash from "react-native-web/dist/vendor/hash";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('')
+
+  function sendLogin(){
+    fetch("http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/login", {
+      method: "POST",
+      body: JSON.stringify({
+          email: email,
+          password: password
+        }
+      )
+    })
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.loginBox}>
@@ -27,5 +40,6 @@ export default function LoginScreen({ navigation }) {
     </View>
   );
 }
+
 
 //TODO: Adjust sizing of page to resize to display size? do we want to fix for mobile rn?
