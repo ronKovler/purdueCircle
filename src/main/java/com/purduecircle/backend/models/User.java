@@ -49,7 +49,7 @@ public class User {
     @Column(name="password", length=64, nullable=false, unique=true)
     private String password;
 
-    @Column(name="phooneNumber", nullable=true)
+    @Column(name="phoneNumber", nullable=true)
     private String phoneNumber;
 
     /*
