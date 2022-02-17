@@ -1,4 +1,4 @@
-import {Component, useState} from 'react';
+import React, {Component, useState} from 'react';
 import {View, Text, Button, StatusBar, StyleSheet, Pressable} from 'react-native';
 import {styles} from './stylesheet';
 // TODO Post UI and import to timeline?
@@ -6,6 +6,7 @@ import {styles} from './stylesheet';
 export default function HomeScreen({navigation}) {
   return (
     <View style={styles.container}>
+
       <Text style={styles.header}>Welcome to Purdue Circle!</Text>
       <Post/>
       <View style={styles.buttonContainer}>
