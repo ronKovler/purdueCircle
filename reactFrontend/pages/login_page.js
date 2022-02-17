@@ -4,8 +4,10 @@ import { styles, Logo } from './stylesheet';
 import hash from "react-native-web/dist/vendor/hash";
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [id, setId] = useState('')
+  const [success, setSuccess] = useState(false)
 
   function sendLogin(){
     fetch("http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/login", {
@@ -17,6 +19,24 @@ export default function LoginScreen({ navigation }) {
       )
     })
   }
+
+  const getLogin = async () => {
+    try {
+      const response = await fetch(
+        'http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/login'
+      );
+      const json = await response.json();
+      setId(json.id);
+      setSuccess(true);
+      return json;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getLogin();
+  }, []);
 
   return (
     <View style={styles.container}>
