@@ -8,56 +8,49 @@ package com.purduecircle.backend.models;
 * 
 **/
 
+import java.io.Serializable;
+import javax.persistence.*;
 import java.util.ArrayList;
 
-public class User {
+@Entity
+@Table(name = "users")
 
-    public User(String firstName, String lastName, String email, String username, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
+public class User {
 
     /*
     * Class variables
     */
 
     /* Required user field */
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    /* TABLE indicates that the persistence provider must assign primary keys
+    for the entity using an underlying database table to ensure uniqueness */
+    private int userID;
+
+    /* Required user field */
+
+    @Column(name="firstName", length=64, nullable=false)
     private String firstName;
 
     /* Required user field */
+    @Column(name="lastName", length=64, nullable=false)
     private String lastName;
 
     /* Serves as uniqueID, cannot be changed, required user field */
+    @Column(name="email", length=64, nullable=false, unique=true)
     private String email;
 
     /* Unique to user, requried user field */
+    @Column(name="username", length=64, nullable=false, unique=true)
     private String username;
 
     /* Required user field */
+    @Column(name="password", length=64, nullable=false, unique=true)
     private String password;
 
+    @Column(name="phooneNumber", nullable=true)
     private String phoneNumber;
-
-    /* List of other users following this user */   
-    private ArrayList<User> followers;
-
-    /* List of other users this user is following */   
-    private ArrayList<User> followedUsers;
-
-    /* List of users this user has blocked */   
-    private ArrayList<User> blockedUsers;
-
-    /* List of topics this user is following */   
-    private ArrayList<String> followedTopics;
-
-    /* List of poosts made by user */   
-    private ArrayList<Post> userPosts;
-
-    /* List of posts saved by this user */   
-    private ArrayList<Post> savedPosts;
 
     /*
     * Class methods
@@ -128,86 +121,50 @@ public class User {
     }
 
     /*
-    * Getters and setters
+    * Getters
     */
+
+    public int getUserID() {
+        return userID;
+    }   
 
     public String getFirstName() {
         return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public ArrayList<User> getFollowers() {
-        return followers;
-    }
-
-    public void setFollowers(ArrayList<User> followers) {
-        this.followers = followers;
+        return null;
     }
 
     public ArrayList<User> getFollowedUsers() {
-        return followedUsers;
-    }
-
-    public void setFollowedUsers(ArrayList<User> followedUsers) {
-        this.followedUsers = followedUsers;
+        return null;
     }
 
     public ArrayList<User> getBlockedUsers() {
-        return blockedUsers;
-    }
-
-    public void setBlockedUsers(ArrayList<User> blockedUsers) {
-        this.blockedUsers = blockedUsers;
+        return null;
     }
 
     public ArrayList<String> getFollowedTopics() {
-        return followedTopics;
-    }
-
-    public void setFollowedTopics(ArrayList<String> followedTopics) {
-        this.followedTopics = followedTopics;
+        return null;
     }
 }
