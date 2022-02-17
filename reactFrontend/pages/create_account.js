@@ -1,6 +1,7 @@
 import {Text, TextInput, View, Button, Alert} from 'react-native';
 import React, {useState} from 'react'
 import {styles, Logo, YellowButton} from './stylesheet';
+import {TouchableOpacity} from "react-native-web";
 
 export default function CreateAccountScreen({navigation}) {
   const [name, setName] = useState('')
@@ -41,7 +42,7 @@ export default function CreateAccountScreen({navigation}) {
         <TextInput style={styles.accountInputBox}
                    placeholder="Re-enter Password"
                    secureTextEntry={true}/>
-        <YellowButton style={{margin: 5}} title="Register" onPress={() => Alert.alert("do nothing")}/>
+        <TouchableOpacity style={styles.button} onPress={() => Alert.alert("do nothing")}><Text>Register</Text></TouchableOpacity>
       </View>
     </View>
   )

@@ -1,14 +1,14 @@
 import { Text, TextInput, View, Button, Alert } from 'react-native';
 import React, { useState } from 'react';
-import { styles, Logo } from './stylesheet';
-import hash from "react-native-web/dist/vendor/hash";
+import {styles, Logo} from './stylesheet';
+import {TouchableOpacity} from "react-native-web";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
 
   function sendLogin(){
-    fetch("http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/login", {
+    fetch("http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/auth/login", {
       method: "POST",
       body: JSON.stringify({
           email: email,
@@ -30,12 +30,8 @@ export default function LoginScreen({ navigation }) {
           placeholder='Password'
           secureTextEntry={true}
           onChangeText={password => setPassword(password)} />
-        <View style={styles.button}>
-          <Button title="Login" onPress={() => Alert.alert("bad")}/>
-        </View>
-        <View style={styles.button}>
-          <Button title="Create Account" onPress={() => navigation.navigate("Create Account")}/>
-        </View>
+        <TouchableOpacity style={styles.button} onPress={() => sendLogin()}><Text>Login</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Create Account")}><Text>Create Account</Text></TouchableOpacity>
       </View>
     </View>
   );
