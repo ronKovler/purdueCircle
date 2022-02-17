@@ -1,11 +1,14 @@
 package com.purduecircle.backend;
 
+import com.purduecircle.backend.models.User;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class ServerController {
+@RestController("/api/auth/")
+public class AuthController {
+
 
     @GetMapping("/checkConnection")
     public String testConnection() {
@@ -21,5 +24,10 @@ public class ServerController {
     @RequestMapping("/")
     public String home() {
         return "Add Code here to handle home page";
+    }
+
+    @PostMapping("login/")
+    public String tryLogin() {
+        
     }
 }
