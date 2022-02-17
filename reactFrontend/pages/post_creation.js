@@ -29,7 +29,7 @@ export default function PostCreation({ navigation }) {
 
 // TODO: Get post URL from API and updated for images and URLs next sprint
 function sendPost(topic, text){
-  fetch("", {
+  fetch("https://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/create_post", {
     method: 'POST',
     body: JSON.stringify({
       topic: topic,

@@ -41,7 +41,7 @@ function Post(props, {navigation}) {
       setIsLoading(false)
     }
   }
-
+// Get like icon and make pressable
   return (
     <View style={postStyles.postContainer}>
       <View style={{flexDirection: 'row'}}>
