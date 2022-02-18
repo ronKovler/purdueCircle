@@ -16,7 +16,14 @@ public class AuthController {
 
 
     @PostMapping("login/")
-    public String tryLogin() {
-        
+    public int tryLogin(@RequestBody User newUser) {
+        List<User> users = userRepository.findAll();
+        for (User check : users) {
+            if (check.equals(newUser)) {
+                return check.getUserID();
+            }
+        }
+
+        return -1;
     }
 }

@@ -1,16 +1,17 @@
 import { Text, TextInput, View, Button, Alert } from 'react-native';
-import React, { useState } from 'react';
-import { styles, Logo } from './stylesheet';
-import hash from "react-native-web/dist/vendor/hash";
+import React, {useEffect, useState} from 'react';
+import {styles, Logo} from './stylesheet';
+import {TouchableOpacity} from "react-native-web";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [id, setId] = useState('')
   const [success, setSuccess] = useState(false)
+  const [correct, setCorrect] = useState(true)
 
-  function sendLogin(){
-    fetch("http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/login", {
+  function SendLogin(){
+    fetch("http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/auth/login", {
       method: "POST",
       body: JSON.stringify({
           email: email,
@@ -20,23 +21,25 @@ export default function LoginScreen({ navigation }) {
     })
   }
 
-  const getLogin = async () => {
+  const GetLogin = async () => {
     try {
       const response = await fetch(
-        'http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/login'
+        'http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/auth/login'
       );
       const json = await response.json();
       setId(json.id);
       setSuccess(true);
+      setCorrect(true)
       return json;
     } catch (error) {
       console.error(error);
+      //setCorrect(false)
     }
   }
 
-  useEffect(() => {
-    getLogin();
-  }, []);
+  // useEffect(() => {
+  //   GetLogin();
+  // }, []);
 
   return (
     <View style={styles.container}>
@@ -50,12 +53,9 @@ export default function LoginScreen({ navigation }) {
           placeholder='Password'
           secureTextEntry={true}
           onChangeText={password => setPassword(password)} />
-        <View style={styles.button}>
-          <Button title="Login" onPress={() => Alert.alert("bad")}/>
-        </View>
-        <View style={styles.button}>
-          <Button title="Create Account" onPress={() => navigation.navigate("Create Account")}/>
-        </View>
+        {(!correct ? <Text style={{color:'red'}}>Incorrect Password. Try again</Text> : null)}
+        <TouchableOpacity style={styles.button} onPress={() => SendLogin()}><Text>Login</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Create Account")}><Text>Create Account</Text></TouchableOpacity>
       </View>
     </View>
   );

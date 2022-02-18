@@ -1,4 +1,4 @@
-import { Text, TextInput, View, Button, Image, Alert } from 'react-native';
+import { Text, TextInput, View, Button, Image, StyleSheet } from 'react-native';
 import React, { useState } from 'react'
 import { styles } from './stylesheet';
 
@@ -23,3 +23,13 @@ export default function ProfilePage ({navigation}) {
     </View>
   )
 }
+
+//postGrid:
+const profile = StyleSheet.create({
+  postGrid:{
+    flexDirection: "row",
+    flexWrap:"wrap",
+    alignContent: "stretch",
+
+  }
+})

@@ -1,19 +1,32 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import LoginScreen from './pages/login_page';
 import ProfilePage from './pages/profile_page';
 import CreateAccountScreen from './pages/create_account';
 import PostCreation from './pages/post_creation';
 import HomeScreen from './pages/home_page';
+import { Text } from "react-native";
 
 const Stack = createNativeStackNavigator();
+
+const linkConfig = {
+  screens:{
+    Home: 'home',
+    Login: 'login',
+    'Create Account': 'create_account'
+  }
+}
+
+const linking ={
+  prefixes: [],
+  config: linkConfig,
+}
 
 // TODO: Stylesheet, header, buttons
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
       <Stack.Navigator screenOptions={{headerShown:false}}>
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: "PurdueCircle" }} />
         <Stack.Screen name="Profile Page" component={ProfilePage}/>
@@ -26,18 +39,3 @@ export default function App() {
 }
 
 export {Stack}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#737373',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  button: {
-    backgroundColor: '#ffde59',
-    justifyContent: 'center'
-  },
-
-});
