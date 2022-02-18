@@ -17,6 +17,6 @@ public class AuthController {
 
     @PostMapping("login/")
     public String tryLogin() {
-        
+        return null;
     }
 }

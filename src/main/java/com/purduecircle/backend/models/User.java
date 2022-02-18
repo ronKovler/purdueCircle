@@ -30,27 +30,27 @@ public class User {
 
     /* Required user field */
 
-    @Column(name="firstName", length=64, nullable=false)
-    private String firstName;
+    @Column(name="first_name", length=64, nullable=true)
+    private String first_name;
 
     /* Required user field */
-    @Column(name="lastName", length=64, nullable=false)
-    private String lastName;
+    @Column(name="last_name", length=64, nullable=true)
+    private String last_name;
 
     /* Serves as uniqueID, cannot be changed, required user field */
-    @Column(name="email", length=64, nullable=false, unique=true)
+    @Column(name="email", length=64, nullable=true, unique=true)
     private String email;
 
     /* Unique to user, requried user field */
-    @Column(name="username", length=64, nullable=false, unique=true)
+    @Column(name="username", length=64, nullable=true, unique=true)
     private String username;
 
     /* Required user field */
-    @Column(name="password", length=64, nullable=false, unique=true)
+    @Column(name="password", length=64, nullable=true, unique=true)
     private String password;
 
-    @Column(name="phoneNumber", nullable=true)
-    private String phoneNumber;
+    @Column(name="phone_number", nullable=true)
+    private String phone_number;
 
     /*
     * Class methods
@@ -129,19 +129,19 @@ public class User {
     }
 
     public String getFirstName() {
-        return firstName;
+        return first_name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String first_name) {
+        this.first_name = first_name;
     }
 
     public String getLastName() {
-        return lastName;
+        return last_name;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastName(String last_name) {
+        this.last_name = last_name;
     }
 
     public String getEmail() {
@@ -169,11 +169,11 @@ public class User {
     }    
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return phone_number;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhoneNumber(String phone_number) {
+        this.phone_number = phone_number;
     }
 
     public ArrayList<User> getFollowers() {
