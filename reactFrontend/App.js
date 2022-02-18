@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator();
 
 const linkConfig = {
   screens:{
-    Home: '',
+    Home: 'home',
     Login: 'login',
     'Create Account': 'create_account'
   }

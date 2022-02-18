@@ -8,10 +8,11 @@ export default function CreateAccountScreen({navigation}) {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [reenter, setReenter] = useState('')
 
 
   //TODO: Encrypt password before POST, insert URL
-  function register() {
+  function Register() {
     fetch("", {
       method: "POST",
       body: JSON.stringify({
@@ -41,7 +42,8 @@ export default function CreateAccountScreen({navigation}) {
                    onChangeText={password => setPassword(password)}/>
         <TextInput style={styles.accountInputBox}
                    placeholder="Re-enter Password"
-                   secureTextEntry={true}/>
+                   secureTextEntry={true} onChangeText={reenter => setReenter(reenter)}/>
+        {password !== reenter ? <Text style={{color:'red'}}>Passwords do not match</Text> : null}
         <TouchableOpacity style={styles.button} onPress={() => Alert.alert("do nothing")}><Text>Register</Text></TouchableOpacity>
       </View>
     </View>

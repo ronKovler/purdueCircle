@@ -1,12 +1,13 @@
-import {Button, Image, StyleSheet, View} from "react-native";
+import {Button, Image, Pressable, StyleSheet, View} from "react-native";
 import React from "react";
 
-const Logo = ({navigation}, props) => {
+const Logo = ({navigation}) => {
   return (
-    <Image style={styles.image} source={require('../assets/logo.svg')} onClick={() => navigation.navigate("Home")}/>
+    <Pressable onClick={() => navigation.navigate("Home")}>
+      <Image style={styles.image} source={require('../assets/logo.svg')}/>
+    </Pressable>
   )
 }
-
 
 const styles = StyleSheet.create({
   border: {
@@ -19,7 +20,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#737373',
     alignItems: 'center',
     justifyContent: 'center',
-    //transform: [{scale: 1.25}],
   },
   wideViewContainer: {
     resizeMode: 'contain',
@@ -70,8 +70,6 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: null,
-    height: null,
     resizeMode: 'contain',
     aspectRatio: 1,
     //margin: 15,
@@ -79,13 +77,15 @@ const styles = StyleSheet.create({
   },
   button: {
     textAlign: "center",
-    textAlignVertical: "center",
+    //textAlignVertical: "center",
     alignItems: "stretch",
-    justifyContent:"space-evenly",
+    justifyContent: "space-evenly",
     padding: 10,
     margin: 5,
     backgroundColor: "#ffde59",
     flex: 1,
+    minWidth: 100,
+    maxHeight: 40,
   },
   text: {
     fontFamily: 'Helvetica'
