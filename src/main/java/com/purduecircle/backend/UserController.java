@@ -29,11 +29,41 @@ public class UserController {
         return "Add Code here to handle home page";
     }
 
+    /**
+    /* Returns false if username or password is already taken, otherwise saves information
+    /* to database and returns true
+    */
+    @GetMapping("/create_account")
+    public boolean createNewUserAccount(String firstName, String lastName, 
+        String username, String email, String password) {
+        // Check email for uniqueness
+        if (!userRepository.findByEmail(email).isEmpty()) {
+            // Email already exists in database
+            return false;
+        }
+        // Check username for uniqueness
+        if (!userRepository.findByUsername(username).isEmpty()) {
+            // Email already exists in database
+            return false;
+        }
+
+        User newUser = new User();
+        newUser.setFirstName(firstName);
+        newUser.setLastName(lastName);
+        newUser.setUsername(username);
+        newUser.setEmail(email);
+        newUser.setPassword(password);
+        userRepository.save(newUser);
+
+        return true;    
+    }
+
     // localhost:8081
     // user and generated password
     // TODO: catch exceptions
     @GetMapping("/test")
     public void testDatabase() {
+        /*
         User newUser = new User();
         newUser.setFirstName("testName");
         newUser.setLastName("testName");
@@ -41,9 +71,16 @@ public class UserController {
         newUser.setUsername("testUsername");
         newUser.setPassword("testPassword");
         userRepository.save(newUser);
+        */
 
         long count = userRepository.count();
         System.out.println("Number of users: " + count);
+
+        if (!userRepository.findByEmail("teamUSA@gmail.com").isEmpty()) {
+            // Should exist
+            System.out.println("FOUND GEORGE!");
+        }
+
         return;
     }
 }
