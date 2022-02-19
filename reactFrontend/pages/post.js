@@ -10,6 +10,7 @@ export default function Post(props, {navigation}) {
   const [isLoading, setIsLoading] = useState(true)
   const [followingTopic, setFollowingTopic] = useState('false')
   const [followingUser, setFollowingUser] = useState('false')
+  const [status, setStatus] = useState('false');
 
   const getPostInfo = async () => {
     try {
@@ -36,18 +37,22 @@ export default function Post(props, {navigation}) {
                        onClick={() => navigation.navigate("Profile Page")}>
               <Text style={postStyles.username}>{user}</Text>
             </Pressable>
-            {followingUser ?
-              <Pressable style={{alignSelf: 'center'}}>
-                <Text style={postStyles.followButton}>Follow</Text>
-              </Pressable> : null}
+          <Pressable style={{alignSelf: 'center'}}
+              onClick={() => setStatus(!status)}>
+              {status ?
+              <Text style={postStyles.followButton}>Follow</Text> :
+              <Text style={postStyles.followButton}>Unfollow</Text>}
+          </Pressable>
           </View>
           <Pressable style={{alignSelf: 'center'}}>
             <Text style={postStyles.topic}>{topic}</Text>
           </Pressable>
-          {followingTopic ?
-            <Pressable style={{alignSelf: 'center'}}>
-              <Text style={postStyles.followButton}>Follow</Text>
-            </Pressable> : null}
+          <Pressable style={{alignSelf: 'center'}}
+              onClick={() => setStatus(!status)}>
+              {status ?
+              <Text style={postStyles.followButton}>Follow</Text> :
+              <Text style={postStyles.followButton}>Unfollow</Text>}
+          </Pressable>
         </View>
       </View>
       <Text style={postStyles.text}>{content}</Text>
