@@ -1,5 +1,5 @@
-import { Text, TextInput, Button, View } from 'react-native'
-import { useState } from 'react'
+import { Text, TextInput, View } from 'react-native'
+import React, { useState } from 'react'
 import {styles} from './stylesheet'
 import AsyncCreatableSelect from 'react-select/async-creatable'
 import {TouchableOpacity} from "react-native-web";
@@ -14,14 +14,14 @@ export default function PostCreation({ navigation }) {
       <View style={[styles.loginBox]}>
         <Text style={styles.header}>Create Post</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} title="Link" onPress={() => CreateURLPost()}/>
-          <TouchableOpacity style={styles.button} title="Image" onPress={() => CreateImagePost()}/>
+          <TouchableOpacity onPress={() => CreateURLPost}><Text style={styles.button}>Link</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => CreateImagePost}><Text style={styles.button}>Image</Text></TouchableOpacity>
         </View>
-        <View style={[styles.button, styles.text]}>
+        <View style={[styles.text, {padding: 5}]}>
           <AsyncCreatableSelect placeholder="Topic"/>
         </View>
         <TextInput style={styles.accountInputBox} placeholder='Text' onChangeText={() => setInputtedText(inputtedText)} />
-        <View style={styles.button}><Button color="#ffde59" title="Create" onPress={() => SendPost(topic, '', '', inputtedText)}/></View>
+        <TouchableOpacity onPress={() => SendPost(topic, '', '', inputtedText)}><Text style={styles.button}>Create</Text></TouchableOpacity>
       </View>
       <View style={styles.border}/>
     </View>

@@ -1,13 +1,25 @@
-import {Button, Image, Pressable, StyleSheet, View} from "react-native";
+import { Image, Pressable, StyleSheet, Text, View} from "react-native";
 import React from "react";
 
-const Logo = ({navigation}) => {
+const Logo = (props, {navigation}) => {
   return (
     <Pressable onClick={() => navigation.navigate("Home")}>
       <Image style={styles.image} source={require('../assets/logo.svg')}/>
     </Pressable>
   )
 }
+
+const HeaderLogo = (props, {navigation}) => {
+  return (
+    <Pressable onClick={() => navigation.navigate("Home")}>
+      <View style={{flexDirection: 'row', flex: 1}}>
+        <Image style={props.style} source={require('../assets/logo.svg')}/>
+        <Text style={styles.header}>PurdueCircle</Text>
+      </View>
+    </Pressable>
+  )
+}
+
 
 const styles = StyleSheet.create({
   border: {
@@ -16,10 +28,11 @@ const styles = StyleSheet.create({
   },
   container: {
     resizeMode: 'contain',
-    flex: 1,
+    flex: 9,
     backgroundColor: '#737373',
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 'fit-content',
   },
   wideViewContainer: {
     resizeMode: 'contain',
@@ -31,11 +44,12 @@ const styles = StyleSheet.create({
     //transform: [{scale: 1.25}],
   },
   header: {
+    alignSelf:'center',
     textAlign: 'center',
     color: '#ffc000',
     fontWeight: 'bold',
-    margin: 5,
     fontSize: 18,
+    padding: 10,
   },
   accountInputBox: {
     backgroundColor: '#d9d9d9',
@@ -75,16 +89,23 @@ const styles = StyleSheet.create({
     //margin: 15,
     maxWidth: 968,
   },
+  headerIcon: {
+    aspectRatio: 1,
+    width: 50,
+    height: 50,
+    alignSelf:'center',
+  },
   button: {
     textAlign: "center",
-    //textAlignVertical: "center",
-    alignItems: "stretch",
+    // textAlignVertical: "center",
+    fontSize: 16,
+    fontWeight: 'bold',
     justifyContent: "space-evenly",
     padding: 10,
     margin: 5,
     backgroundColor: "#ffde59",
     flex: 1,
-    minWidth: 100,
+    minWidth: 90,
     maxHeight: 40,
   },
   text: {
@@ -92,9 +113,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    flex: 1,
-    justifyContent: 'space-evenly',
+    alignSelf: 'center',
+    // position: "absolute",
+    // justifyContent: 'space-evenly',
   }
 })
 
-export {styles, Logo};
+export {styles, Logo, HeaderLogo};

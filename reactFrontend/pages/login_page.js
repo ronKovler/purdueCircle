@@ -1,16 +1,16 @@
-import { Text, TextInput, View, Button, Alert } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {Text, TextInput, View} from 'react-native';
+import React, {useState} from 'react';
 import {styles, Logo} from './stylesheet';
 import {TouchableOpacity} from "react-native-web";
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [id, setId] = useState('')
   const [success, setSuccess] = useState(false)
   const [correct, setCorrect] = useState(true)
 
-  function SendLogin(){
+  function SendLogin() {
     fetch("http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/auth/login", {
       method: "POST",
       body: JSON.stringify({
@@ -47,15 +47,17 @@ export default function LoginScreen({ navigation }) {
         <Logo/>
         <Text style={styles.header}>Login</Text>
         <TextInput style={styles.accountInputBox}
-          placeholder='Username/Email'
-          onChangeText={email => setEmail(email)} />
+                   placeholder='Username/Email'
+                   onChangeText={email => setEmail(email)}/>
         <TextInput style={styles.accountInputBox}
-          placeholder='Password'
-          secureTextEntry={true}
-          onChangeText={password => setPassword(password)} />
-        {(!correct ? <Text style={{color:'red'}}>Incorrect Password. Try again</Text> : null)}
-        <TouchableOpacity style={styles.button} onPress={() => SendLogin()}><Text>Login</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Create Account")}><Text>Create Account</Text></TouchableOpacity>
+                   placeholder='Password'
+                   secureTextEntry={true}
+                   onChangeText={password => setPassword(password)}/>
+        {(!correct ? <Text style={{color: 'red'}}>Incorrect Password. Try again</Text> : null)}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={() => SendLogin()}><Text style={styles.button}>Login</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Create Account")}><Text style={styles.button}>Register</Text></TouchableOpacity>
+        </View>
       </View>
     </View>
   );

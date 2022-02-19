@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import React, { } from 'react';
 import LoginScreen from './pages/login_page';
 import ProfilePage from './pages/profile_page';
 import CreateAccountScreen from './pages/create_account';
@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator();
 
 const linkConfig = {
   screens:{
-    Home: 'home',
+    Home: '',
     Login: 'login',
     'Create Account': 'create_account'
   }
@@ -23,14 +23,13 @@ const linking ={
   config: linkConfig,
 }
 
-// TODO: Stylesheet, header, buttons
 export default function App() {
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
       <Stack.Navigator screenOptions={{headerShown:false}}>
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: "PurdueCircle" }} />
-        <Stack.Screen name="Profile Page" component={ProfilePage}/>
         <Stack.Screen name="Create Post" component={PostCreation}/>
+        <Stack.Screen name="Profile Page" component={ProfilePage}/>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Create Account" component={CreateAccountScreen}/>
       </Stack.Navigator>

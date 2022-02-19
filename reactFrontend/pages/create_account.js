@@ -1,6 +1,6 @@
-import {Text, TextInput, View, Button, Alert} from 'react-native';
+import {Text, TextInput, View, Alert} from 'react-native';
 import React, {useState} from 'react'
-import {styles, Logo, YellowButton} from './stylesheet';
+import {styles, Logo} from './stylesheet';
 import {TouchableOpacity} from "react-native-web";
 
 export default function CreateAccountScreen({navigation}) {
@@ -11,7 +11,7 @@ export default function CreateAccountScreen({navigation}) {
   const [reenter, setReenter] = useState('')
 
 
-  //TODO: Encrypt password before POST, insert URL
+  //TODO: insert URL
   function Register() {
     fetch("", {
       method: "POST",
@@ -44,7 +44,7 @@ export default function CreateAccountScreen({navigation}) {
                    placeholder="Re-enter Password"
                    secureTextEntry={true} onChangeText={reenter => setReenter(reenter)}/>
         {password !== reenter ? <Text style={{color:'red'}}>Passwords do not match</Text> : null}
-        <TouchableOpacity style={styles.button} onPress={() => Alert.alert("do nothing")}><Text>Register</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => Alert.alert("do nothing")}><Text style={styles.button}>Register</Text></TouchableOpacity>
       </View>
     </View>
   )
