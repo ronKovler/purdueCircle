@@ -25,7 +25,7 @@ export default function Post(props, {navigation}) {
   }
 //TODO: Get like icon and make pressable
   return (
-    <View style={{backgroundColor: "#5F5F5F", margin: 5, flexDirection: 'column', height: 'fit-content'}}>
+    <View style={{backgroundColor: "#5F5F5F", margin: 5, flexDirection: 'column', height: 'fit-content', borderRadius: 20}}>
       <View style={postStyles.headerContainer}>
         <View style={{flexDirection: 'row'}}>
           <View style={{flex: 1, flexDirection: 'row'}}>
@@ -67,8 +67,8 @@ const postStyles = StyleSheet.create({
     flex: 1,
     minWidth: 300,
     maxHeight: 47.5,
-    borderBottomWidth: 2,
-    borderBottomColor: "#919191",
+    borderBottomWidth: 4,
+    borderBottomColor: "#737373",
   },
   text: {
     color: 'white',
