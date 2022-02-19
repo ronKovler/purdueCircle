@@ -9,24 +9,22 @@ export default function HomeScreen({navigation}) {
 
     return (
         <View style={styled.container}>
-            <View style={{flex: 2, flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                 <View style={{flex: 5, flexDirection: 'column', alignSelf: 'center'}}>
                     <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
                         <HeaderLogo style={styles.headerIcon}/>
-                        {!User.isLoggedIn ?
-                            <View style={styles.buttonContainer}>
-                            <TouchableOpacity onPress={() => navigation.navigate('Login')}><Text
-                                style={styles.button}>Login</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate('Create Account')}><Text
-                                style={styles.button}>Register</Text></TouchableOpacity>
-                        </View> : null}
-                    </View>
-                    <View style={{flex: 1}}>
-
                     </View>
                 </View>
-                <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
+                <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
+                    {!User.isLoggedIn ?
+                      <View style={styles.buttonContainer}>
+                          <Pressable onPress={() => navigation.navigate('Login')}><Text
+                            style={styles.button}>Login</Text></Pressable>
+                          <Pressable onPress={() => navigation.navigate('Create Account')}><Text
+                            style={styles.button}>Register</Text></Pressable>
+                      </View> : null}
+                </View>
             </View>
             <View style={{flex: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '737373'}}>
                 <View style={{flex: 2, backgroundColor: 'dimgrey', justifyContent: 'center'}}>
@@ -36,7 +34,7 @@ export default function HomeScreen({navigation}) {
                     <Pressable style={{alignSelf: 'center'}}>
                         <Text style={styles.button}>Saved Posts</Text>
                     </Pressable>
-                    <Pressable style={{alignSelf: 'center'}}>
+                    <Pressable style={{alignSelf: 'center'}} onPress={() => navigation.navigate('Create Post')}>
                         <Text style={styles.button}>Create Post</Text>
                     </Pressable>
                 </View>
@@ -48,8 +46,7 @@ export default function HomeScreen({navigation}) {
                     </ScrollView>
                     <View style={{flex: 2, backgroundColor: '737373'}}/>
                 </View>
-                <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
-                </View>
+                <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
             </View>
         </View>
     )

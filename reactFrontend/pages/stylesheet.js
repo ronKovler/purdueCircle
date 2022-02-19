@@ -113,9 +113,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    alignSelf: 'center',
+    alignSelf: 'flex-end',
+    padding: 10,
     // position: "absolute",
-    // justifyContent: 'space-evenly',
+    // justifyContent: 'center',
   }
 })
 

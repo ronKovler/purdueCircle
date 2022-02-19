@@ -14,7 +14,8 @@ const linkConfig = {
   screens:{
     Home: '',
     Login: 'login',
-    'Create Account': 'create_account'
+    'Create Account': 'create_account',
+    'Create Post': 'create_post',
   }
 }
 

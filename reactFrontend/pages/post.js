@@ -8,9 +8,8 @@ export default function Post(props, {navigation}) {
   const [comments, setComments] = useState('comments')
   const [content, setContent] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec tellus ac quam ullamcorper dictum facilisis non orci. Vivamus hendrerit et dui id scelerisque. Suspendisse potenti. Integer ante mauris, tempor. ')
   const [isLoading, setIsLoading] = useState(true)
-  const [followingTopic, setFollowingTopic] = useState('false')
-  const [followingUser, setFollowingUser] = useState('false')
-  const [status, setStatus] = useState('false');
+  const [followingTopic, setFollowingTopic] = useState(false)
+  const [followingUser, setFollowingUser] = useState(true)
 
   const getPostInfo = async () => {
     try {
@@ -38,8 +37,8 @@ export default function Post(props, {navigation}) {
               <Text style={postStyles.username}>{user}</Text>
             </Pressable>
           <Pressable style={{alignSelf: 'center'}}
-              onClick={() => setStatus(!status)}>
-              {status ?
+              onPress={() => setFollowingUser(!followingUser)}>
+              {!followingUser ?
               <Text style={postStyles.followButton}>Follow</Text> :
               <Text style={postStyles.followButton}>Unfollow</Text>}
           </Pressable>
@@ -48,8 +47,8 @@ export default function Post(props, {navigation}) {
             <Text style={postStyles.topic}>{topic}</Text>
           </Pressable>
           <Pressable style={{alignSelf: 'center'}}
-              onClick={() => setStatus(!status)}>
-              {status ?
+              onPress={() => setFollowingTopic(!followingTopic)}>
+              {!followingTopic ?
               <Text style={postStyles.followButton}>Follow</Text> :
               <Text style={postStyles.followButton}>Unfollow</Text>}
           </Pressable>
@@ -72,7 +71,6 @@ const postStyles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    maxWidth: 400,
     padding: 12.5,
   },
   button: {

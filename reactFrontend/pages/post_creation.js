@@ -1,4 +1,4 @@
-import { Text, TextInput, View } from 'react-native'
+import { Text, TextInput, View, StyleSheet, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import {styles} from './stylesheet'
 import AsyncCreatableSelect from 'react-select/async-creatable'
@@ -20,8 +20,8 @@ export default function PostCreation({ navigation }) {
         <View style={[styles.text, {padding: 5}]}>
           <AsyncCreatableSelect placeholder="Topic"/>
         </View>
-        <TextInput style={styles.accountInputBox} placeholder='Text' onChangeText={() => setInputtedText(inputtedText)} />
-        <TouchableOpacity onPress={() => SendPost(topic, '', '', inputtedText)}><Text style={styles.button}>Create</Text></TouchableOpacity>
+        <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]} placeholder='Text' onChangeText={() => setInputtedText(inputtedText)} />
+        <Pressable onPress={() => SendPost(topic, '', '', inputtedText)}><Text style={styles.button}>Create</Text></Pressable>
       </View>
       <View style={styles.border}/>
     </View>
@@ -52,3 +52,14 @@ function CreateImagePost(){
     <Text>Placeholder</Text>
   )
 }
+
+const createStyles = StyleSheet.create({
+  textInput:{
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    minWidth: 400,
+    minHeight: 100,
+    maxHeight: 'fit-content',
+  }
+})
