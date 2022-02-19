@@ -30,7 +30,9 @@ export default function CreateAccountScreen({navigation}) {
         <Logo/>
         <Text style={styles.header}>Create Account</Text>
         <TextInput style={styles.accountInputBox}
-                   placeholder="Name"/>
+                   placeholder="First Name"/>
+        <TextInput style={styles.accountInputBox}
+                   placeholder="Last Name"/>
         <TextInput style={styles.accountInputBox}
                    placeholder="Username"/>
         <TextInput style={styles.accountInputBox}
