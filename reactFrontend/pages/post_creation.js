@@ -2,7 +2,6 @@ import { Text, TextInput, View, StyleSheet, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import {styles} from './stylesheet'
 import AsyncCreatableSelect from 'react-select/async-creatable'
-import {TouchableOpacity} from "react-native-web";
 
 //TODO: Integrate topic selection with database
 export default function PostCreation({ navigation }) {
@@ -14,8 +13,8 @@ export default function PostCreation({ navigation }) {
       <View style={[styles.loginBox]}>
         <Text style={styles.header}>Create Post</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => CreateURLPost}><Text style={styles.button}>Link</Text></TouchableOpacity>
-          <TouchableOpacity onPress={() => CreateImagePost}><Text style={styles.button}>Image</Text></TouchableOpacity>
+          <Pressable onPress={() => CreateURLPost}><Text style={styles.button}>Link</Text></Pressable>
+          <Pressable onPress={() => CreateImagePost}><Text style={styles.button}>Image</Text></Pressable>
         </View>
         <View style={[styles.text, {padding: 5}]}>
           <AsyncCreatableSelect placeholder="Topic"/>

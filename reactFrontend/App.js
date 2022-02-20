@@ -6,7 +6,7 @@ import ProfilePage from './pages/profile_page';
 import CreateAccountScreen from './pages/create_account';
 import PostCreation from './pages/post_creation';
 import HomeScreen from './pages/home_page';
-import { Text } from "react-native";
+import {Text} from "react-native";
 
 const Stack = createNativeStackNavigator();
 

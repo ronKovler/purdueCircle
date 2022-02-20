@@ -1,9 +1,9 @@
 import { Image, Pressable, StyleSheet, Text, View} from "react-native";
 import React from "react";
 
-const Logo = (props, {navigation}) => {
+const Logo = ({navigation}, props) => {
   return (
-    <Pressable onClick={() => navigation.navigate("Home")}>
+    <Pressable onPress={() => navigation.navigate('Home')}>
       <Image style={styles.image} source={require('../assets/logo.svg')}/>
     </Pressable>
   )
@@ -11,7 +11,7 @@ const Logo = (props, {navigation}) => {
 
 const HeaderLogo = (props, {navigation}) => {
   return (
-    <Pressable onClick={() => navigation.navigate("Home")}>
+    <Pressable onPress={() => navigation.navigate('Home')}>
       <View style={{flexDirection: 'row', flex: 1}}>
         <Image style={props.style} source={require('../assets/logo.svg')}/>
         <Text style={styles.header}>PurdueCircle</Text>
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#737373',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 'fit-content',
+    // minHeight: 'fit-content',
   },
   wideViewContainer: {
     resizeMode: 'contain',
@@ -91,9 +91,9 @@ const styles = StyleSheet.create({
   },
   headerIcon: {
     aspectRatio: 1,
-    width: 50,
-    height: 50,
-    alignSelf:'center',
+    minWidth: 60,
+    minHeight: 60,
+    alignSelf: 'center',
   },
   button: {
     textAlign: "center",
@@ -105,8 +105,7 @@ const styles = StyleSheet.create({
     margin: 5,
     backgroundColor: "#ffde59",
     flex: 1,
-    minWidth: 90,
-    maxHeight: 40,
+    resizeMode: 'contain',
   },
   text: {
     fontFamily: 'Helvetica'
@@ -118,6 +117,7 @@ const styles = StyleSheet.create({
     // position: "absolute",
     // justifyContent: 'center',
   }
+
 })
 
 export {styles, Logo, HeaderLogo};

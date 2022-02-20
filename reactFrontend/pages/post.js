@@ -1,6 +1,5 @@
-import {Pressable, StyleSheet, Text, View} from "react-native";
+import {Pressable, StyleSheet, Text, View, Image} from "react-native";
 import React, {useState} from "react";
-import {Image} from "react-native-web";
 
 export default function Post(props, {navigation}) {
   const [user, setUser] = useState('user')
@@ -9,7 +8,7 @@ export default function Post(props, {navigation}) {
   const [content, setContent] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec tellus ac quam ullamcorper dictum facilisis non orci. Vivamus hendrerit et dui id scelerisque. Suspendisse potenti. Integer ante mauris, tempor. ')
   const [isLoading, setIsLoading] = useState(true)
   const [followingTopic, setFollowingTopic] = useState(false)
-  const [followingUser, setFollowingUser] = useState(true)
+  const [followingUser, setFollowingUser] = useState(false)
 
   const getPostInfo = async () => {
     try {
@@ -22,6 +21,7 @@ export default function Post(props, {navigation}) {
       setIsLoading(false)
     }
   }
+
 //TODO: Get like icon and make pressable
   return (
     <View style={{backgroundColor: "#5F5F5F", margin: 5, flexDirection: 'column', height: 'fit-content', borderRadius: 20}}>

@@ -1,7 +1,6 @@
-import {Text, TextInput, View} from 'react-native';
+import {Text, TextInput, View, Pressable} from 'react-native';
 import React, {useState} from 'react';
 import {styles, Logo} from './stylesheet';
-import {TouchableOpacity} from "react-native-web";
 
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('')
@@ -68,9 +67,9 @@ export default function LoginScreen({navigation}) {
                    secureTextEntry={true}
                    onChangeText={password => setPassword(password)}/>
         {(!correct ? <Text style={{color: 'red'}}>Incorrect Password. Try again</Text> : null)}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => validateEmail()}><Text style={styles.button}>Login</Text></TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Create Account")}><Text style={styles.button}>Register</Text></TouchableOpacity>
+        <View style={[styles.buttonContainer, {alignSelf: 'center'}]}>
+          <Pressable onPress={() => validateEmail()}><Text style={[styles.button, {minWidth: 90}]}>Login</Text></Pressable>
+          <Pressable onPress={() => navigation.navigate("Create Account")}><Text style={[styles.button, {minWidth: 90}]}>Register</Text></Pressable>
         </View>
       </View>
     </View>

@@ -1,7 +1,6 @@
 import React, {} from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import {View, Text, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacity} from 'react-native';
 import { styles, HeaderLogo } from './stylesheet';
-import { ScrollView, TouchableOpacity } from "react-native-web";
 import Post from "./post";
 import User from "./user";
 
