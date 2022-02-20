@@ -9,6 +9,7 @@ export default function LoginScreen({navigation}) {
   const [id, setId] = useState('')
   const [success, setSuccess] = useState(false)
   const [correct, setCorrect] = useState(true)
+  const [emailError, setEmailError] = useState("")
 
   function SendLogin() {
     fetch("http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/auth/login", {
@@ -37,6 +38,18 @@ export default function LoginScreen({navigation}) {
     }
   }
 
+  const validateEmail = () => {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (email.length == 0) {
+      setEmailError("Email is required")
+    } else if (reg.test(email) == false) {
+      setEmailError("Enter a valid email address")
+    } else {
+      setEmailError("")
+      SendLogin()
+    }
+  }
+
   // useEffect(() => {
   //   GetLogin();
   // }, []);
@@ -49,13 +62,14 @@ export default function LoginScreen({navigation}) {
         <TextInput style={styles.accountInputBox}
                    placeholder='Username/Email'
                    onChangeText={email => setEmail(email)}/>
+        {emailError.length > 0 && <Text style={{color: 'red'}}>{emailError}</Text>}
         <TextInput style={styles.accountInputBox}
                    placeholder='Password'
                    secureTextEntry={true}
                    onChangeText={password => setPassword(password)}/>
         {(!correct ? <Text style={{color: 'red'}}>Incorrect Password. Try again</Text> : null)}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => SendLogin()}><Text style={styles.button}>Login</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => validateEmail()}><Text style={styles.button}>Login</Text></TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Create Account")}><Text style={styles.button}>Register</Text></TouchableOpacity>
         </View>
       </View>
