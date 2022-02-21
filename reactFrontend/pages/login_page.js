@@ -1,4 +1,4 @@
-import {Text, TextInput, View, Pressable} from 'react-native';
+import {Text, TextInput, View, Pressable, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import {styles, Logo} from './stylesheet';
 
@@ -56,7 +56,9 @@ export default function LoginScreen({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.loginBox}>
-        <Logo/>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Logo/>
+        </TouchableOpacity>
         <Text style={styles.header}>Login</Text>
         <TextInput style={styles.accountInputBox}
                    placeholder='Username/Email'

@@ -3,20 +3,25 @@ import React from "react";
 
 const Logo = ({navigation}, props) => {
   return (
-    <Pressable onPress={() => navigation.navigate('Home')}>
       <Image style={styles.image} source={require('../assets/logo.svg')}/>
-    </Pressable>
   )
 }
 
 const HeaderLogo = (props, {navigation}) => {
   return (
-    <Pressable onPress={() => navigation.navigate('Home')}>
-      <View style={{flexDirection: 'row', flex: 1}}>
+    <View style={{flexDirection: 'row'}}>
         <Image style={props.style} source={require('../assets/logo.svg')}/>
         <Text style={styles.header}>PurdueCircle</Text>
-      </View>
-    </Pressable>
+    </View>
+  )
+}
+
+const CPLogo = (props, {navigation}) => {
+  return (
+    <View style={{flexDirection: 'row'}}>
+        <Image style={props.style} source={require('../assets/logo.svg')}/>
+        <Text style={styles.header}>Create Post</Text>
+    </View>
   )
 }
 
@@ -64,7 +69,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#545454',
     justifyContent: 'center',
     alignContent: 'space-around',
-    padding: 10,
+    paddingTop: 10,
+    paddingBottom: 20,
+    paddingHorizontal: 20
   },
   sideBar: {
     resizeMode: 'contain',
@@ -100,7 +107,6 @@ const styles = StyleSheet.create({
     // textAlignVertical: "center",
     fontSize: 16,
     fontWeight: 'bold',
-    justifyContent: "space-evenly",
     padding: 10,
     margin: 5,
     backgroundColor: "#ffde59",
@@ -112,8 +118,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    alignSelf: 'flex-end',
-    padding: 10,
+    alignSelf: 'center'
     // position: "absolute",
     // justifyContent: 'center',
   }
