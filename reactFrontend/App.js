@@ -28,7 +28,7 @@ export default function App() {
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
       <Stack.Navigator screenOptions={{headerShown:false}}>
-        <Stack.Screen name="Home" component={HomeScreen} options={{ title: "PurdueCircle" }} />
+        <Stack.Screen name="Home" component={HomeScreen}/>
         <Stack.Screen name="Create Post" component={PostCreation}/>
         <Stack.Screen name="Profile Page" component={ProfilePage}/>
         <Stack.Screen name="Login" component={LoginScreen} />
