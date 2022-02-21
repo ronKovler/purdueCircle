@@ -12,6 +12,7 @@ export default function CreateAccountScreen({navigation}) {
   const [reenter, setReenter] = useState('')
   const [usernameError, setUsernameError] = useState('')
   const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
 
 
   //TODO: insert URL
@@ -31,6 +32,7 @@ export default function CreateAccountScreen({navigation}) {
   const validateSubmission = () => {
     var validUsername = false
     var validEmail = false
+    var validPassword = false
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (username.length == 0) {
       setUsernameError("Username is required")
@@ -48,7 +50,14 @@ export default function CreateAccountScreen({navigation}) {
       validEmail = true
     }
 
-    if (validUsername && validEmail) {
+    if (password.length == 0) {
+      setPasswordError("Password is required")
+    } else {
+      setPasswordError("")
+      validPassword = true
+    }
+
+    if (validUsername && validEmail && validPassword) {
       Register()
     }
   }
@@ -75,6 +84,7 @@ export default function CreateAccountScreen({navigation}) {
                    placeholder='Password'
                    secureTextEntry={true}
                    onChangeText={password => setPassword(password)}/>
+        {passwordError.length > 0 && <Text style={{color: 'red'}}>{passwordError}</Text>}
         <TextInput style={styles.accountInputBox}
                    placeholder="Re-enter Password"
                    secureTextEntry={true} onChangeText={reenter => setReenter(reenter)}/>
