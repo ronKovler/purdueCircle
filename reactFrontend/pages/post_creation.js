@@ -1,27 +1,33 @@
-import { Text, TextInput, View } from 'react-native'
+import { Text, TextInput, View, StyleSheet, Pressable, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import {styles} from './stylesheet'
 import AsyncCreatableSelect from 'react-select/async-creatable'
-import {TouchableOpacity} from "react-native-web";
 
 //TODO: Integrate topic selection with database
 export default function PostCreation({ navigation }) {
   const [inputtedText, setInputtedText] = useState('')
   const [topic, setTopic] = useState('')
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {padding: 15}]}>
       <View style={styles.border}/>
       <View style={[styles.loginBox]}>
-        <Text style={styles.header}>Create Post</Text>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => CreateURLPost}><Text style={styles.button}>Link</Text></TouchableOpacity>
-          <TouchableOpacity onPress={() => CreateImagePost}><Text style={styles.button}>Image</Text></TouchableOpacity>
+        <View style={{flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center', paddingBottom: 10}}>
+            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                <Image style={[styles.headerIcon, {margin: 10}]} source={require('../assets/logo.svg')}/>
+            </TouchableOpacity>
+            <Text style={{textAlign: 'center', color: '#ffc000', fontWeight: 'bold', fontSize: 18, padding: 10}}>Create Post</Text>
         </View>
-        <View style={[styles.text, {padding: 5}]}>
-          <AsyncCreatableSelect placeholder="Topic"/>
+        <View style={{flex: 5}}>
+            <View style={styles.buttonContainer}>
+              <Pressable onPress={() => CreateURLPost}><Text style={styles.button}>Link</Text></Pressable>
+              <Pressable onPress={() => CreateImagePost}><Text style={styles.button}>Image</Text></Pressable>
+            </View>
+            <View style={[styles.text, {padding: 5}]}>
+              <AsyncCreatableSelect placeholder="Topic"/>
+            </View>
+            <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]} placeholder='Text' onChangeText={() => setInputtedText(inputtedText)} />
+            <Pressable onPress={() => SendPost(topic, '', '', inputtedText)}><Text style={styles.button}>Create</Text></Pressable>
         </View>
-        <TextInput style={styles.accountInputBox} placeholder='Text' onChangeText={() => setInputtedText(inputtedText)} />
-        <TouchableOpacity onPress={() => SendPost(topic, '', '', inputtedText)}><Text style={styles.button}>Create</Text></TouchableOpacity>
       </View>
       <View style={styles.border}/>
     </View>
@@ -52,3 +58,14 @@ function CreateImagePost(){
     <Text>Placeholder</Text>
   )
 }
+
+const createStyles = StyleSheet.create({
+  textInput:{
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    minWidth: 400,
+    minHeight: 100,
+    maxHeight: 'fit-content',
+  }
+})

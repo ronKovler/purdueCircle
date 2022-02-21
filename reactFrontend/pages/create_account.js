@@ -4,7 +4,8 @@ import {styles, Logo} from './stylesheet';
 import {TouchableOpacity} from "react-native-web";
 
 export default function CreateAccountScreen({navigation}) {
-  const [name, setName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +19,8 @@ export default function CreateAccountScreen({navigation}) {
     fetch("", {
       method: "POST",
       body: JSON.stringify({
-        name: name,
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         username: username,
         password: password
@@ -54,7 +56,9 @@ export default function CreateAccountScreen({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.loginBox}>
-        <Logo/>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Logo/>
+        </TouchableOpacity>
         <Text style={styles.header}>Create Account</Text>
         <TextInput style={styles.accountInputBox}
                    placeholder="First Name"/>
@@ -75,7 +79,10 @@ export default function CreateAccountScreen({navigation}) {
                    placeholder="Re-enter Password"
                    secureTextEntry={true} onChangeText={reenter => setReenter(reenter)}/>
         {password !== reenter ? <Text style={{color:'red'}}>Passwords do not match</Text> : null}
-        <TouchableOpacity onPress={() => validateSubmission()}><Text style={styles.button}>Register</Text></TouchableOpacity>
+        <View style={[styles.buttonContainer, {alignSelf: 'center'}]}>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}><Text style={[styles.button, {minWidth: 90}]}>Login</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => validateSubmission()}><Text style={styles.button}>Register</Text></TouchableOpacity>
+        </View>
       </View>
     </View>
   )

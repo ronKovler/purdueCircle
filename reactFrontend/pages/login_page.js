@@ -1,7 +1,6 @@
-import {Text, TextInput, View} from 'react-native';
+import {Text, TextInput, View, Pressable, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import {styles, Logo} from './stylesheet';
-import {TouchableOpacity} from "react-native-web";
 
 export default function LoginScreen({navigation}) {
     const [email, setEmail] = useState('')
@@ -99,6 +98,25 @@ return (
                     style={styles.button}>Register</Text></TouchableOpacity>
             </View>
         </View>
+      <View style={styles.loginBox}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Logo/>
+        </TouchableOpacity>
+        <Text style={styles.header}>Login</Text>
+        <TextInput style={styles.accountInputBox}
+                   placeholder='Username/Email'
+                   onChangeText={email => setEmail(email)}/>
+        {emailError.length > 0 && <Text style={{color: 'red'}}>{emailError}</Text>}
+        <TextInput style={styles.accountInputBox}
+                   placeholder='Password'
+                   secureTextEntry={true}
+                   onChangeText={password => setPassword(password)}/>
+        {(!correct ? <Text style={{color: 'red'}}>Incorrect Password. Try again</Text> : null)}
+        <View style={[styles.buttonContainer, {alignSelf: 'center'}]}>
+          <Pressable onPress={() => validateEmail()}><Text style={[styles.button, {minWidth: 90}]}>Login</Text></Pressable>
+          <Pressable onPress={() => navigation.navigate("Create Account")}><Text style={[styles.button, {minWidth: 90}]}>Register</Text></Pressable>
+        </View>
+      </View>
     </View>
 );
 }
