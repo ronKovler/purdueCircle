@@ -78,26 +78,7 @@ const validateEmail = () => {
 
 return (
     <View style={styles.container}>
-        <View style={styles.loginBox}>
-            <Logo/>
-            <Text style={styles.header}>Login</Text>
-            <TextInput style={styles.accountInputBox}
-                       placeholder='Username/Email'
-                       onChangeText={email => setEmail(email)}
-                       value={email}/>
-            {emailError.length > 0 && <Text style={{color: 'red'}}>{emailError}</Text>}
-            <TextInput style={styles.accountInputBox}
-                       placeholder='Password'
-                       secureTextEntry={true}
-                       onChangeText={password => setPassword(password)}/>
-            {(!correct ? <Text style={{color: 'red'}}>Incorrect Password. Try again</Text> : null)}
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={() => validateEmail()}><Text
-                    style={styles.button}>Login</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate("Create Account")}><Text
-                    style={styles.button}>Register</Text></TouchableOpacity>
-            </View>
-        </View>
+
       <View style={styles.loginBox}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <Logo/>
