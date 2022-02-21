@@ -11,7 +11,7 @@ export default function LoginScreen({navigation}) {
   const [emailError, setEmailError] = useState("")
 
   function SendLogin() {
-    fetch("https://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/auth/login", {
+    fetch("https://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:443/api/auth/login", {
       method: "POST",
       body: JSON.stringify({
           email: email,
