@@ -1,5 +1,6 @@
 import {Pressable, StyleSheet, Text, View, Image} from "react-native";
 import React, {useState} from "react";
+import User from "./user";
 
 export default function Post(props, {navigation}) {
   const [user, setUser] = useState('user')
@@ -36,22 +37,24 @@ export default function Post(props, {navigation}) {
                        onClick={() => navigation.navigate("Profile Page")}>
               <Text style={postStyles.username}>{user}</Text>
             </Pressable>
-          <Pressable style={{alignSelf: 'center'}}
-              onPress={() => setFollowingUser(!followingUser)}>
-              {!followingUser ?
-              <Text style={postStyles.followButton}>Follow</Text> :
-              <Text style={postStyles.followButton}>Unfollow</Text>}
-          </Pressable>
+          {User.isLoggedIn ?
+              <Pressable style={{alignSelf: 'center'}}
+                  onPress={() => setFollowingUser(!followingUser)}>
+                  {!followingUser ?
+                  <Text style={postStyles.followButton}>Follow</Text> :
+                  <Text style={postStyles.followButton}>Unfollow</Text>}
+              </Pressable> : null}
           </View>
           <Pressable style={{alignSelf: 'center'}}>
             <Text style={postStyles.topic}>{topic}</Text>
           </Pressable>
-          <Pressable style={{alignSelf: 'center'}}
-              onPress={() => setFollowingTopic(!followingTopic)}>
-              {!followingTopic ?
-              <Text style={postStyles.followButton}>Follow</Text> :
-              <Text style={postStyles.followButton}>Unfollow</Text>}
-          </Pressable>
+          {User.isLoggedIn ?
+              <Pressable style={{alignSelf: 'center'}}
+                  onPress={() => setFollowingTopic(!followingTopic)}>
+                  {!followingTopic ?
+                  <Text style={postStyles.followButton}>Follow</Text> :
+                  <Text style={postStyles.followButton}>Unfollow</Text>}
+              </Pressable> : null}
         </View>
       </View>
       <Text style={postStyles.text}>{content}</Text>

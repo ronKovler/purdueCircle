@@ -7,6 +7,12 @@ const Logo = ({navigation}, props) => {
   )
 }
 
+const Choo = ({navigation}, props) => {
+  return (
+      <Image source={require('../assets/choo.svg')}/>
+  )
+}
+
 const HeaderLogo = (props, {navigation}) => {
   return (
     <View style={{flexDirection: 'row'}}>
@@ -112,11 +118,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffde59",
     flex: 1,
     resizeMode: 'contain',
+    borderRadius: 5
   },
   text: {
     fontFamily: 'Helvetica'
   },
   buttonContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignSelf: 'center'
     // position: "absolute",

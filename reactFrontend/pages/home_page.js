@@ -1,6 +1,6 @@
 import React, {} from 'react';
-import {View, Text, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacity} from 'react-native';
-import { styles, HeaderLogo } from './stylesheet';
+import {View, Text, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacity, Image} from 'react-native';
+import { styles, HeaderLogo, Choo, Logo } from './stylesheet';
 import Post from "./post";
 import User from "./user";
 
@@ -10,32 +10,45 @@ export default function HomeScreen({navigation}) {
         <View style={styled.container}>
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
-                <View style={{flex: 5, flexDirection: 'column', alignSelf: 'center'}}>
+                <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
+                    <View style={{flex: 1}}/>
                     <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
                         <HeaderLogo style={styles.headerIcon}/>
                     </View>
-                </View>
-                <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
                     {!User.isLoggedIn ?
                       <View style={styles.buttonContainer}>
                           <Pressable onPress={() => navigation.navigate('Login')}><Text
                             style={styles.button}>Login</Text></Pressable>
                           <Pressable onPress={() => navigation.navigate('Create Account')}><Text
                             style={styles.button}>Register</Text></Pressable>
-                      </View> : null}
+                      </View> : <View style={{flex: 1}}/>}
+                </View>
+                <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
                 </View>
             </View>
             <View style={{flex: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '737373'}}>
-                <View style={{flex: 2, backgroundColor: 'dimgrey', justifyContent: 'center'}}>
-                    <Pressable style={{alignSelf: 'center'}}>
-                        <Text style={styles.button}>Hot Posts</Text>
-                    </Pressable>
-                    <Pressable style={{alignSelf: 'center'}}>
-                        <Text style={styles.button}>Saved Posts</Text>
-                    </Pressable>
-                    <Pressable style={{alignSelf: 'center'}} onPress={() => navigation.navigate('Create Post')}>
-                        <Text style={styles.button}>Create Post</Text>
-                    </Pressable>
+                <View style={{flex: 2, backgroundColor: 'dimgrey', justifyContent: 'center', alignItems: 'space-between'}}>
+                    <View style={{flex: 3}}>
+                        <Image style={styles.image}  source={require('../assets/choo.svg')}/>
+                    </View>
+                    <View style={{flex: 3, justifyContent: 'center'}}>
+                        <View style={{flex: 1}}>
+                            <Pressable>
+                                <Text style={styles.button}>Hot Posts</Text>
+                            </Pressable>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <Pressable>
+                                <Text style={styles.button}>Saved Posts</Text>
+                            </Pressable>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <Pressable onPress={() => navigation.navigate('Create Post')}>
+                                <Text style={styles.button}>Create Post</Text>
+                            </Pressable>
+                        </View>
+                        <View style={{flex: 5}}/>
+                    </View>
                 </View>
                 <View style={{flex: 5, flexDirection: 'column'}}>
                     <View style={{flex: 1, backgroundColor: '737373'}}/>

@@ -91,7 +91,7 @@ export default function CreateAccountScreen({navigation}) {
         {password !== reenter ? <Text style={{color:'red'}}>Passwords do not match</Text> : null}
         <View style={[styles.buttonContainer, {alignSelf: 'center'}]}>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}><Text style={[styles.button, {minWidth: 90}]}>Login</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => validateSubmission()}><Text style={styles.button}>Register</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => validateSubmission()}><Text style={styles.button}>Register Account</Text></TouchableOpacity>
         </View>
       </View>
     </View>
