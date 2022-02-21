@@ -4,7 +4,8 @@ import {styles, Logo} from './stylesheet';
 import {TouchableOpacity} from "react-native-web";
 
 export default function CreateAccountScreen({navigation}) {
-  const [name, setName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +19,8 @@ export default function CreateAccountScreen({navigation}) {
     fetch("", {
       method: "POST",
       body: JSON.stringify({
-        name: name,
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         username: username,
         password: password
