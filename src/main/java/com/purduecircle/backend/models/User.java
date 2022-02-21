@@ -29,27 +29,42 @@ public class User {
 
     /* Required user field */
 
-    @Column(name="first_name", length=64, nullable=true)
+    @Column(name="first_name", length=64)
     private String first_name;
 
     /* Required user field */
-    @Column(name="last_name", length=64, nullable=true)
+    @Column(name="last_name", length=64)
     private String last_name;
 
     /* Serves as uniqueID, cannot be changed, required user field */
-    @Column(name="email", length=64, nullable=true, unique=true)
+    @Column(name="email", length=64, unique=true)
     private String email;
 
     /* Unique to user, requried user field */
-    @Column(name="username", length=64, nullable=true, unique=true)
+    @Column(name="username", length=64, unique=true)
     private String username;
 
     /* Required user field */
-    @Column(name="password", length=64, nullable=true, unique=true)
+    @Column(name="password", length=64, unique=true)
     private String password;
 
-    @Column(name="phone_number", nullable=true)
+    @Column(name="phone_number")
     private String phone_number;
+
+    @OneToMany(mappedBy="userID")
+    private set<Post> userPosts;
+
+    @OneToMany(mappedBy="userID")
+    private set<Post> savedPosts;
+
+    @OneToMany(mappedBy="userID")
+    private set<User> following;
+
+    @OneToMany(mappedBy="userID")
+    private set<User> followers;
+
+    @OneToMany(mappedBy="userID")
+    private set<User> blocked;
 
     public User(String first_name, String last_name, String email, String username, String password, String phone_number) {
         this.first_name = first_name;
@@ -191,21 +206,5 @@ public class User {
 
     public void setPhoneNumber(String phone_number) {
         this.phone_number = phone_number;
-    }
-
-    public ArrayList<User> getFollowers() {
-        return null;
-    }
-
-    public ArrayList<User> getFollowedUsers() {
-        return null;
-    }
-
-    public ArrayList<User> getBlockedUsers() {
-        return null;
-    }
-
-    public ArrayList<String> getFollowedTopics() {
-        return null;
     }
 }

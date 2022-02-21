@@ -7,16 +7,16 @@ package com.purduecircle.backend.models; /**
 * 
 **/
 
-import java.util.ArrayList;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "post")
 public class Post {
 
     public Post(String content, User user, String topic) {
         this.content = content;
         this.user = user;
         this.topic = topic;
-        setPostID();
     }
 
     /*
@@ -24,21 +24,30 @@ public class Post {
     */
 
     /* Unique ID for post, set when created */
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int postID;
 
     /* Text, picture, or URL data in content */
+    @Column(name="content", length=255)
     private String content;
 
     /* User that made post */
+    @ManyToOne
+    @JoinColumn(name="userID")
     private User user;
 
+    @Column(name="timePosted")
     private LocalDateTime timePosted;
 
+    @Column(name="likes", nullable=true)
     private int likes;
 
     /* List of comments on post */
-    private ArrayList<Comment> comments;
+    @OneToMany(mappedBy="commentID")
+    private Set<Comment> comments;
 
+    @Column(name="topic", length=64)
     private String topic;
 
     /*
@@ -66,6 +75,7 @@ public class Post {
     }
 
     private void setPostID() {
+        this.postID = postID;
     }
 
     public String getContent() {
