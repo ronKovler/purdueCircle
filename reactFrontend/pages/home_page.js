@@ -6,12 +6,21 @@ import User from "./user";
 
 export default function HomeScreen({navigation}) {
 
+    const LogOut = async () => {
+        User.isLoggedIn=false;
+        navigation.navigate('Login');
+    }
+
     return (
         <View style={styled.container}>
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                 <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
-                    <View style={{flex: 1}}/>
+                    {User.isLoggedIn ?
+                        <View style={styles.buttonContainer}>
+                              <Pressable onPress={() => LogOut()}><Text
+                                style={styles.button}>Log Out</Text></Pressable>
+                        </View> : <View style={{flex: 1}}/>}
                     <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
                         <HeaderLogo style={styles.headerIcon}/>
                     </View>

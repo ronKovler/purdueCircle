@@ -30,7 +30,7 @@ export default function LoginScreen({navigation}) {
             if (userID >= 0) {
                 setId(userID);
                 User.isLoggedIn=true;
-                //navigation.navigate('Home');
+                navigation.navigate('Home');
             } else { //password failed
                 User.isLoggedIn=false;
                 console.log("FAILED FUCKER TRY AGAIN");
