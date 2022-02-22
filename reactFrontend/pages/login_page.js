@@ -1,4 +1,4 @@
-import {Text, TextInput, View, Pressable, TouchableOpacity, Alert} from 'react-native';
+import {Text, TextInput, View, Pressable, TouchableOpacity, AsyncStorage} from 'react-native';
 import React, {useState} from 'react';
 import {styles, Logo} from './stylesheet';
 import User from './user';
@@ -77,9 +77,9 @@ export default function LoginScreen({navigation}) {
 
 const validateEmail = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-    if (email.length == 0) {
+    if (email.length === 0) {
         setEmailError("Email is required")
-    } else if (reg.test(email) == false) {
+    } else if (reg.test(email) === false) {
         setEmailError("Enter a valid email address")
     } else {
         setEmailError("")

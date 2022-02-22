@@ -34,23 +34,23 @@ export default function CreateAccountScreen({navigation}) {
     var validEmail = false
     var validPassword = false
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-    if (username.length == 0) {
+    if (username.length === 0) {
       setUsernameError("Username is required")
     } else {
       setUsernameError("")
       validUsername = true
     }
 
-    if (email.length == 0) {
+    if (email.length === 0) {
       setEmailError("Email is required")
-    } else if (reg.test(email) == false) {
+    } else if (reg.test(email) === false) {
       setEmailError("Enter a valid email address")
     } else {
       setEmailError("")
       validEmail = true
     }
 
-    if (password.length == 0) {
+    if (password.length === 0) {
       setPasswordError("Password is required")
     } else {
       setPasswordError("")
