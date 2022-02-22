@@ -10,6 +10,8 @@ export default function CreateAccountScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [reenter, setReenter] = useState('')
+  const [firstNameError, setFirstNameError] = useState('')
+  const [lastNameError, setLastNameError] = useState('')
   const [usernameError, setUsernameError] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
@@ -30,10 +32,27 @@ export default function CreateAccountScreen({navigation}) {
   }
 
   const validateSubmission = () => {
+    var validFirstName = false
+    var validLastName = false
     var validUsername = false
     var validEmail = false
     var validPassword = false
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
+    if (firstName.length === 0) {
+      setFirstNameError("First name is required")
+    } else {
+      setFirstNameError("")
+      validFirstName = true
+    }
+
+    if (lastName.length === 0) {
+      setLastNameError("Last name is required")
+    } else {
+      setLastNameError("")
+      validLastName = true
+    }
+
     if (username.length === 0) {
       setUsernameError("Username is required")
     } else {
@@ -57,7 +76,7 @@ export default function CreateAccountScreen({navigation}) {
       validPassword = true
     }
 
-    if (validUsername && validEmail && validPassword) {
+    if (validFirstName && validLastName && validUsername && validEmail && validPassword) {
       Register()
     }
   }
@@ -70,9 +89,13 @@ export default function CreateAccountScreen({navigation}) {
         </TouchableOpacity>
         <Text style={styles.header}>Create Account</Text>
         <TextInput style={styles.accountInputBox}
-                   placeholder="First Name"/>
+                   placeholder="First Name"
+                   onChangeText={firstName => setFirstName(firstName)}/>
+        {firstNameError.length > 0 && <Text style={{color: 'red'}}>{firstNameError}</Text>}
         <TextInput style={styles.accountInputBox}
-                   placeholder="Last Name"/>
+                   placeholder="Last Name"
+                   onChangeText={lastName => setLastName(lastName)}/>
+        {lastNameError.length > 0 && <Text style={{color: 'red'}}>{lastNameError}</Text>}
         <TextInput style={styles.accountInputBox}
                    placeholder="Username"
                    onChangeText={username => setUsername(username)}/>
