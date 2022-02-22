@@ -1,8 +1,8 @@
 package com.purduecircle.backend;
 
+import com.purduecircle.backend.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import com.purduecircle.backend.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 

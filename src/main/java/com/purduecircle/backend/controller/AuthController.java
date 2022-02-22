@@ -1,24 +1,20 @@
-package com.purduecircle.backend;
+package com.purduecircle.backend.controller;
 
-//import com.purduecircle.backend.DTO.UserDTO;
 import com.purduecircle.backend.models.User;
-import com.purduecircle.backend.models.UserRepository;
+import com.purduecircle.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
-import java.util.List;
 
 @RestController()
 @RequestMapping("/api/auth/")
 public class AuthController {
     @Autowired
     UserRepository userRepository;
-
 
     @CrossOrigin
     @RequestMapping(value="login", method = RequestMethod.POST,

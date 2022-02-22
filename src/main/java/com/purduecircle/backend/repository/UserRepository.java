@@ -1,5 +1,7 @@
-package com.purduecircle.backend.models;
+package com.purduecircle.backend.repository;
 
+import com.purduecircle.backend.models.User;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.stereotype.Repository;

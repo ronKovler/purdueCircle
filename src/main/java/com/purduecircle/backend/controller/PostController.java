@@ -1,5 +1,7 @@
-package com.purduecircle.backend;
+package com.purduecircle.backend.controller;
 
+import com.purduecircle.backend.repository.PostRepository;
+import com.purduecircle.backend.repository.UserRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,34 +10,16 @@ import com.purduecircle.backend.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URISyntaxException;
-import java.util.List;
 
 @RestController
-public class UserController {
+@RequestMapping("/api/post/")
+public class PostController {
 
     @Autowired  //Autowired annotation automatically injects an instance
     private UserRepository userRepository;
 
-    @GetMapping("/checkConnection")
-    public String testConnection() {
-        return "Connection Successful";
-    }
-
-    /**
-     * TODO Add code to handle home page.
-     * any request (GET, POST, PUT, etc.) to the root URL(/) will be
-     * handled here within this method
-     * @return String, might change to a file or whatever down the line
-     */
-    @RequestMapping("/")
-    public String home() {
-        return "Add Code here to handle home page";
-    }
-
-    /**
-    /* Returns false if username or password is already taken, otherwise saves information
-    /* to database and returns true
-    */
+    @Autowired
+    private PostRepository postRepository;
 
     @CrossOrigin
     @RequestMapping(value="create_account", method = RequestMethod.POST,
