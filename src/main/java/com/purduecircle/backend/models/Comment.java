@@ -9,6 +9,8 @@ package com.purduecircle.backend.models; /**
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "comment")
 public class Comment {
 
     public Comment(String content, User user) {
@@ -22,14 +24,20 @@ public class Comment {
     */
 
     /* Unique ID for comment, set when created */
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int commentID;
 
     /* Text, picture, or URL data in content */
+    @Column(name="content", length=255)
     private String content;
 
     /* User that made post */
+    @ManyToOne
+    @JoinColumn(name="userID")
     private User user;
 
+    @Column(name="timePosted")
     private LocalDateTime timePosted;
 
     /*

@@ -18,11 +18,19 @@ export default function PostCreation({ navigation }) {
             <Text style={{textAlign: 'center', color: '#ffc000', fontWeight: 'bold', fontSize: 18, padding: 10}}>Create Post</Text>
         </View>
         <View style={{flex: 5}}>
-            <View style={styles.buttonContainer}>
-              <Pressable onPress={() => CreateURLPost}><Text style={styles.button}>Link</Text></Pressable>
-              <Pressable onPress={() => CreateImagePost}><Text style={styles.button}>Image</Text></Pressable>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+                <View style={{flex: 1}}>
+                    <Pressable>
+                        <Text style={styles.button}>Embed Link</Text>
+                    </Pressable>
+                </View>
+                <View style={{flex: 1}}>
+                    <Pressable>
+                        <Text style={styles.button}>Attach Image</Text>
+                    </Pressable>
+                </View>
             </View>
-            <View style={[styles.text, {padding: 5}]}>
+            <View style={[styles.text, {padding: 5, flex: 1}]}>
               <AsyncCreatableSelect placeholder="Topic"/>
             </View>
             <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]} placeholder='Text' onChangeText={() => setInputtedText(inputtedText)} />

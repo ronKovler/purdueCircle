@@ -95,7 +95,7 @@ return (
         {(!correct ? <Text style={{color: 'red'}}>Incorrect Password. Try again</Text> : null)}
         <View style={[styles.buttonContainer, {alignSelf: 'center'}]}>
           <Pressable onPress={() => validateEmail()}><Text style={[styles.button, {minWidth: 90}]}>Login</Text></Pressable>
-          <Pressable onPress={() => navigation.navigate("Create Account")}><Text style={[styles.button, {minWidth: 90}]}>Register</Text></Pressable>
+          <Pressable onPress={() => navigation.navigate("Create Account")}><Text style={[styles.button, {minWidth: 90}]}>Create an Account</Text></Pressable>
         </View>
       </View>
     </View>
