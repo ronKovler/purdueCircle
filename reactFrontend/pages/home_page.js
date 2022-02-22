@@ -21,7 +21,11 @@ export default function HomeScreen({navigation}) {
                             style={styles.button}>Login</Text></Pressable>
                           <Pressable onPress={() => navigation.navigate('Create Account')}><Text
                             style={styles.button}>Register</Text></Pressable>
-                      </View> : <View style={{flex: 1}}/>}
+                      </View> :
+                      <View style={styles.buttonContainer}>
+                          <Pressable onPress={() => navigation.navigate('Profile Page')}><Text
+                            style={styles.button}>View Profile</Text></Pressable>
+                      </View>}
                 </View>
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
                 </View>
