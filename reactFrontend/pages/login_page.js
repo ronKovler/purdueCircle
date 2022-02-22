@@ -12,7 +12,7 @@ export default function LoginScreen({navigation}) {
 
     const SendLogin = async () => {
         try {
-            fetch("https://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:443/api/auth/login", {
+            fetch(serverAddress + "/api/auth/login", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
