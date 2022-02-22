@@ -8,10 +8,13 @@ package com.purduecircle.backend.models; /**
 **/
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "posts")
@@ -21,6 +24,8 @@ public class Post {
         this.content = content;
         this.user = user;
         this.topic = topic;
+        Date date = new Date();
+        this.time_posted = new Timestamp(date.getTime());
     }
 
     /*
