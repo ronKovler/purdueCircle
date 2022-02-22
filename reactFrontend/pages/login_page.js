@@ -1,6 +1,7 @@
 import {Text, TextInput, View, Pressable, TouchableOpacity, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {styles, Logo} from './stylesheet';
+import User from './user';
 
 export default function LoginScreen({navigation}) {
     const [email, setEmail] = useState('')
@@ -9,6 +10,7 @@ export default function LoginScreen({navigation}) {
     const [success, setSuccess] = useState(false)
     const [correct, setCorrect] = useState(true)
     const [emailError, setEmailError] = useState("")
+
 
     const SendLogin = async () => {
         try {
@@ -23,10 +25,21 @@ export default function LoginScreen({navigation}) {
                     'password': password
                 })
             })
-            const json = await response.json();
-            console.log("FUCK ME");
+            const userID = await response.json();
+            console.log(userID)
+            if (userID >= 0) {
+                setId(userID);
+                User.isLoggedIn=true;
 
-        } catch {
+            } else { //password failed
+                User.isLoggedIn=false;
+                console.log("FAILED FUCKER TRY AGAIN");
+
+                //ADD ERROR DIALOGUE HERE-------------------------------------------
+                setEmailError("Username/Password combination is invalid. Try Again");
+            }
+
+        } catch (error){
             console.error(error)
         }
     }

@@ -1,10 +1,13 @@
 package com.purduecircle.backend;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.purduecircle.backend.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
@@ -33,49 +36,28 @@ public class UserController {
     /* Returns false if username or password is already taken, otherwise saves information
     /* to database and returns true
     */
-    @GetMapping("/create_account")
-    public boolean createNewUserAccount(String firstName, String lastName, 
-        String username, String email, String password) {
-        // Check email for uniqueness
-        if (!userRepository.findByEmail(email).isEmpty()) {
-            // Email already exists in database
-            return false;
-        }
-        // Check username for uniqueness
-        if (!userRepository.findByUsername(username).isEmpty()) {
-            // Username already exists in database
-            return false;
+
+    @CrossOrigin
+    @RequestMapping(value="create_account", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> tryLogin(@RequestBody User newUser) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        //DON'T TOUCH ABOVE
+
+        User checkExists = userRepository.findByEmail(newUser.getEmail());
+        if (checkExists != null) {
+            System.out.println("Email already used: " + checkExists.getEmail());
+            return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
 
-        User newUser = new User(firstName, lastName, email, username, password);
+        checkExists = null;
+        checkExists = userRepository.findByUsername(newUser.getUsername());
+        if (checkExists != null) {
+            System.out.println("Username already used: " + checkExists.getUsername());
+            return ResponseEntity.ok().headers(responseHeaders).body(-1);
+        }
+
         userRepository.save(newUser);
-
-        return true;    
-    }
-
-    // localhost:8081
-    // user and generated password
-    // TODO: catch exceptions
-    @GetMapping("/test")
-    public void testDatabase() {
-        /*
-        User newUser = new User();
-        newUser.setFirstName("testName");
-        newUser.setLastName("testName");
-        newUser.setEmail("testEmail");
-        newUser.setUsername("testUsername");
-        newUser.setPassword("testPassword");
-        userRepository.save(newUser);
-        */
-
-        long count = userRepository.count();
-        System.out.println("Number of users: " + count);
-
-        if (!userRepository.findByEmail("teamUSA@gmail.com").isEmpty()) {
-            // Should exist
-            System.out.println("FOUND GEORGE!");
-        }
-
-        return;
+        return ResponseEntity.ok().headers(responseHeaders).body(checkExists.getUserID());
     }
 }
