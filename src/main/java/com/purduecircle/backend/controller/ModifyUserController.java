@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.net.URISyntaxException;
 
 @RestController
+@RequestMapping("/api/modify/")
 public class ModifyUserController {
 
     @Autowired  //Autowired annotation automatically injects an instance
@@ -27,39 +28,30 @@ public class ModifyUserController {
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> modifyFirstName(@RequestBody User newUser) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-
-
-        User user = userRepository.findByUserID(newUser.getUserID);
+        User user = userRepository.findByUserID(newUser.getUserID());
         user.setFirstName(newUser.getFirstName());
-
-
-        User checkExists = userRepository.findByEmail(newUser.getEmail());
-        if (checkExists != null) {
-            System.out.println("Email already used: " + checkExists.getEmail());
-            return ResponseEntity.ok().headers(responseHeaders).body(-1);
-        }
-
-        checkExists = null;
-        checkExists = userRepository.findByUsername(newUser.getUsername());
-        if (checkExists != null) {
-            System.out.println("Username already used: " + checkExists.getUsername());
-            return ResponseEntity.ok().headers(responseHeaders).body(-1);
-        }
-
-        userRepository.save(newUser);
-        return ResponseEntity.ok().headers(responseHeaders).body(checkExists.getUserID());
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
     @CrossOrigin
     @RequestMapping(value="modify_last_name", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> modifyLastName(@RequestBody User newUser) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.findByUserID(newUser.getUserID());
+        user.setLastName(newUser.getLastName());
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
     @CrossOrigin
     @RequestMapping(value="modify_username", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> modifyUsername(@RequestBody User newUser) throws URISyntaxException {
+    public ResponseEntity<Integer> modifyUsername(@RequestBody User newUser) throws URISyntaxException{
+        // JESSE WORK ON THE CHECK FOR THIS
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.findByUserID(newUser.getUserID());
+        user.setUsername(newUser.getUsername());
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
     // TODO: regex should be checked on frontend
