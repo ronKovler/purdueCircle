@@ -74,7 +74,8 @@ export default function CreateAccountScreen({navigation}) {
         <TextInput style={styles.accountInputBox}
                    placeholder="Last Name"/>
         <TextInput style={styles.accountInputBox}
-                   placeholder="Username"/>
+                   placeholder="Username"
+                   onChangeText={username => setUsername(username)}/>
         {usernameError.length > 0 && <Text style={{color: 'red'}}>{usernameError}</Text>}
         <TextInput style={styles.accountInputBox}
                    placeholder='Email'
