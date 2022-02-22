@@ -1,9 +1,9 @@
-import EncryptedStorage from "react-native-encrypted-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class Authentication {
   async login(userID){
     try{
-      await EncryptedStorage.setItem('user', userID)
+      await AsyncStorage.setItem('user', userID)
     } catch (error){
       console.error(error)
     }
@@ -11,7 +11,7 @@ class Authentication {
 
   async logout(){
     try{
-      await EncryptedStorage.removeItem('user')
+      await AsyncStorage.removeItem('user')
     } catch (error){
       console.error(error)
     }
@@ -19,11 +19,15 @@ class Authentication {
 
   async isLoggedIn(){
     try{
-      return await EncryptedStorage.getItem('user') !== undefined
+      return await AsyncStorage.getItem('user') !== null
     } catch(error){
       console.log(error)
       return false;
     }
+  }
+
+  async getUserId(){
+    return await AsyncStorage.getItem('user')
   }
 }
 
