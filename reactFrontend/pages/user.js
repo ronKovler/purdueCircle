@@ -1,8 +1,32 @@
+import EncryptedStorage from "react-native-encrypted-storage";
 
-const User = {
-  id: 0,
-  isLoggedIn: true,
-  image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farchive.org%2Fdownload%2Ftwitter-default-pfp%2Fe.png&f=1&nofb=1'
+class Authentication {
+  async login(userID){
+    try{
+      await EncryptedStorage.setItem('user', userID)
+    } catch (error){
+      console.error(error)
+    }
+  }
+
+  async logout(){
+    try{
+      await EncryptedStorage.removeItem('user')
+    } catch (error){
+      console.error(error)
+    }
+  }
+
+  async isLoggedIn(){
+    try{
+      return await EncryptedStorage.getItem('user') !== undefined
+    } catch(error){
+      console.log(error)
+      return false;
+    }
+  }
 }
+
+const User = new Authentication()
 
 export default User

@@ -9,6 +9,7 @@ import com.purduecircle.backend.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URISyntaxException;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/modify/")
@@ -22,7 +23,6 @@ public class ModifyUserController {
     /* to database and returns true
     */
 
-    // TODO: will need to send UserID and new requested first name
     @CrossOrigin
     @RequestMapping(value="modify_first_name", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,10 +47,17 @@ public class ModifyUserController {
     @RequestMapping(value="modify_username", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> modifyUsername(@RequestBody User newUser) throws URISyntaxException{
-        // JESSE WORK ON THE CHECK FOR THIS
         HttpHeaders responseHeaders = new HttpHeaders();
+
+        User checkExists = userRepository.findByUsername(newUser.getUsername().toLowerCase());
+        if (checkExists != null) {
+            // Username already in use
+            System.out.println("Username already used: " + checkExists.getUsername());
+            return ResponseEntity.ok().headers(responseHeaders).body(-1);
+        }
+
         User user = userRepository.findByUserID(newUser.getUserID());
-        user.setUsername(newUser.getUsername());
+        user.setUsername(newUser.getUsername().toLowerCase());
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
@@ -59,6 +66,10 @@ public class ModifyUserController {
     @RequestMapping(value="modify_password", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> modifyPassword(@RequestBody User newUser) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.findByUserID(newUser.getUserID());
+        user.setPassword(newUser.getPassword());
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
     // TODO: regex should be checked on frontend
@@ -66,7 +77,9 @@ public class ModifyUserController {
     @RequestMapping(value="modify_phone_number", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> modifyPhoneNumber(@RequestBody User newUser) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.findByUserID(newUser.getUserID());
+        user.setPhoneNumber(newUser.getPhoneNumber());
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 }
-
-

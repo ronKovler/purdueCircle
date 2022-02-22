@@ -69,6 +69,9 @@ public class User {
     @OneToMany(mappedBy="userID")
     private Set<User> blocked = new HashSet<>();
 
+    @OneToMany(mappedBy="user")
+    private Set<Topic> followedTopics = new HashSet<>();
+
     public User(String first_name, String last_name, String email, String username, String password, String phone_number) {
         this.first_name = first_name;
         this.last_name = last_name;
@@ -130,11 +133,13 @@ public class User {
     }
 
      /* add topic to list of topics this user is following */
-    public void addTopic(User user) {
-    }   
+    public void addFollowedTopic (Topic topic) {
+        // JESSE TODO
+    }
 
     /* remove topic to list of topics this user is following */
-    public void removeTopic(User user) {
+    public void removeFollowedTopic(Topic topic) {
+        // JESSE TODO
     }
 
      /* add user to list this user has blocked */

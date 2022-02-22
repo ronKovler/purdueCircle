@@ -13,11 +13,12 @@ import java.util.Set;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 
+
 @Entity
 @Table(name = "posts")
 public class Post {
 
-    public Post(String content, User user, String topic) {
+    public Post(String content, User user, Topic topic) {
         this.content = content;
         this.user = user;
         this.topic = topic;
@@ -51,8 +52,9 @@ public class Post {
     @OneToMany(mappedBy="post")
     private Set<Comment> comments = new HashSet<>();
 
-    @Column(name="topic", length=64)
-    private String topic;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="topic_name")
+    private Topic topic;
 
     public Post() {
 

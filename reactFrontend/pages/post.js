@@ -58,6 +58,11 @@ export default function Post(props, {navigation}) {
         </View>
       </View>
       <Text style={postStyles.text}>{content}</Text>
+      <View style={{flex:1}}>
+        <Pressable>
+          
+        </Pressable>
+      </View>
     </View>
   )
 }

@@ -9,6 +9,7 @@ import com.purduecircle.backend.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URISyntaxException;
+import java.util.Locale;
 
 @RestController
 public class UserController {
@@ -42,14 +43,15 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> tryLogin(@RequestBody User newUser) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        //DON'T TOUCH ABOVE
 
+        // Ensure email is not already in use
         User checkExists = userRepository.findByEmail(newUser.getEmail());
         if (checkExists != null) {
             System.out.println("Email already used: " + checkExists.getEmail());
             return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
 
+        // Ensure username is not already in use
         checkExists = null;
         checkExists = userRepository.findByUsername(newUser.getUsername());
         if (checkExists != null) {
@@ -58,6 +60,19 @@ public class UserController {
         }
 
         userRepository.save(newUser);
+        // Ensure username is all lowercase
+        newUser.setUsername(newUser.getUsername().toLowerCase());
         return ResponseEntity.ok().headers(responseHeaders).body(checkExists.getUserID());
+    }
+
+    @CrossOrigin
+    @RequestMapping(value="follow_topic", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> followTopic(@RequestBody User newUser, String topicStr) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.findByUserID(newUser.getUserID());
+        // TODO - topic repository
+        user.addFollowedTopic(topic);
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 }

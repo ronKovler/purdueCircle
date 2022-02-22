@@ -7,7 +7,7 @@ import User from "./user";
 export default function HomeScreen({navigation}) {
 
     const LogOut = async () => {
-        User.isLoggedIn=false;
+        await User.logout
         navigation.navigate('Login');
     }
 

@@ -33,3 +33,4 @@ build/
 .vscode/
 /AWSkey.pem
 /buildExport.txt
+/node_modules/
