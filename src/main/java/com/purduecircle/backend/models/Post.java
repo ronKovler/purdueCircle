@@ -7,10 +7,14 @@ package com.purduecircle.backend.models; /**
 * 
 **/
 
-import java.time.LocalDateTime;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.Table;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "post")
+@Table(name = "posts")
 public class Post {
 
     public Post(String content, User user, String topic) {
@@ -33,22 +37,26 @@ public class Post {
     private String content;
 
     /* User that made post */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userID")
     private User user;
 
-    @Column(name="timePosted")
-    private LocalDateTime timePosted;
+    @Column(name="time_posted")
+    private Timestamp time_posted;
 
     @Column(name="likes", nullable=true)
     private int likes;
 
     /* List of comments on post */
-    @OneToMany(mappedBy="commentID")
-    private Set<Comment> comments;
+    @OneToMany(mappedBy="post")
+    private Set<Comment> comments = new HashSet<>();
 
     @Column(name="topic", length=64)
     private String topic;
+
+    public Post() {
+
+    }
 
     /*
     * Class methods
@@ -90,8 +98,8 @@ public class Post {
         return user;
     }
 
-    public LocalDateTime getTimePosted() {
-        return timePosted;
+    public Timestamp getTimePosted() {
+        return time_posted;
     }
 
     public int getLikes() {

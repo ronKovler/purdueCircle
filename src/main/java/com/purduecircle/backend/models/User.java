@@ -8,9 +8,12 @@ package com.purduecircle.backend.models;
 * 
 **/
 
+import java.util.ArrayList;
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "users")
@@ -51,20 +54,20 @@ public class User {
     @Column(name="phone_number")
     private String phone_number;
 
-    @OneToMany(mappedBy="userID")
-    private set<Post> userPosts;
+    @OneToMany(mappedBy="user")
+    private Set<Post> userPosts = new HashSet<>();
+
+    @OneToMany(mappedBy="user")
+    private Set<Post> savedPosts = new HashSet<>();
 
     @OneToMany(mappedBy="userID")
-    private set<Post> savedPosts;
+    private Set<User> following = new HashSet<>();
 
     @OneToMany(mappedBy="userID")
-    private set<User> following;
+    private Set<User> followers = new HashSet<>();
 
     @OneToMany(mappedBy="userID")
-    private set<User> followers;
-
-    @OneToMany(mappedBy="userID")
-    private set<User> blocked;
+    private Set<User> blocked = new HashSet<>();
 
     public User(String first_name, String last_name, String email, String username, String password, String phone_number) {
         this.first_name = first_name;
@@ -75,9 +78,15 @@ public class User {
         this.phone_number = phone_number;
     }
 
-    public User() {
-
+    public User(String first_name, String last_name, String email, String username, String password) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
     }
+
+    public User() {}
 
     public User(String email, String password) {
         this.email = email;

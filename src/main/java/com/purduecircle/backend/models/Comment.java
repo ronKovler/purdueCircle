@@ -1,4 +1,8 @@
-package com.purduecircle.backend.models; /**
+package com.purduecircle.backend.models;
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Set;
+/**
 *
 * Represents a commment on a post
 *
@@ -7,16 +11,16 @@ package com.purduecircle.backend.models; /**
 * 
 **/
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "comment")
+@Table(name = "comments")
 public class Comment {
 
-    public Comment(String content, User user) {
+    public Comment(String content, String username, Post post) {
         this.content = content;
-        this.user = user;
-        setCommentID();
+        this.username = username;
+        this.post = post;
     }
 
     /*
@@ -32,13 +36,20 @@ public class Comment {
     @Column(name="content", length=255)
     private String content;
 
-    /* User that made post */
-    @ManyToOne
-    @JoinColumn(name="userID")
-    private User user;
+    @Column(name="username")
+    private String username;
 
-    @Column(name="timePosted")
-    private LocalDateTime timePosted;
+    /* User that made post */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="postID")
+    private Post post;
+
+    @Column(name="time_posted")
+    private Timestamp time_posted;
+
+    public Comment() {
+
+    }
 
     /*
     * Getters and setters
@@ -51,6 +62,14 @@ public class Comment {
     private void setCommentID() {
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getContent() {
         return content;
     }
@@ -59,12 +78,8 @@ public class Comment {
         this.content = content;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public LocalDateTime getTimePosted() {
-        return timePosted;
+    public Timestamp getTimePosted() {
+        return time_posted;
     }
 
 }

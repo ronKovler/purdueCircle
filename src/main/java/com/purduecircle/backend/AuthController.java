@@ -1,6 +1,6 @@
 package com.purduecircle.backend;
 
-import com.purduecircle.backend.DTO.UserDTO;
+//import com.purduecircle.backend.DTO.UserDTO;
 import com.purduecircle.backend.models.User;
 import com.purduecircle.backend.models.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,23 +29,26 @@ public class AuthController {
 
     @CrossOrigin
     //@PostMapping("login")
-    @RequestMapping(value="login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> tryLogin(@RequestBody User newUserDTO) throws URISyntaxException {
-
-        System.out.println("RECEIVED USER" + newUserDTO.getEmail());/*
-        User newUser = new User(newUserDTO.getEmail(), newUserDTO.getPassword());
-        List<User> users = userRepository.findAll();
-        for (User check : users) {
-            if (check.equals(newUser)) {
-                return new ResponseEntity<Integer>(check.getUserID(), HttpStatus.OK);
-            }
-        }*/
+    @RequestMapping(value="login", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> tryLogin(@RequestBody User newUser) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Header-Test",
-                "ID");
-        //return new ResponseEntity<Integer>(-1, HttpStatus.OK);
+        responseHeaders.set("Header-Test", "ID");
+        //DON'T TOUCH ABOVE
 
-        //System.out.println(temp);
+        System.out.println("RECEIVED USER " + newUser.getEmail()); //Test for server
+
+        User checkExists = userRepository.findByEmailEqualsAndPasswordEquals(newUser.getEmail(),
+                newUser.getPassword());
+
+        if (checkExists != null) {
+            System.out.println("FOUND CHECK EXISTS USER: " + checkExists.getUsername());
+            return ResponseEntity.ok().headers(responseHeaders).body(checkExists.getUserID());
+        }
+
+
+
+
         return ResponseEntity.ok().headers(responseHeaders).body(-1);
     }
 }

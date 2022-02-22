@@ -43,16 +43,11 @@ public class UserController {
         }
         // Check username for uniqueness
         if (!userRepository.findByUsername(username).isEmpty()) {
-            // Email already exists in database
+            // Username already exists in database
             return false;
         }
 
-        User newUser = new User();
-        newUser.setFirstName(firstName);
-        newUser.setLastName(lastName);
-        newUser.setUsername(username);
-        newUser.setEmail(email);
-        newUser.setPassword(password);
+        User newUser = new User(firstName, lastName, email, username, password);
         userRepository.save(newUser);
 
         return true;    

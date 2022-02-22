@@ -1,4 +1,4 @@
-import {Text, TextInput, View, Pressable, TouchableOpacity} from 'react-native';
+import {Text, TextInput, View, Pressable, TouchableOpacity, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {styles, Logo} from './stylesheet';
 
@@ -12,7 +12,7 @@ export default function LoginScreen({navigation}) {
 
     const SendLogin = async () => {
         try {
-            fetch(serverAddress + "/api/auth/login", {
+            const response = await fetch(serverAddress + "/api/auth/login", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -23,6 +23,9 @@ export default function LoginScreen({navigation}) {
                     'password': password
                 })
             })
+            const json = await response.json();
+            console.log("FUCK ME");
+
         } catch {
             console.error(error)
         }
@@ -69,6 +72,7 @@ const validateEmail = () => {
         setEmailError("")
         //GetLogin()
         SendLogin()
+
     }
 }
 
