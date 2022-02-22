@@ -22,7 +22,7 @@ export default function Post(props, {navigation}) {
       setIsLoading(false)
     }
   }
-
+  
 //TODO: Get like icon and make pressable
   return (
     <View style={{backgroundColor: "#5F5F5F", margin: 5, flexDirection: 'column', height: 'fit-content', borderRadius: 20}}>
@@ -58,11 +58,6 @@ export default function Post(props, {navigation}) {
         </View>
       </View>
       <Text style={postStyles.text}>{content}</Text>
-      <View style={{flex:1}}>
-        <Pressable>
-          
-        </Pressable>
-      </View>
     </View>
   )
 }
