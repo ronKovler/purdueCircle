@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacit
 import { styles, HeaderLogo } from './stylesheet';
 import Post from "./post";
 import User from "./user";
-
+var serverAddress = "https://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:443";
 export default function HomeScreen({navigation}) {
 
     return (

@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, View} from "react-native";
 import React from "react";
-
+var serverAddress = "https://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:443";
 const Logo = ({navigation}, props) => {
   return (
       <Image style={styles.image} source={require('../assets/logo.svg')}/>
