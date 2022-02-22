@@ -9,7 +9,7 @@ const Logo = ({navigation}, props) => {
 
 const Choo = ({navigation}, props) => {
   return (
-      <Image source={require('../assets/choo.svg')}/>
+      <Image style={styles.image} source={require('../assets/choo.png')}/>
   )
 }
 

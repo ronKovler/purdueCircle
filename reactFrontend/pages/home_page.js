@@ -29,7 +29,7 @@ export default function HomeScreen({navigation}) {
             <View style={{flex: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '737373'}}>
                 <View style={{flex: 2, backgroundColor: 'dimgrey', justifyContent: 'center', alignItems: 'space-between'}}>
                     <View style={{flex: 3}}>
-                        <Image style={styles.image}  source={require('../assets/choo.svg')}/>
+                        <Image style={styles.image}  source={require('../assets/choo.png')}/>
                     </View>
                     <View style={{flex: 3, justifyContent: 'center'}}>
                         <View style={{flex: 1}}>
