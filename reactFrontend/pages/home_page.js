@@ -17,10 +17,10 @@ export default function HomeScreen({navigation}) {
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                 <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
                     {User.isLoggedIn ?
-                        <View style={styles.buttonContainer}>
-                              <Pressable onPress={() => LogOut()}><Text
-                                style={styles.button}>Log Out</Text></Pressable>
-                        </View> : <View style={{flex: 1}}/>}
+                    <View style={styles.buttonContainer}>
+                          <Pressable onPress={() => LogOut()}><Text
+                            style={styles.button}>Log Out</Text></Pressable>
+                    </View> : <View style={{flex: 1}}/>}
                     <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
                         <HeaderLogo style={styles.headerIcon}/>
                     </View>
@@ -32,8 +32,8 @@ export default function HomeScreen({navigation}) {
                             style={styles.button}>Register</Text></Pressable>
                       </View> :
                       <View style={styles.buttonContainer}>
-                          <Pressable onPress={() => navigation.navigate('Profile Page')}><Text
-                            style={styles.button}>View Profile</Text></Pressable>
+                          <TouchableOpacity onPress={() => navigation.navigate('Profile Page')}><Text
+                            style={styles.button}>View Profile</Text></TouchableOpacity>
                       </View>}
                 </View>
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}>

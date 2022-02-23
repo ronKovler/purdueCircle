@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import {HeaderLogo, styles} from './stylesheet';
 import Post from "./post";
 import Topic from "./topic";
+import User from "./user";
 
 export default function ProfilePage ({navigation}) {
   const [username, setUsername] = useState('')
@@ -38,7 +39,11 @@ export default function ProfilePage ({navigation}) {
       <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
         <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
-          <View style={{flex: 1}}/>
+          {User.isLoggedIn ?
+          <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={() => LogOut()}><Text
+                  style={styles.button}>Log Out</Text></TouchableOpacity>
+          </View> : <View style={{flex: 1}}/>}
           <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                 <HeaderLogo style={styles.headerIcon}/>
