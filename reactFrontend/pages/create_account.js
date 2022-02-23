@@ -1,7 +1,7 @@
-import {Text, TextInput, View, Alert} from 'react-native';
+import {Text, TextInput, View, Alert, Pressable} from 'react-native';
 import React, {useState} from 'react'
 import {styles, Logo} from './stylesheet';
-import {TouchableOpacity} from "react-native-web";
+import User from "./user";
 
 export default function CreateAccountScreen({navigation}) {
   const [firstName, setFirstName] = useState('')
@@ -16,27 +16,27 @@ export default function CreateAccountScreen({navigation}) {
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
 
-
-  //TODO: insert URL
-  function Register() {
-    fetch("", {
+  async function Register() {
+    let ID = await fetch(serverAddress + '/api/user/create_account', {
       method: "POST",
       body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
+        first_name: firstName,
+        last_name: lastName,
         email: email,
         username: username,
         password: password
       })
     })
+    await User.login(ID)
   }
 
   const validateSubmission = () => {
-    var validFirstName = false
-    var validLastName = false
-    var validUsername = false
-    var validEmail = false
-    var validPassword = false
+    let validFirstName = false
+    let validLastName = false
+    let validUsername = false
+    let validEmail = false
+    let validPassword = false
+
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
     if (firstName.length === 0) {
@@ -77,16 +77,16 @@ export default function CreateAccountScreen({navigation}) {
     }
 
     if (validFirstName && validLastName && validUsername && validEmail && validPassword) {
-      Register()
+      Register().then(navigation.navigate('Home'))
     }
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.loginBox}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+        <Pressable onPress={() => navigation.navigate('Home')}>
             <Logo/>
-        </TouchableOpacity>
+        </Pressable>
         <Text style={styles.header}>Create Account</Text>
         <TextInput style={styles.accountInputBox}
                    placeholder="First Name"
@@ -114,8 +114,8 @@ export default function CreateAccountScreen({navigation}) {
                    secureTextEntry={true} onChangeText={reenter => setReenter(reenter)}/>
         {password !== reenter ? <Text style={{color:'red'}}>Passwords do not match</Text> : null}
         <View style={[styles.buttonContainer, {alignSelf: 'center'}]}>
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}><Text style={[styles.button, {minWidth: 90}]}>Login</Text></TouchableOpacity>
-            <TouchableOpacity onPress={() => validateSubmission()}><Text style={styles.button}>Register Account</Text></TouchableOpacity>
+            <Pressable onPress={() => navigation.navigate("Login")}><Text style={[styles.button, {minWidth: 90}]}>Login</Text></Pressable>
+            <Pressable onPress={() => validateSubmission()}><Text style={styles.button}>Register Account</Text></Pressable>
         </View>
       </View>
     </View>

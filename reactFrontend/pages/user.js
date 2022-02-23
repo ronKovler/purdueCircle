@@ -7,8 +7,8 @@ class Authentication {
 
   async login(userID){
     try{
-      await AsyncStorage.setItem('user', userID)
       this.isLoggedIn = true;
+      await AsyncStorage.setItem('user', userID)
     } catch (error){
       console.error(error)
     }
