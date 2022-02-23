@@ -5,11 +5,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.purduecircle.backend.models.*;
+import com.purduecircle.backend.newModels.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URISyntaxException;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/modify/")

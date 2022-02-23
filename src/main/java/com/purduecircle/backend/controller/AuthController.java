@@ -1,6 +1,6 @@
 package com.purduecircle.backend.controller;
 
-import com.purduecircle.backend.models.User;
+import com.purduecircle.backend.newModels.User;
 import com.purduecircle.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
