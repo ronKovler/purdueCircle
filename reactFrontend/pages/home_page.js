@@ -44,7 +44,8 @@ export default function HomeScreen({navigation}) {
                     <View style={{flex: 3}}>
                         <Image style={styles.image}  source={require('../assets/choo.png')}/>
                     </View>
-                    <View style={{flex: 3, justifyContent: 'center'}}>
+                    <View style={{flex: 6, justifyContent: 'center'}}>
+                        <View style={{flex: 2}}/>
                         <View style={{flex: 1}}>
                             <Pressable>
                                 <Text style={styles.button}>Hot Posts</Text>
@@ -60,7 +61,7 @@ export default function HomeScreen({navigation}) {
                                 <Text style={styles.button}>Create Post</Text>
                             </Pressable>
                         </View>
-                        <View style={{flex: 5}}/>
+                        <View style={{flex: 6}}/>
                     </View>
                 </View>
                 <View style={{flex: 5, flexDirection: 'column'}}>
