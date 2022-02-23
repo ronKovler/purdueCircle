@@ -61,7 +61,7 @@ export default function EditProfileScreen({navigation}) {
               </View>
             </View>
             <View style={{flex: 5, flexDirection: 'column'}}>
-              <View style={{flex: 1, backgroundColor: '737373'}}/>
+              <View style={{flex: 2, backgroundColor: '737373'}}/>
               <View style={{flex: 3, backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
                 <Text style={styles.header}>User's Profile Information</Text>
                 <View style={{justifyContent: 'center'}}>
@@ -84,7 +84,7 @@ export default function EditProfileScreen({navigation}) {
                     <Pressable onPress={() => SendUpdates()}><Text style={styles.button}>Save Changes</Text></Pressable>
                 </View>
               </View>
-              <View style={{flex: 4}}/>
+              <View style={{flex: 3}}/>
             </View>
             <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
           </View>
