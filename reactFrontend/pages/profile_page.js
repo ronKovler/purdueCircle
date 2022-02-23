@@ -2,6 +2,7 @@ import {Text, TextInput, View, Button, Image, StyleSheet, Pressable, ScrollView}
 import React, { useState } from 'react'
 import {HeaderLogo, styles} from './stylesheet';
 import Post from "./post";
+import Topic from "./topic";
 
 export default function ProfilePage ({navigation}) {
   const [username, setUsername] = useState('')
@@ -79,8 +80,8 @@ export default function ProfilePage ({navigation}) {
           <View style={{flex: 5}}>
             <View style={{flex: 1, backgroundColor: 'dimgrey'}}/>
               <ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>
-                <Post/><Post/><Post/><Post/><Post/><Post/>
-                <Post/><Post/><Post/><Post/><Post/><Post/>
+                <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
+                <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
               </ScrollView>
             <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
           </View>
