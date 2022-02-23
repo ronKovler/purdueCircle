@@ -1,9 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class Authentication {
+  constructor() {
+    this.isLoggedIn = false;
+  }
+
   async login(userID){
     try{
       await AsyncStorage.setItem('user', userID)
+      this.isLoggedIn = true;
     } catch (error){
       console.error(error)
     }
@@ -11,18 +16,11 @@ class Authentication {
 
   async logout(){
     try{
-      await AsyncStorage.removeItem('user')
+      await AsyncStorage.setItem('user', '-1')
+      this.isLoggedIn = false;
+      console.log('-1')
     } catch (error){
       console.error(error)
-    }
-  }
-
-  async isLoggedIn(){
-    try{
-      return await AsyncStorage.getItem('user') !== null
-    } catch(error){
-      console.log(error)
-      return false;
     }
   }
 

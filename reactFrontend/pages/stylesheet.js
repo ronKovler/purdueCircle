@@ -7,7 +7,7 @@ const Logo = ({navigation}, props) => {
   )
 }
 
-const Choo = ({navigation}, props) => {
+export const Choo = ({navigation}, props) => {
   return (
       <Image style={styles.image} source={require('../assets/choo.png')}/>
   )

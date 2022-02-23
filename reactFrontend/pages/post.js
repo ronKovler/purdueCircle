@@ -1,6 +1,7 @@
 import {Pressable, StyleSheet, Text, View, Image} from "react-native";
 import React, {useState} from "react";
 import User from "./user";
+import {styles} from "./stylesheet";
 
 export default function Post(props, {navigation}) {
   const [user, setUser] = useState('user')
@@ -10,6 +11,9 @@ export default function Post(props, {navigation}) {
   const [isLoading, setIsLoading] = useState(true)
   const [followingTopic, setFollowingTopic] = useState(false)
   const [followingUser, setFollowingUser] = useState(false)
+  const [liked, setLiked] = useState(false)
+  const postID = props.postID
+  const userID = props.userID
 
   const getPostInfo = async () => {
     try {
@@ -22,10 +26,62 @@ export default function Post(props, {navigation}) {
       setIsLoading(false)
     }
   }
-  
-//TODO: Get like icon and make pressable
+
+  async function toggleFollowUser() {
+    let url = serverAddress
+    if (!followingUser) {
+      url += ''
+    } else{
+      url += ''
+    }
+    try {
+      await fetch(url, {
+        userID: User.getUserId(),
+        otherUserID: userID,
+      }).then(() => setFollowingUser(!followingUser), () => console.log("Promise unfulfilled"))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function toggleLike() {
+    let url = serverAddress
+    if (!liked) {
+      url += ''
+    } else{
+      url += ''
+    }
+    try {
+      await fetch(url, JSON.stringify({
+        method: 'POST',
+        userID: User.getUserId(),
+        postID: postID
+      })).then(() => setLiked(!liked), () => console.log("Promise unfulfilled"))
+    } catch (error){
+      console.error(error)
+    }
+  }
+
+  async function toggleFollowTopic() {
+    let url = serverAddress
+    if (!followingTopic) { // add user to follow list if following
+      url += ''
+    } else{
+      url += ''
+    }
+    try {
+      await fetch(url, JSON.stringify({
+        'userID': User.getUserId(),
+        'topic_name': topic,
+      })).then(() => setFollowingTopic(!followingTopic), () => console.log("Promise unfulfilled"))
+    } catch (error){
+      console.error(error)
+    }
+  }
+
   return (
-    <View style={{backgroundColor: "#5F5F5F", margin: 5, flexDirection: 'column', height: 'fit-content', borderRadius: 20}}>
+    <View
+      style={{backgroundColor: "#5F5F5F", margin: 5, flexDirection: 'column', height: 'fit-content', borderRadius: 20}}>
       <View style={postStyles.headerContainer}>
         <View style={{flexDirection: 'row'}}>
           <View style={{flex: 1, flexDirection: 'row'}}>
@@ -37,10 +93,10 @@ export default function Post(props, {navigation}) {
                        onClick={() => navigation.navigate("Profile Page")}>
               <Text style={postStyles.username}>{user}</Text>
             </Pressable>
-          {User.isLoggedIn ?
+            {User.isLoggedIn ?
               <Pressable style={{alignSelf: 'center'}}
-                  onPress={() => setFollowingUser(!followingUser)}>
-                  {!followingUser ?
+                         onPress={() => toggleFollowUser()}>
+                {!followingUser ?
                   <Text style={postStyles.followButton}>Follow</Text> :
                   <Text style={postStyles.followButton}>Unfollow</Text>}
               </Pressable> : null}
@@ -49,32 +105,42 @@ export default function Post(props, {navigation}) {
             <Text style={postStyles.topic}>{topic}</Text>
           </Pressable>
           {User.isLoggedIn ?
-              <Pressable style={{alignSelf: 'center'}}
-                  onPress={() => setFollowingTopic(!followingTopic)}>
-                  {!followingTopic ?
-                  <Text style={postStyles.followButton}>Follow</Text> :
-                  <Text style={postStyles.followButton}>Unfollow</Text>}
-              </Pressable> : null}
+            <Pressable style={{alignSelf: 'center'}}
+                       onPress={() => toggleFollowTopic()}>
+              {!followingTopic ?
+                <Text style={postStyles.followButton}>Follow</Text> :
+                <Text style={postStyles.followButton}>Unfollow</Text>}
+            </Pressable> : null}
         </View>
       </View>
-      <Text style={postStyles.text}>{content}</Text>
+      <Text style={[postStyles.text, {flex: 1}]}>{content}</Text>
+      <View style={{flex: 1, padding: 5}}>
+        <Pressable onPress={() => toggleLike()}>
+          {liked ?
+            <Image source={require('../assets/full_heart.svg')} style={[postStyles.likeButton, {tintColor: 'red'}]}/> :
+            <Image source={require('../assets/heart.svg')} style={postStyles.likeButton}/>}
+        </Pressable>
+      </View>
     </View>
   )
 }
 
 const postStyles = StyleSheet.create({
   headerContainer: {
-    padding: 5,
-    paddingLeft: 10, paddingRight: 10,
+    padding: 10,
+    paddingTop: 5,
     flex: 1,
     minWidth: 300,
     maxHeight: 47.5,
-    borderBottomWidth: 4,
-    borderBottomColor: "#737373",
+    // borderBottomWidth: 4,
+    // borderBottomColor: "#737373",
   },
   text: {
+    borderTopWidth: 4,
+    borderTopColor: '#737373',
     color: 'white',
     padding: 12.5,
+    paddingBottom: 5,
   },
   button: {
     flex: 1,
@@ -106,5 +172,12 @@ const postStyles = StyleSheet.create({
     color: 'blue',
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  likeButton: {
+    maxWidth: 20,
+    aspectRatio: 1,
+    resizeMode: 'contain',
+    flex: 1,
+    marginLeft: 10,
   }
 })
