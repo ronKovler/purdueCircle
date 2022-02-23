@@ -1,6 +1,6 @@
 package com.purduecircle.backend.repository;
 
-import com.purduecircle.backend.newModels.User;
+import com.purduecircle.backend.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.stereotype.Repository;

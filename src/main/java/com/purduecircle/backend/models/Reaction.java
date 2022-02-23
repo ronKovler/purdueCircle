@@ -1,12 +1,6 @@
-package com.purduecircle.backend.newModels;
-
-import com.purduecircle.backend.newModels.Comment;
-import com.purduecircle.backend.newModels.Topic;
-import com.purduecircle.backend.newModels.User;
+package com.purduecircle.backend.models;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 import java.sql.Timestamp;
 
 /**

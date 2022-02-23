@@ -1,4 +1,4 @@
-package com.purduecircle.backend.newModels;
+package com.purduecircle.backend.models;
 
 import javax.persistence.*;
 

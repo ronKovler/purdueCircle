@@ -1,6 +1,4 @@
-package com.purduecircle.backend.newModels;
-
-import com.purduecircle.backend.newModels.Topic;
+package com.purduecircle.backend.models;
 
 import javax.persistence.*;
 import java.util.HashSet;
