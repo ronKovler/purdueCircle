@@ -9,7 +9,7 @@ import HomeScreen from './pages/home_page';
 import EditProfile from './pages/edit_profile';
 import {Text} from "react-native";
 
-global.serverAddress = "https://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:443";
+global.serverAddress = "3.137.16.13:443";
 
 const Stack = createNativeStackNavigator();
 
