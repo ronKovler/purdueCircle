@@ -34,27 +34,6 @@ export default function ProfilePage ({navigation}) {
   }
 
   return (
-      /*
-    <View style={styles.container}>
-      <View style={styles.wideViewContainer}>
-        <View style={styles.sideBar}>
-          <Image style={styles.image} source={require('../assets/logo.svg')} />
-          <Text style={styles.header}>Hot Topics</Text>
-          <Text style={styles.header}>Saved Posts</Text>
-          <Text style={styles.header}>My Activity</Text>
-          <Text style={styles.header}>Hot Topics</Text>
-        </View>
-        <View style={styles.profileBox}>
-          <Text style={styles.header}>User's Profile Information</Text>
-          <Pressable onPress={() => SendUpdates()}>
-        </View>
-        <View style={styles.sideBar}>
-          <Text style={styles.header}>Messages</Text>
-        </View>
-      </View>
-    </View>
-    */
-
     <View style={styled.container}>
       <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
@@ -65,7 +44,11 @@ export default function ProfilePage ({navigation}) {
                 <HeaderLogo style={styles.headerIcon}/>
             </TouchableOpacity>
           </View>
-          <View style={{flex: 1}}/>
+          <View style={{flex: 1}}>
+            <TouchableOpacity onPress={() => navigation.navigate('Edit Profile')}>
+              <Text style={styles.button}>Edit Profile</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
       </View>
