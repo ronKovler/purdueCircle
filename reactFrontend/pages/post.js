@@ -2,7 +2,7 @@ import {Pressable, StyleSheet, Text, View, Image} from "react-native";
 import React, {useState} from "react";
 import User from "./user";
 
-export default function Post(props, {navigation}) {
+export default function Post({navigation}, props) {
   const [user, setUser] = useState('user')
   const [topic, setTopic] = useState('topic')
   const [comments, setComments] = useState('comments')
@@ -26,12 +26,16 @@ export default function Post(props, {navigation}) {
     }
   }
 
+  //TODO: Force login if interacted while not logged in
   async function toggleFollowUser() {
-    let url = serverAddress
+    if(!User.isLoggedIn){
+      return
+    }
+    let url = serverAddress + '/api/user/'
     if (!followingUser) {
-      url += ''
+      url += 'follow_user'
     } else{
-      url += ''
+      url += 'unfollow_user'
     }
     try {
       await fetch(url, {
@@ -44,29 +48,41 @@ export default function Post(props, {navigation}) {
   }
 
   async function toggleLike() {
-    let url = serverAddress
+    if(!User.isLoggedIn){
+      return
+    }
+    let url = serverAddress + '/api/user/'
     if (!liked) {
-      url += ''
+      url += 'like_post'
     } else{
       url += ''
     }
     try {
-      await fetch(url, JSON.stringify({
+      await fetch(url, {
         method: 'POST',
-        userID: User.getUserId(),
-        postID: postID
-      })).then(() => setLiked(!liked), () => console.log("Promise unfulfilled"))
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify({
+          userID: User.getUserId(),
+          postID: postID
+        }),
+      }).then(() => setLiked(!liked))
     } catch (error){
       console.error(error)
     }
   }
 
   async function toggleFollowTopic() {
+    if(!User.isLoggedIn){
+      return
+    }
     let url = serverAddress
     if (!followingTopic) { // add user to follow list if following
-      url += ''
+      url += 'follow_topic'
     } else{
-      url += ''
+      url += 'unfollow_topic'
     }
     try {
       await fetch(url, JSON.stringify({
@@ -101,7 +117,7 @@ export default function Post(props, {navigation}) {
                       <Text style={postStyles.followButton}>Follow</Text> :
                       <Text style={postStyles.followButton}>Unfollow</Text>}
                   </Pressable> : null}
-                </View>: null
+                </View> : null
             }
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -116,9 +132,7 @@ export default function Post(props, {navigation}) {
           </View>
         </View>
       </View>
-      <View style={{flex: 2, padding: 12.5}}>
         <Text style={postStyles.text}>{content}</Text>
-      </View>
       <View style={{flex: 1, padding: 5}}>
         <Pressable onPress={() => toggleLike()}>
           {liked ?
@@ -138,7 +152,7 @@ Post.defaultProps = {
 const postStyles = StyleSheet.create({
   headerContainer: {
     padding: 10,
-    paddingTop: 5,
+    //paddingTop: 5,
     flex: 1,
     minWidth: 300,
     maxHeight: 47.5,
@@ -151,6 +165,7 @@ const postStyles = StyleSheet.create({
     color: 'white',
     padding: 12.5,
     paddingBottom: 5,
+    flex: 2
   },
   button: {
     flex: 1,
@@ -165,7 +180,7 @@ const postStyles = StyleSheet.create({
   topic: {
     flex: 1,
     fontWeight: 'bold',
-    alignSelf: 'flex-end',
+    // alignSelf: 'flex-end',
     marginRight: 6,
   },
   icon: {
