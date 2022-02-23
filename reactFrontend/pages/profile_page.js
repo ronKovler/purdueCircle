@@ -95,8 +95,8 @@ export default function ProfilePage ({navigation}) {
         <View style={{flex: 5, flexDirection: 'column'}}>
           <View style={{flex: 1, backgroundColor: '737373'}}/>
             <ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>
-              <Post/><Post/><Post/><Post/><Post/><Post/>
-              <Post/><Post/><Post/><Post/><Post/><Post/>
+              <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
+              <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
             </ScrollView>
           <View style={{flex: 2, backgroundColor: '737373'}}/>
         </View>

@@ -44,6 +44,7 @@ export default function HomeScreen({navigation}) {
                     <View style={{flex: 3}}>
                         <Image style={styles.image}  source={require('../assets/choo.png')}/>
                     </View>
+                    {User.isLoggedIn ?
                     <View style={{flex: 6, justifyContent: 'center'}}>
                         <View style={{flex: 2}}/>
                         <View style={{flex: 1}}>
@@ -62,7 +63,7 @@ export default function HomeScreen({navigation}) {
                             </Pressable>
                         </View>
                         <View style={{flex: 6}}/>
-                    </View>
+                    </View> : <View style={{flex: 6}}/>}
                 </View>
                 <View style={{flex: 5, flexDirection: 'column'}}>
                     <View style={{flex: 1, backgroundColor: '737373'}}/>
