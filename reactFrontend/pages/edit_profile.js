@@ -8,6 +8,11 @@ export default function EditProfileScreen({navigation}) {
     const [firstName, setFirstName] = useState("TestFirstName")
     const [lastName, setLastName] = useState("TestLastName")
     const [password, setPassword] = useState("TestPassword")
+
+    const LogOut = async () => {
+        await User.logout()
+        navigation.navigate('Login');
+    }
     
     //helper functions
     const SendUpdates = async () => {

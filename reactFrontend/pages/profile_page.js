@@ -11,6 +11,11 @@ export default function ProfilePage ({navigation}) {
   const [lastName, setLastName] = useState('')
   const [password, setPassword] = useState('')
 
+    const LogOut = async () => {
+        await User.logout()
+        navigation.navigate('Login');
+    }
+
   //helper functions
   const SendUpdates = async () => {
     try {
@@ -82,10 +87,13 @@ export default function ProfilePage ({navigation}) {
         </View>
         <View style={{flex: 5, flexDirection: 'column'}}>
           <View style={{flex: 1, backgroundColor: '737373'}}/>
-            <ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>
-              <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
-              <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
-            </ScrollView>
+          <View style={{flex: 20, backgroundColor: '737373'}}>
+
+          </View>
+          <ScrollView style={{flex: 80, flexBasis: 100}} showsVerticalScrollIndicator={false}>
+            <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
+            <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
+          </ScrollView>
           <View style={{flex: 2, backgroundColor: '737373'}}/>
         </View>
         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
