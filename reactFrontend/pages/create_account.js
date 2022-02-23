@@ -19,6 +19,9 @@ export default function CreateAccountScreen({navigation}) {
   async function Register() {
     let ID = await fetch(serverAddress + '/api/user/create_account', {
       method: "POST",
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
       body: JSON.stringify({
         first_name: firstName,
         last_name: lastName,
