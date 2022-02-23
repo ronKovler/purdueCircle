@@ -1,13 +1,12 @@
 import {Pressable, StyleSheet, Text, View, Image} from "react-native";
 import React, {useState} from "react";
 import User from "./user";
-import {styles} from "./stylesheet";
 
 export default function Post(props, {navigation}) {
   const [user, setUser] = useState('user')
   const [topic, setTopic] = useState('topic')
   const [comments, setComments] = useState('comments')
-  const [content, setContent] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec tellus ac quam ullamcorper dictum facilisis non orci. Vivamus hendrerit et dui id scelerisque. Suspendisse potenti. Integer ante mauris, tempor. ')
+  const [content, setContent] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec tellus ac quam ullamcorper dictum facilisis non orci. Vivamus hendrerit et dui id scelerisque. Suspendisse potenti. Integer ante mauris, tempor. hijcsdahijklcadslojn;kcds;ljnkdfsvq lkjdfsvpoun')
   const [isLoading, setIsLoading] = useState(true)
   const [followingTopic, setFollowingTopic] = useState(false)
   const [followingUser, setFollowingUser] = useState(false)
@@ -80,40 +79,46 @@ export default function Post(props, {navigation}) {
   }
 
   return (
-    <View
-      style={{backgroundColor: "#5F5F5F", margin: 5, flexDirection: 'column', height: 'fit-content', borderRadius: 20}}>
+    <View style={{backgroundColor: "#5F5F5F", margin: 5, flexDirection: 'column', height: 'fit-content', borderRadius: 20}}>
       <View style={postStyles.headerContainer}>
         <View style={{flexDirection: 'row'}}>
           <View style={{flex: 1, flexDirection: 'row'}}>
-            <Pressable>
-              <Image style={postStyles.icon}
-                     source={{uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farchive.org%2Fdownload%2Ftwitter-default-pfp%2Fe.png&f=1&nofb=1'}}/>
-            </Pressable>
-            <Pressable style={{alignSelf: 'center', paddingLeft: '5'}}
-                       onClick={() => navigation.navigate("Profile Page")}>
-              <Text style={postStyles.username}>{user}</Text>
-            </Pressable>
-            {User.isLoggedIn ?
-              <Pressable style={{alignSelf: 'center'}}
-                         onPress={() => toggleFollowUser()}>
-                {!followingUser ?
-                  <Text style={postStyles.followButton}>Follow</Text> :
-                  <Text style={postStyles.followButton}>Unfollow</Text>}
-              </Pressable> : null}
+            {!props.moves ?
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Pressable
+                    onClick={() => navigation.navigate("Profile Page")}>
+                  <Image style={postStyles.icon}
+                         source={{uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farchive.org%2Fdownload%2Ftwitter-default-pfp%2Fe.png&f=1&nofb=1'}}/>
+                </Pressable>
+                <Pressable style={{paddingLeft: 10}}
+                           onClick={() => navigation.navigate("Profile Page")}>
+                  <Text style={postStyles.username}>{user}</Text>
+                </Pressable>
+                {User.isLoggedIn ?
+                  <Pressable
+                      onPress={() => toggleFollowUser()}>
+                      {!followingUser ?
+                      <Text style={postStyles.followButton}>Follow</Text> :
+                      <Text style={postStyles.followButton}>Unfollow</Text>}
+                  </Pressable> : null}
+                </View>: null
+            }
           </View>
-          <Pressable style={{alignSelf: 'center'}}>
-            <Text style={postStyles.topic}>{topic}</Text>
-          </Pressable>
-          {User.isLoggedIn ?
-            <Pressable style={{alignSelf: 'center'}}
-                       onPress={() => toggleFollowTopic()}>
-              {!followingTopic ?
-                <Text style={postStyles.followButton}>Follow</Text> :
-                <Text style={postStyles.followButton}>Unfollow</Text>}
-            </Pressable> : null}
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              {User.isLoggedIn ?
+                  <Pressable style={{paddingRight: 10}}
+                      onPress={() => toggleFollowTopic()}>
+                      {!followingTopic ?
+                      <Text style={postStyles.followButton}>Follow</Text> :
+                      <Text style={postStyles.followButton}>Unfollow</Text>}
+                  </Pressable> : null}
+                <Text style={postStyles.topic}>{topic}</Text>
+          </View>
         </View>
       </View>
-      <Text style={[postStyles.text, {flex: 1}]}>{content}</Text>
+      <View style={{flex: 2, padding: 12.5}}>
+        <Text style={postStyles.text}>{content}</Text>
+      </View>
       <View style={{flex: 1, padding: 5}}>
         <Pressable onPress={() => toggleLike()}>
           {liked ?
@@ -124,6 +129,11 @@ export default function Post(props, {navigation}) {
     </View>
   )
 }
+/*
+Post.defaultProps = {
+    moves: true
+};
+*/
 
 const postStyles = StyleSheet.create({
   headerContainer: {
@@ -159,14 +169,12 @@ const postStyles = StyleSheet.create({
     marginRight: 6,
   },
   icon: {
-    alignSelf: "flex-start",
     width: 25,
     height: 25,
     borderRadius: 50,
     flex: 1,
     aspectRatio: 1,
-    justifyContent: 'space-around',
-    margin: 4,
+    padding: 10
   },
   followButton: {
     color: 'blue',

@@ -6,6 +6,7 @@ import ProfilePage from './pages/profile_page';
 import CreateAccountScreen from './pages/create_account';
 import PostCreation from './pages/post_creation';
 import HomeScreen from './pages/home_page';
+import EditProfile from './pages/edit_profile';
 import {Text} from "react-native";
 
 global.serverAddress = "https://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:443";
@@ -30,10 +31,11 @@ export default function App() {
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
       <Stack.Navigator screenOptions={{headerShown:false}}>
-        <Stack.Screen name="Profile Page" component={ProfilePage}/>
         <Stack.Screen name="Home" component={HomeScreen}/>
         <Stack.Screen name="Create Post" component={PostCreation}/>
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Profile Page" component={ProfilePage}/>
+        <Stack.Screen name="Edit Profile" component={EditProfile}/>
         <Stack.Screen name="Create Account" component={CreateAccountScreen}/>
       </Stack.Navigator>
     </NavigationContainer>

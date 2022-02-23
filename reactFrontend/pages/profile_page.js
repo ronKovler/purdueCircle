@@ -1,7 +1,9 @@
-import {Text, TextInput, View, Button, Image, StyleSheet, Pressable, ScrollView} from 'react-native';
+import {Text, TextInput, View, Button, Image, StyleSheet, Pressable, ScrollView, TouchableOpacity} from 'react-native';
 import React, { useState } from 'react'
 import {HeaderLogo, styles} from './stylesheet';
 import Post from "./post";
+import Topic from "./topic";
+import User from "./user";
 
 export default function ProfilePage ({navigation}) {
   const [username, setUsername] = useState('')
@@ -33,36 +35,25 @@ export default function ProfilePage ({navigation}) {
   }
 
   return (
-      /*
-    <View style={styles.container}>
-      <View style={styles.wideViewContainer}>
-        <View style={styles.sideBar}>
-          <Image style={styles.image} source={require('../assets/logo.svg')} />
-          <Text style={styles.header}>Hot Topics</Text>
-          <Text style={styles.header}>Saved Posts</Text>
-          <Text style={styles.header}>My Activity</Text>
-          <Text style={styles.header}>Hot Topics</Text>
-        </View>
-        <View style={styles.profileBox}>
-          <Text style={styles.header}>User's Profile Information</Text>
-          <Pressable onPress={() => SendUpdates()}>
-        </View>
-        <View style={styles.sideBar}>
-          <Text style={styles.header}>Messages</Text>
-        </View>
-      </View>
-    </View>
-    */
-
     <View style={styled.container}>
       <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
         <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
-          <View style={{flex: 1}}/>
+          {User.isLoggedIn ?
+          <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={() => LogOut()}><Text
+                  style={styles.button}>Log Out</Text></TouchableOpacity>
+          </View> : <View style={{flex: 1}}/>}
           <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
-            <HeaderLogo style={styles.headerIcon}/>
+            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                <HeaderLogo style={styles.headerIcon}/>
+            </TouchableOpacity>
           </View>
-          <View style={{flex: 1}}/>
+          <View style={{flex: 1}}>
+            <TouchableOpacity onPress={() => navigation.navigate('Edit Profile')}>
+              <Text style={styles.button}>Edit Profile</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
       </View>
@@ -71,25 +62,29 @@ export default function ProfilePage ({navigation}) {
           <View style={{flex: 3}}>
             <Image style={styles.image}  source={require('../assets/choo.png')}/>
           </View>
-          <View style={{flex: 1}}>
-            <Text style={styles.header}>
-              Followed Topics
-            </Text>
-          </View>
-          <View style={{flex: 5}}>
-            <View style={{flex: 1, backgroundColor: 'dimgrey'}}/>
-              <ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>
-                <Post/><Post/><Post/><Post/><Post/><Post/>
-                <Post/><Post/><Post/><Post/><Post/><Post/>
-              </ScrollView>
-            <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
+          <View style={{flex: 6}}>
+              <View style={{flex: 1}}/>
+              <View style={{flex: 1}}>
+                <Text style={styles.header}>
+                  Followed Topics
+                </Text>
+              </View>
+              <View style={{flex: 10}}>
+                <View style={{flex: 1, backgroundColor: 'dimgrey'}}/>
+                  <ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>
+                    <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
+                    <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
+                    <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
+                  </ScrollView>
+                <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
+              </View>
           </View>
         </View>
         <View style={{flex: 5, flexDirection: 'column'}}>
           <View style={{flex: 1, backgroundColor: '737373'}}/>
             <ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>
-              <Post/><Post/><Post/><Post/><Post/><Post/>
-              <Post/><Post/><Post/><Post/><Post/><Post/>
+              <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
+              <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
             </ScrollView>
           <View style={{flex: 2, backgroundColor: '737373'}}/>
         </View>

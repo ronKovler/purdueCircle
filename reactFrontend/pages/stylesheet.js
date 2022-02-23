@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   wideViewContainer: {
     resizeMode: 'contain',
-    flex: 1,
+    flex: 5,
     backgroundColor: '#545454',
     alignItems: 'center',
     justifyContent: 'center',
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     padding: 10,
     minWidth: 200,
     minHeight: 300,
+    flex: 2
   },
   profileBox: {
     backgroundColor: '#d9d9d9',

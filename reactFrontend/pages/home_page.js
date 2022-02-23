@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, Pressable, FlatList, ScrollView, Image} from 'react-native';
+import React, {} from 'react';
+import {View, Text, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacity, Image} from 'react-native';
 import { styles, HeaderLogo, Choo, Logo } from './stylesheet';
 import Post from "./post";
 import User from "./user";
@@ -8,7 +8,7 @@ export default function HomeScreen({navigation}) {
 
     const LogOut = async () => {
         await User.logout()
-        //navigation.navigate('Login');
+        navigation.navigate('Login');
     }
 
     return (
@@ -40,29 +40,30 @@ export default function HomeScreen({navigation}) {
               </View>
           </View>
           <View style={{flex: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '737373'}}>
-              <View
-                style={{flex: 2, backgroundColor: 'dimgrey', justifyContent: 'center', alignItems: 'space-between'}}>
+              <View style={{flex: 2, backgroundColor: 'dimgrey', justifyContent: 'center', alignItems: 'space-between'}}>
                   <View style={{flex: 3}}>
                       <Image style={styles.image} source={require('../assets/choo.png')}/>
                   </View>
-                  <View style={{flex: 3, justifyContent: 'center'}}>
-                      <View style={{flex: 1}}>
-                          <Pressable>
-                              <Text style={styles.button}>Hot Posts</Text>
-                          </Pressable>
-                      </View>
-                      <View style={{flex: 1}}>
-                          <Pressable>
-                              <Text style={styles.button}>Saved Posts</Text>
-                          </Pressable>
-                      </View>
-                      <View style={{flex: 1}}>
-                          <Pressable onPress={() => navigation.navigate('Create Post')}>
-                              <Text style={styles.button}>Create Post</Text>
-                          </Pressable>
-                      </View>
-                      <View style={{flex: 5}}/>
-                  </View>
+                  {User.isLoggedIn ?
+                    <View style={{flex: 6, justifyContent: 'center'}}>
+                        <View style={{flex: 2}}/>
+                        <View style={{flex: 1}}>
+                            <Pressable>
+                                <Text style={styles.button}>Hot Posts</Text>
+                            </Pressable>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <Pressable>
+                                <Text style={styles.button}>Saved Posts</Text>
+                            </Pressable>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <Pressable onPress={() => navigation.navigate('Create Post')}>
+                                <Text style={styles.button}>Create Post</Text>
+                            </Pressable>
+                        </View>
+                        <View style={{flex: 6}}/>
+                    </View> : <View style={{flex: 6}}/>}
               </View>
               <View style={{flex: 5, flexDirection: 'column'}}>
                   <View style={{flex: 1, backgroundColor: '737373'}}/>
