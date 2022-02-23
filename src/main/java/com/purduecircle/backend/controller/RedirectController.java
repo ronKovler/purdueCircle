@@ -10,7 +10,7 @@ import java.net.URL;
 
 @RestController
 
-public class TempController {
+public class RedirectController {
 
     @RequestMapping("/")
     public ResponseEntity<Void> redirect() {
