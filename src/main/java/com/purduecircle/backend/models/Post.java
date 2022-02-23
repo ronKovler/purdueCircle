@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.sql.Timestamp;
+import com.purduecircle.backend.repository.UserRepository;
+import com.purduecircle.backend.repository.TopicRepository;
 
 /**
  *

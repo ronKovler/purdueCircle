@@ -31,7 +31,7 @@ export default function PostCreation({ navigation }) {
                 </View>
             </View>
             <View style={[styles.text, {padding: 5, flex: 1}]}>
-              <AsyncCreatableSelect placeholder="Topic"/>
+              <AsyncCreatableSelect placeholder="Topic" onCreateOption={() => }/> //send to topic repository to create new topic
             </View>
             <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]} placeholder='Text' onChangeText={() => setInputtedText(inputtedText)} />
             <Pressable onPress={() => SendPost(topic, '', '', inputtedText)}><Text style={styles.button}>Create</Text></Pressable>
