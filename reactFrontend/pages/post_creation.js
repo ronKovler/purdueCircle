@@ -21,7 +21,8 @@ export default function PostCreation({ navigation }) {
               body: JSON.stringify({
                   'content': inputtedText,
                   'userId': User.userId,
-                  'topicName': topic
+                  'topicName': topic,
+                  'email': User.email
               })
           })
           const postID = await response.json();
@@ -76,7 +77,11 @@ export default function PostCreation({ navigation }) {
                 </View>
             </View>
             <View style={[styles.text, {padding: 5, flex: 1}]}>
-                <AsyncCreatableSelect placeholder="Topic" isLoading={loading} isSearchable={true} />
+
+                <TextInput
+                    style={styles.accountInputBox}
+                    placeholder='Topic'
+                    onChangeText={topic => setTopic(topic)}/>
             </View>
             <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]} placeholder='Text' onChangeText={() => setInputtedText(inputtedText)} />
             <Pressable onPress={() => SendPost()}><Text style={styles.button}>Create</Text></Pressable>
