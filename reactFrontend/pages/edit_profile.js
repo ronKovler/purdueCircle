@@ -4,7 +4,7 @@ import { styles, HeaderLogo, Choo, Logo } from './stylesheet';
 import User from "./user";
 
 export default function EditProfileScreen({navigation}) {
-    const [username, setUsername] = useState("TestUsername")
+    const [username, setUsername] = useState('')
     const [firstName, setFirstName] = useState("TestFirstName")
     const [lastName, setLastName] = useState("TestLastName")
     const [password, setPassword] = useState("TestPassword")
@@ -68,23 +68,23 @@ export default function EditProfileScreen({navigation}) {
             <View style={{flex: 5, flexDirection: 'column'}}>
               <View style={{flex: 2, backgroundColor: '737373'}}/>
               <View style={{flex: 3, backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
-                <Text style={styles.header}>User's Profile Information</Text>
+                <Text style={styles.header}>{User.username}'s Profile Information</Text>
                 <View style={{justifyContent: 'center'}}>
                     <TextInput
                         style={styles.accountInputBox}
-                        placeholder={username}
+                        placeholder={User.username}
                         onChangeText={username => setUsername(username)}/>
                     <TextInput
                         style={styles.accountInputBox}
-                        placeholder={firstName}
+                        placeholder={User.firstName}
                         onChangeText={firstName => setFirstName(firstName)}/>
                     <TextInput
                         style={styles.accountInputBox}
-                        placeholder={lastName}
+                        placeholder={User.lastName}
                         onChangeText={lastName => setLastName(lastName)}/>
                     <TextInput
                         style={styles.accountInputBox}
-                        placeholder={password}
+                        placeholder={User.password}
                         onChangeText={password => setPassword(password)}/>
                     <Pressable onPress={() => SendUpdates()}><Text style={styles.button}>Save Changes</Text></Pressable>
                 </View>

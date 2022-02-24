@@ -6,8 +6,6 @@ import Topic from "./topic";
 import User from "./user";
 
 export default function ProfilePage ({navigation}) {
-  const [username, setUsername] = User.username;
-
     const LogOut = async () => {
         await User.logout()
         navigation.navigate('Login');
@@ -45,7 +43,7 @@ export default function ProfilePage ({navigation}) {
               <View style={{flex: 1}}/>
               <View style={{flex: 1}}>
                 <Text style={styles.header}>
-                  {username}'s Followed Topics
+                  {User.username}'s Followed Topics
                 </Text>
               </View>
               <View style={{flex: 10}}>
@@ -62,7 +60,7 @@ export default function ProfilePage ({navigation}) {
         <View style={{flex: 5, flexDirection: 'column'}}>
           <View style={{flex: 1, backgroundColor: '737373'}}/>
           <View style={{flex: 7, backgroundColor: '737373'}}>
-            <Text style={styles.header}>{username}'s Posts</Text>
+            <Text style={styles.header}>{User.username}'s Posts</Text>
           </View>
           <ScrollView style={{flex: 93, flexBasis: 100}} showsVerticalScrollIndicator={false}>
             <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
