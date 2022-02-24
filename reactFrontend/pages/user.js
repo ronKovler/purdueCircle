@@ -3,12 +3,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 class Authentication {
   constructor() {
     this.isLoggedIn = false;
+    this.username = '';
   }
 
-  async login(userID) {
+  async login(userID, username) {
     try{
       await AsyncStorage.setItem('user', userID)
       this.isLoggedIn = true;
+      this.username = username;
+      console.log(this.isLoggedIn);
+      console.log(this.username);
     } catch (error){
       console.error(error)
     }

@@ -24,10 +24,11 @@ export default function LoginScreen({navigation}) {
                     'password': password
                 })
             })
-            const userID = await response.json();
-            console.log(userID)
-            if (userID >= 0) {
-                await User.login(userID);
+            const user = await response.json();
+            console.log(user.userId);
+            console.log(user.username);
+            if (user.userId >= 0) {
+                await User.login(user.userId, user.username);
                 navigation.navigate('Home');
             } else { //password failed
                 User.isLoggedIn=false;
