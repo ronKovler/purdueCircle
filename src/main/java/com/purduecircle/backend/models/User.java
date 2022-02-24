@@ -60,6 +60,9 @@ public class User {
     @OneToMany(mappedBy="follower")
     private Set<UserFollower> following = new HashSet<>();
 
+    @OneToMany(mappedBy="follower")
+    private Set<TopicFollower> followedTopics = new HashSet<>();
+
     public User(String first_name, String last_name, String email, String username, String password, String phone_number) {
         this.firstName = first_name;
         this.lastName = last_name;
@@ -85,25 +88,33 @@ public class User {
     public User() {}
 
     /* add topic to list of topics this user is following */
-    public void addFollowedTopic(Topic topic) {
-        // TODO: Corresponding UserController method exists and is done
-        // TODO: have to edit topic info
+    public void addFollowedTopic(TopicFollower newTopicFollower) {
+        followedTopics.add(newTopicFollower);
     }
 
     /* remove topic to list of topics this user is following */
-    public void removeFollowedTopic(Topic topic) {
-        // TODO: Corresponding UserController method exists and is done
-        // TODO: have to edit topic info
+    public void removeFollowedTopic(TopicFollower newTopicFollower) {
+        followedTopics.remove(newTopicFollower);
     }
 
     /* add topic to list of topics this user is following */
-    public void addFollowedUser(User user) {
-        // TODO: Corresponding UserController method exists and is done
+    public void addFollower(UserFollower newUserFollower) {
+        followers.add(newUserFollower);
     }
 
     /* remove topic to list of topics this user is following */
-    public void removeFollowedUser(User user) {
-        // TODO: Corresponding UserController method exists and is done
+    public void removeFollower(UserFollower newUserFollower) {
+        followers.remove(newUserFollower);
+    }
+
+    /* add topic to list of topics this user is following */
+    public void addFollowing(UserFollower newUserFollower) {
+        following.add(newUserFollower);
+    }
+
+    /* remove topic to list of topics this user is following */
+    public void removeFollowing(UserFollower newUserFollower) {
+        following.add(newUserFollower);
     }
 
     public int getUserID() {

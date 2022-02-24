@@ -54,6 +54,14 @@ public class Post {
     @OneToMany(mappedBy="post")
     private Set<Reaction> reactions;
 
+    public void addReaction(Reaction reaction) {
+        reactions.add(reaction);
+    }
+
+    /* remove topic to list of topics this user is following */
+    public void removeReaction(Reaction reaction) {
+        reactions.remove(reaction);
+    }
 
     /*
     Getters and Setters

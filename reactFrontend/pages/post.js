@@ -78,7 +78,7 @@ export default function Post({navigation}, props) {
           userID: User.getUserId(),
           postID: postID
         }),
-      }).then(() => setLiked(!liked))
+      }).then(() => setLiked(!liked), () => console.log("Promise unfulfilled"))
     } catch (error){
       console.error(error)
     }
@@ -142,13 +142,16 @@ export default function Post({navigation}, props) {
           </View>
         </View>
       </View>
-      <Text style={postStyles.text}>{content}</Text>
-      <View style={{flex: 1, padding: 5}}>
-        <Pressable onPress={() => toggleLike()}>
-          {liked ?
-            <Image source={require('../assets/full_heart.svg')} style={[postStyles.likeButton, {tintColor: 'red'}]}/> :
-            <Image source={require('../assets/heart.svg')} style={postStyles.likeButton}/>}
-        </Pressable>
+      <View style={postStyles.box}>
+          <Text style={postStyles.text}>{content}</Text>
+          <View style={{flexBasis: 1, padding: 5}}>
+            {User.isLoggedIn ?
+            <Pressable onPress={() => toggleLike()}>
+              {liked ?
+                <Image source={require('../assets/full_heart.svg')} style={[postStyles.likeButton, {tintColor: 'red'}]}/> :
+                <Image source={require('../assets/heart.svg')} style={postStyles.likeButton}/>}
+            </Pressable> : null}
+          </View>
       </View>
     </View>
   )
@@ -170,11 +173,15 @@ const postStyles = StyleSheet.create({
     // borderBottomColor: "#737373",
   },
   text: {
-    borderTopWidth: 4,
     borderTopColor: '#737373',
     color: 'white',
+    flex: 2
+  },
+  box: {
+    borderTopWidth: 4,
+    borderTopColor: '#737373',
     padding: 12.5,
-    paddingBottom: 5,
+    paddingBottom: 25,
     flex: 2
   },
   button: {

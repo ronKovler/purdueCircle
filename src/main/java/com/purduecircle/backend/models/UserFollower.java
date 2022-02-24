@@ -15,6 +15,13 @@ import javax.persistence.*;
 @Table(name = "user_followers")
 public class UserFollower {
 
+    public UserFollower() {}
+
+    public UserFollower(User User, User follower) {
+        this.user = user;
+        this.follower = follower;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_follower_ID")

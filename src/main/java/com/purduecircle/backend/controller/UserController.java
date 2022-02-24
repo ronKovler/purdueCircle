@@ -21,6 +21,10 @@ public class UserController {
     private TopicRepository topicRepository;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private TopicFollowerRepository topicFollowerRepository;
+    @Autowired
+    private UserFollowerRepository userFollowerRepository;
 
     @GetMapping("/checkConnection")
     public String testConnection() {
@@ -64,6 +68,7 @@ public class UserController {
             return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
 
+        // Saves user to database
         userRepository.save(newUser);
         // Ensure username is all lowercase
         newUser.setUsername(newUser.getUsername().toLowerCase());
@@ -73,62 +78,78 @@ public class UserController {
     @CrossOrigin
     @RequestMapping(value="follow_topic", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> followTopic(@RequestBody User newUser, String topicStr) throws URISyntaxException {
+    public ResponseEntity<Integer> followTopic(@RequestBody User argUser, String topicStr) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.findByUserID(newUser.getUserID());
+        // Find actual user and topic in database
+        User user = userRepository.findByUserID(argUser.getUserID());
         Topic topic = topicRepository.findByTopicName(topicStr);
         if (topic == null) {
-            // Add topic to database
-            Topic newTopic = new Topic(topicStr);
+            // Adds topic to database
+            topic = new Topic(topicStr);
         }
-        // TODO: function in user class
-        user.addFollowedTopic(topic);
+        TopicFollower newTopicFollower = new TopicFollower(user, topic);
+        topicFollowerRepository.save(newTopicFollower);
+        user.addFollowedTopic(newTopicFollower);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
     @CrossOrigin
     @RequestMapping(value="unfollow_topic", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> unfollowTopic(@RequestBody User newUser, String topicStr) throws URISyntaxException {
+    public ResponseEntity<Integer> unfollowTopic(@RequestBody User argUser, String topicStr) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.findByUserID(newUser.getUserID());
+        // Find actual user and topic in database
+        User user = userRepository.findByUserID(argUser.getUserID());
         Topic topic = topicRepository.findByTopicName(topicStr);
-        // TODO: function in user class
-        user.removeFollowedTopic(topic);
+        // Remove from user list to be safe for now
+        user.removeFollowedTopic(topicFollowerRepository.findByFollowerAndTopic(user, topic));
+        // Remove from table
+        topicFollowerRepository.deleteByFollowerAndTopic(user, topic);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
     @CrossOrigin
     @RequestMapping(value="follow_user", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> followUser(@RequestBody User newUser, User newUserToFollow) throws URISyntaxException {
+    public ResponseEntity<Integer> followUser(@RequestBody User argUser, User argUserToFollow) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.findByUserID(newUser.getUserID());
-        User userToFollow = userRepository.findByUserID(newUserToFollow.getUserID());
-        // TODO: function in user class
-        user.addFollowedUser(userToFollow);
-        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+        User userThatsFollowing = userRepository.findByUserID(argUser.getUserID());
+        User userToFollow = userRepository.findByUserID(argUserToFollow.getUserID());
+
+        UserFollower userFollower = new UserFollower(userToFollow, userThatsFollowing);
+        userFollowerRepository.save(userFollower);
+        userToFollow.addFollower(userFollower);
+        userThatsFollowing.addFollowing(userFollower);
+        return ResponseEntity.ok().headers(responseHeaders).body(userThatsFollowing.getUserID());
     }
 
     @CrossOrigin
     @RequestMapping(value="unfollow_user", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> unfollowUser(@RequestBody User newUser, User userToFollow) throws URISyntaxException {
+    public ResponseEntity<Integer> unfollowUser(@RequestBody User argUser, User argUserToUnfollow) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.findByUserID(newUser.getUserID());
-        // TODO: function in user class
-        user.removeFollowedUser(userToFollow);
-        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+        User userThatsFollowing = userRepository.findByUserID(argUser.getUserID());
+        User userToUnfollow = userRepository.findByUserID(argUserToUnfollow.getUserID());
+
+        UserFollower userFollower = userFollowerRepository.findByUserAndFollower(userToUnfollow, userThatsFollowing);
+        // remove from following
+        userThatsFollowing.removeFollowing(userFollower);
+        // remove from followers
+        userToUnfollow.removeFollower(userFollower);
+        // remove from table
+        userFollowerRepository.deleteByUserAndFollower(userToUnfollow, userThatsFollowing);
+        return ResponseEntity.ok().headers(responseHeaders).body(userThatsFollowing.getUserID());
     }
 
     @CrossOrigin
     @RequestMapping(value="like_post", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> likePost(@RequestBody User newUser, Post newPost) throws URISyntaxException {
+    public ResponseEntity<Integer> likePost(@RequestBody User argUser, Post argPost) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.findByUserID(newUser.getUserID());
-        Post post = postRepository.findByPostID(newPost.getPostID());
+        User user = userRepository.findByUserID(argUser.getUserID());
+        Post post = postRepository.findByPostID(argPost.getPostID());
         Reaction newReaction = new Reaction(0, user, post);
+        post.addReaction(newReaction);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
