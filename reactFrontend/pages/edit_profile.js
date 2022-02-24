@@ -17,20 +17,46 @@ export default function EditProfileScreen({navigation}) {
     //helper functions
     const SendUpdates = async () => {
         try {
-            const response = await fetch (serverAddress + "api/update", {
+            await fetch (serverAddress + "/api/modify/modify_password", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'username': username,
-                    'firstName': firstName,
-                    'lastName': lastName,
                     'password': password
                 })
             })
-            const success = await response.json();
+            await fetch (serverAddress + "/api/modify/first_name", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify({
+                    'password': password
+                })
+            })
+            await fetch (serverAddress + "/api/modify/last_name", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify({
+                    'password': password
+                })
+            })
+            await fetch (serverAddress + "/api/modify/modify_username", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify({
+                    'password': password
+                })
+            })
             console.log(success)
         } catch (error){
             console.error(error)

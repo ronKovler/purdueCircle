@@ -20,6 +20,14 @@ public class UserDTO {
         this.password = "*".repeat(length);
     }
 
+    public UserDTO(String password, String username, String firstName, String lastName, int userId) {
+        this.userId = userId;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+    }
+
     public UserDTO(String username, int userId) {
         this.username = username;
         this.userId = userId;
