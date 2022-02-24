@@ -6,38 +6,12 @@ import Topic from "./topic";
 import User from "./user";
 
 export default function ProfilePage ({navigation}) {
-  const [username, setUsername] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = User.username;
 
     const LogOut = async () => {
         await User.logout()
         navigation.navigate('Login');
     }
-
-  //helper functions
-  const SendUpdates = async () => {
-    try {
-      const response = await fetch (serverAddress + "api/update", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          'Access-Control-Allow-Origin': '*',
-        },
-        body: JSON.stringify({
-          'username': username,
-          'firstName': firstName,
-          'lastName': lastName,
-          'password': password
-        })
-      })
-      const success = await response.json();
-      console.log(success)
-    } catch (error){
-      console.error(error)
-    }
-  }
 
   return (
     <View style={styled.container}>
@@ -71,7 +45,7 @@ export default function ProfilePage ({navigation}) {
               <View style={{flex: 1}}/>
               <View style={{flex: 1}}>
                 <Text style={styles.header}>
-                  Followed Topics
+                  {username}'s Followed Topics
                 </Text>
               </View>
               <View style={{flex: 10}}>
@@ -87,10 +61,10 @@ export default function ProfilePage ({navigation}) {
         </View>
         <View style={{flex: 5, flexDirection: 'column'}}>
           <View style={{flex: 1, backgroundColor: '737373'}}/>
-          <View style={{flex: 20, backgroundColor: '737373'}}>
-
+          <View style={{flex: 7, backgroundColor: '737373'}}>
+            <Text style={styles.header}>{username}'s Posts</Text>
           </View>
-          <ScrollView style={{flex: 80, flexBasis: 100}} showsVerticalScrollIndicator={false}>
+          <ScrollView style={{flex: 93, flexBasis: 100}} showsVerticalScrollIndicator={false}>
             <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
             <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
           </ScrollView>
