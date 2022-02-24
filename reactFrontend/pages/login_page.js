@@ -29,7 +29,7 @@ export default function LoginScreen({navigation}) {
             console.log(user.username);
             if (user.userId >= 0) {
                 await User.login(user.userId, user.username);
-                navigation.navigate('home');
+                navigation.navigate('Home');
             } else { //password failed
                 User.isLoggedIn=false;
                 console.log("FAILED FUCKER TRY AGAIN");
