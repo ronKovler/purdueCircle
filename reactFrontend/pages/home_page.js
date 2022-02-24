@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacity, Image} from 'react-native';
 import {styles, HeaderLogo, Choo, Logo} from './stylesheet';
 import Post from "./post";
@@ -6,6 +6,7 @@ import User from "./user";
 
 export default function HomeScreen({navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
+    // const timelineData = getTimeline()
 
     const LogOut = async () => {
         setIsLoggedIn(false)
@@ -28,7 +29,7 @@ export default function HomeScreen({navigation}) {
                 'Access-Control-Allow-Origin': '*',
             },
         })
-        let json = response.json()
+        let json = await response.json()
         console.log(json)
         return json
     }
@@ -37,9 +38,11 @@ export default function HomeScreen({navigation}) {
         Post.get
     }*/
 
-    const renderPost = ({item}) =>(
-        <Post topic={item.topic_name} user={item.username} content={item.content} postID={item.postID} userID={item.userID}/>
-    );
+    const renderPost = ({item}) => {
+        // <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
+        //       userID={item.userId}/>
+        console.log(item)
+    };
 
     return (
         <View style={styled.container}>
