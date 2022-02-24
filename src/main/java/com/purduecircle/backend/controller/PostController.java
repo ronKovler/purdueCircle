@@ -46,5 +46,15 @@ public class PostController {
         return ResponseEntity.ok().headers(responseHeaders).body(post.getPostID());
     }
 
+    @CrossOrigin
+    @RequestMapping(value="get_post", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Post> getPost(@RequestBody Post post) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        //DON'T TOUCH ABOVE
+        Post getPost = postRepository.findByPostID(post.getPostID());
+
+        return ResponseEntity.ok().headers(responseHeaders).body(getPost);
+    }
 
 }

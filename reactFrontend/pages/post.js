@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import User from "./user";
 
 export default function Post({navigation}, props) {
+  //TODO: Implement default state according to pass props aligned with post list returned
   const [user, setUser] = useState('user')
   const [topic, setTopic] = useState('topic')
   const [comments, setComments] = useState('comments')
@@ -16,8 +17,17 @@ export default function Post({navigation}, props) {
 
   const getPostInfo = async () => {
     try {
-      const response = await fetch()
-      const json = await response.json()
+      const response = await fetch(serverAddress + '/api/post/get_post', {
+        method: 'GET',
+        body:{
+          postID: postID
+        }
+      }).json().then( postData => {
+          setUser(postData.user)
+          setTopic(postData.topic)
+          setContent(postData.content)
+        }
+      )
 
     } catch {
       console.error(error)
@@ -132,7 +142,7 @@ export default function Post({navigation}, props) {
           </View>
         </View>
       </View>
-        <Text style={postStyles.text}>{content}</Text>
+      <Text style={postStyles.text}>{content}</Text>
       <View style={{flex: 1, padding: 5}}>
         <Pressable onPress={() => toggleLike()}>
           {liked ?

@@ -4,6 +4,7 @@ public class PostDTO {
     private String content;
     private int userId;
     private String topicName;
+    private int postId;
 
     public String getContent() {
         return content;
@@ -29,9 +30,21 @@ public class PostDTO {
         this.topicName = topicName;
     }
 
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
+    }
+
     public PostDTO(String content, int userId, String topicName) {
         this.content = content;
         this.userId = userId;
         this.topicName = topicName;
+    }
+
+    public PostDTO(int postId) {
+        this.postId = postId;
     }
 }

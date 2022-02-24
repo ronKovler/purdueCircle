@@ -1,14 +1,26 @@
-import React, {} from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacity, Image} from 'react-native';
 import { styles, HeaderLogo, Choo, Logo } from './stylesheet';
 import Post from "./post";
 import User from "./user";
 
 export default function HomeScreen({navigation}) {
+    const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
 
     const LogOut = async () => {
+        setIsLoggedIn(false)
         await User.logout()
-        navigation.navigate('Login');
+        navigation.navigate('Login')
+    }
+
+    async function getTimeline(){
+        let posts, response
+        if(!isLoggedIn){
+            response = await fetch(serverAddress + '/api/post/hot_timeline', {
+                method: 'GET',
+            }).json()
+            return response
+        }
     }
 
     return (
@@ -16,7 +28,7 @@ export default function HomeScreen({navigation}) {
           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
               <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
               <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
-                  {User.isLoggedIn ?
+                  {isLoggedIn ?
                     <View style={styles.buttonContainer}>
                         <Pressable onPress={() => LogOut()}><Text
                           style={styles.button}>Log Out</Text></Pressable>
@@ -24,7 +36,7 @@ export default function HomeScreen({navigation}) {
                   <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
                       <HeaderLogo style={styles.headerIcon}/>
                   </View>
-                  {!User.isLoggedIn ?
+                  {!isLoggedIn ?
                     <View style={styles.buttonContainer}>
                         <Pressable onPress={() => navigation.navigate('Login')}><Text
                           style={styles.button}>Login</Text></Pressable>
