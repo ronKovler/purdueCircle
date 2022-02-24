@@ -14,6 +14,10 @@ class Authentication {
     }
   }
 
+  async isLoggedIn() {
+    return this.isLoggedIn();
+  }
+
   async logout(){
     try{
       await AsyncStorage.setItem('user', '-1')

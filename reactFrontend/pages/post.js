@@ -22,7 +22,7 @@ export default function Post(props) {
       const response = await fetch(serverAddress + '/api/post/get_post', {
         method: 'GET',
         body:{
-          postID: postID
+          'postID': postID
         }
       }).json().then( postData => {
           setUser(postData.user)
