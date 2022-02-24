@@ -33,7 +33,8 @@ class Authentication {
   }
 
   async getUserId(){
-    return await AsyncStorage.getItem('user')
+    let no = await AsyncStorage.getItem('user')
+    return JSON.parse(no)
   }
 }
 

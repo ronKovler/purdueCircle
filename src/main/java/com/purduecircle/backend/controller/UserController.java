@@ -159,7 +159,8 @@ public class UserController {
         Post post = postRepository.findByPostID(reactionDTO.getPostID());
         Reaction newReaction = new Reaction(0, user, post);
         post.addReaction(newReaction);
-        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+        int numReactions = post.getReactions().size();
+        return ResponseEntity.ok().headers(responseHeaders).body(numReactions);
     }
 
     @CrossOrigin
@@ -170,9 +171,10 @@ public class UserController {
         User user = userRepository.findByUserID(reactionDTO.getUserID());
         Post post = postRepository.findByPostID(reactionDTO.getPostID());
         Reaction reaction = reactionRepository.getReactionByPostAndUser(post, user);
-        reactionRepository.delete(reaction);
         post.removeReaction(reaction);
-        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+        reactionRepository.delete(reaction);
+        int numReactions = post.getReactions().size();
+        return ResponseEntity.ok().headers(responseHeaders).body(numReactions);
     }
 
     @CrossOrigin

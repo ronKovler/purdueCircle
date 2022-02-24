@@ -17,7 +17,7 @@ public class UserFollower {
 
     public UserFollower() {}
 
-    public UserFollower(User User, User follower) {
+    public UserFollower(User user, User follower) {
         this.user = user;
         this.follower = follower;
     }

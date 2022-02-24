@@ -13,7 +13,7 @@ export default function Post(props) {
     const [followingUser, setFollowingUser] = useState(false)
     const [liked, setLiked] = useState(false)
     const postID = props.postID
-    const userID = props.userID
+    const userID = 1
     const navigation = useNavigation();
 
     async function getPostInfo() {
@@ -96,10 +96,13 @@ export default function Post(props) {
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'userID': User.getUserId(),
+                    'userID': await User.getUserId(),
                     'postID': postID
                 }),
-            }).then(() => setLiked(!liked), () => console.log("Promise unfulfilled"))
+            }).then(() => {
+                setLiked(!liked)
+                console.log(response)
+            }, () => console.log("Promise unfulfilled"))
         } catch (error) {
             console.error(error)
         }

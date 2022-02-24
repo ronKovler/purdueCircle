@@ -6,7 +6,8 @@ import User from "./user";
 
 export default function HomeScreen({navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
-    // const timelineData = getTimeline()
+    const [loading, setLoading] = useState(true)
+    const [timelineData, setTimelineData] = useState(null)
 
     const LogOut = async () => {
         setIsLoggedIn(false)
@@ -14,11 +15,14 @@ export default function HomeScreen({navigation}) {
         navigation.navigate('Login')
     }
 
+    useEffect(async () => {
+        const data = await getTimeline();
+        setTimelineData(data);
+    }, [])
+
     const Login = async () => {
-        let loggedIn;
-        navigation.navigate('Login', loggedIn)
-        setIsLoggedIn(loggedIn)
-        await User.login()
+        navigation.navigate('Login')
+        setIsLoggedIn(true)
     }
 
     async function getTimeline() {
@@ -30,7 +34,7 @@ export default function HomeScreen({navigation}) {
             },
         })
         let json = await response.json()
-        console.log(json)
+        setLoading(false)
         return json
     }
 
@@ -39,17 +43,19 @@ export default function HomeScreen({navigation}) {
     }*/
 
     const renderPost = ({item}) => {
-        // <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
-        //       userID={item.userId}/>
         console.log(item)
+        return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
+              userID={item.userId}/>
     };
+
 
     return (
         <View style={styled.container}>
+            {!loading ?
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                 <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
-                    {User.isLoggedIn ?
+                    {isLoggedIn ?
                         <View style={styles.buttonContainer}>
                             <Pressable onPress={() => LogOut()}><Text
                                 style={styles.button}>Log Out</Text></Pressable>
@@ -57,9 +63,9 @@ export default function HomeScreen({navigation}) {
                     <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
                         <HeaderLogo style={styles.headerIcon}/>
                     </View>
-                    {!User.isLoggedIn ?
+                    {!isLoggedIn ?
                         <View style={styles.buttonContainer}>
-                            <Pressable onPress={() => navigation.navigate('Login')}><Text
+                            <Pressable onPress={() => Login()}><Text
                                 style={styles.button}>Login</Text></Pressable>
                             <Pressable onPress={() => navigation.navigate('Create Account')}><Text
                                 style={styles.button}>Register</Text></Pressable>
@@ -71,7 +77,8 @@ export default function HomeScreen({navigation}) {
                 </View>
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
                 </View>
-            </View>
+            </View>: <Text>Loading...</Text>}
+            {!loading ?
             <View style={{flex: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '737373'}}>
                 <View style={{
                     flex: 2,
@@ -82,7 +89,7 @@ export default function HomeScreen({navigation}) {
                     <View style={{flex: 3}}>
                         <Image style={styles.image} source={require('../assets/choo.png')}/>
                     </View>
-                    {User.isLoggedIn ?
+                    {isLoggedIn ?
                         <View style={{flex: 6, justifyContent: 'center'}}>
                             <View style={{flex: 2}}/>
                             <View style={{flex: 1}}>
@@ -109,11 +116,12 @@ export default function HomeScreen({navigation}) {
                     {/*    <Post/><Post/><Post/><Post/><Post/><Post/>*/}
                     {/*    <Post/><Post/><Post/><Post/><Post/>*/}
                     {/*</ScrollView>*/}
-                    <FlatList data={getTimeline()} renderItem={renderPost} />
+                    <FlatList data={timelineData} renderItem={renderPost} keyExtractor={item => item.postId}/>
                     <View style={{flex: 2, backgroundColor: '737373'}}/>
                 </View>
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
             </View>
+                : null}
         </View>
     )
 }
