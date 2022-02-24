@@ -46,10 +46,19 @@ public class PostDTO {
         this.topicName = topicName;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public PostDTO(Post post) {
         this.content = post.getContent();
         this.userId = post.getUser().getUserID();
         this.username = post.getUser().getUsername();
+        System.out.println(post.getUser().getUsername());
         this.topicName = post.getTopic().getTopicName();
         this.postId = post.getPostID();
 

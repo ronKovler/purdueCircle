@@ -4,17 +4,16 @@ import User from "./user";
 import {useNavigation} from '@react-navigation/native';
 
 export default function Post(props) {
-    //TODO: Implement default state according to pass props aligned with post list returned
-    const [user, setUser] = useState('user')
-    const [topic, setTopic] = useState(props.topicName)
+    const [user, setUser] = useState(props.user)
+    const [topic, setTopic] = useState(props.topic)
     const [comments, setComments] = useState()
-    const [content, setContent] = useState('Bitch <3')
+    const [content, setContent] = useState(props.content)
     const [isLoading, setIsLoading] = useState(true)
     const [followingTopic, setFollowingTopic] = useState(false)
     const [followingUser, setFollowingUser] = useState(false)
     const [liked, setLiked] = useState(false)
     const postID = props.postID
-    let userID
+    const userID = props.userID
     const navigation = useNavigation();
 
     async function getPostInfo() {
@@ -46,9 +45,9 @@ export default function Post(props) {
         }
     }
 
-    useEffect(() => {
-        getPostInfo().then(() => console.log("Got Post"))
-    }, [])
+    // useEffect(() => {
+    //     getPostInfo().then(() => console.log("Got Post"))
+    // }, [])
 
     //TODO: Force login if interacted while not logged in
     async function toggleFollowUser() {

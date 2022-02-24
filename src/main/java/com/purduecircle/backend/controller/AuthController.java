@@ -1,6 +1,7 @@
 package com.purduecircle.backend.controller;
 
 import com.purduecircle.backend.models.User;
+import com.purduecircle.backend.models.UserDTO;
 import com.purduecircle.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +20,7 @@ public class AuthController {
     @CrossOrigin
     @RequestMapping(value="login", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> tryLogin(@RequestBody User newUser) throws URISyntaxException {
+    public ResponseEntity<UserDTO> tryLogin(@RequestBody User newUser) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         //DON'T TOUCH ABOVE
 
@@ -30,9 +31,11 @@ public class AuthController {
 
         if (checkExists != null) {
             System.out.println("FOUND CHECK EXISTS USER: " + checkExists.getUsername());
-            return ResponseEntity.ok().headers(responseHeaders).body(checkExists.getUserID());
+            UserDTO existsDTO = new UserDTO(checkExists);
+            return ResponseEntity.ok().headers(responseHeaders).body(existsDTO);
         }
+        UserDTO failed = new UserDTO("Failed", -1);
 
-        return ResponseEntity.ok().headers(responseHeaders).body(-1);
+        return ResponseEntity.ok().headers(responseHeaders).body(failed);
     }
 }

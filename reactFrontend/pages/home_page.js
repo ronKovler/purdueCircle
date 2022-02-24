@@ -106,7 +106,7 @@ export default function HomeScreen({navigation}) {
                     {/*    <Post/><Post/><Post/><Post/><Post/><Post/>*/}
                     {/*    <Post/><Post/><Post/><Post/><Post/>*/}
                     {/*</ScrollView>*/}
-                    <FlatList data={getTimeline()} renderItem={renderPost} keyExtractor={item => item.postID}/>
+                    <FlatList data={getTimeline()} renderItem={renderPost} />
                     <View style={{flex: 2, backgroundColor: '737373'}}/>
                 </View>
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
