@@ -21,10 +21,11 @@ export default function CreateAccountScreen({navigation}) {
       method: "POST",
       headers: {
         'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json; charset=utf-8',
       },
       body: JSON.stringify({
-        first_name: firstName,
-        last_name: lastName,
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         username: username,
         password: password

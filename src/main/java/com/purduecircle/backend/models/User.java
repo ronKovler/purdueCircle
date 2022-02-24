@@ -63,18 +63,18 @@ public class User {
     @OneToMany(mappedBy="follower")
     private Set<TopicFollower> followedTopics = new HashSet<>();
 
-    public User(String first_name, String last_name, String email, String username, String password, String phone_number) {
-        this.firstName = first_name;
-        this.lastName = last_name;
+    public User(String firstName, String lastName, String email, String username, String password, String phone_number) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
         this.phoneNumber = phone_number;
     }
 
-    public User(String first_name, String last_name, String email, String username, String password) {
-        this.firstName = first_name;
-        this.lastName = last_name;
+    public User(String firstName, String lastName, String email, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
