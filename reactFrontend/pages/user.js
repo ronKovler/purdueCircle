@@ -10,7 +10,9 @@ class Authentication {
     try{
       await AsyncStorage.setItem('user', userID)
       this.isLoggedIn = true;
-      this.username = '{username}';
+      this.username = username;
+      console.log(this.isLoggedIn);
+      console.log(this.username);
     } catch (error){
       console.error(error)
     }
