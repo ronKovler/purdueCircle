@@ -4,10 +4,10 @@ import { styles, HeaderLogo, Choo, Logo } from './stylesheet';
 import User from "./user";
 
 export default function EditProfileScreen({navigation}) {
-    const [username, setUsername] = useState('')
-    const [firstName, setFirstName] = useState("TestFirstName")
-    const [lastName, setLastName] = useState("TestLastName")
-    const [password, setPassword] = useState("TestPassword")
+    const [username, setUsername] = useState("")
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [password, setPassword] = useState("")
 
     const LogOut = async () => {
         await User.logout()
@@ -24,27 +24,39 @@ export default function EditProfileScreen({navigation}) {
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'password': password
+                    'userId': User.userId,
+                    'password': password,
+                    'firstName': firstName,
+                    'lastName': lastName,
+                    'username': username
                 })
             })
-            await fetch (serverAddress + "/api/modify/first_name", {
+            await fetch (serverAddress + "/api/modify/modify_first_name", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'password': password
+                    'userId': User.userId,
+                    'password': password,
+                    'firstName': firstName,
+                    'lastName': lastName,
+                    'username': username
                 })
             })
-            await fetch (serverAddress + "/api/modify/last_name", {
+            await fetch (serverAddress + "/api/modify/modify_last_name", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'password': password
+                    'userId': User.userId,
+                    'password': password,
+                    'firstName': firstName,
+                    'lastName': lastName,
+                    'username': username
                 })
             })
             await fetch (serverAddress + "/api/modify/modify_username", {
@@ -54,10 +66,13 @@ export default function EditProfileScreen({navigation}) {
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'password': password
+                    'userId': User.userId,
+                    'password': password,
+                    'firstName': firstName,
+                    'lastName': lastName,
+                    'username': username
                 })
             })
-            console.log(success)
         } catch (error){
             console.error(error)
         }
