@@ -9,9 +9,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 public class BackendApplication {
 
-	@Autowired	//Autowired annotation automatically injects an instance
-	static UserRepository userRepository;
-
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 		System.out.println("PRINTTTTTTTTTTTTTTTTTTTTTTTTTT");

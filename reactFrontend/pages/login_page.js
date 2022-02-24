@@ -11,7 +11,6 @@ export default function LoginScreen({navigation}) {
     const [correct, setCorrect] = useState(true)
     const [emailError, setEmailError] = useState("")
 
-
     const SendLogin = async () => {
         try {
             const response = await fetch(serverAddress + "/api/auth/login", {
@@ -94,7 +93,6 @@ const validateEmail = () => {
 
 return (
     <View style={styles.container}>
-
       <View style={styles.loginBox}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <Logo/>

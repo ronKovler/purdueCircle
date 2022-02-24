@@ -176,14 +176,18 @@ public class UserController {
     }
 
     @CrossOrigin
-    @RequestMapping(value="hot_timeline", method = RequestMethod.POST,
+    @RequestMapping(value="hot_timeline", method = RequestMethod.GET,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Post>> showHotTimeline() throws URISyntaxException {
+    public ResponseEntity<List<PostDTO>> showHotTimeline() throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         Timestamp yesterday = Timestamp.from(Instant.now().minus(24, ChronoUnit.HOURS));
 
         List<Post> topPosts = postRepository.findByTimePostedGreaterThanEqualOrderByTimePostedDesc(yesterday);
-
-        return ResponseEntity.ok().headers(responseHeaders).body(topPosts);
+        List<PostDTO> topPostsDTO = new ArrayList<PostDTO>();
+        for (Post post : topPosts) {
+            PostDTO temp = new PostDTO(post);
+            topPostsDTO.add(temp);
+        }
+        return ResponseEntity.ok().headers(responseHeaders).body(topPostsDTO);
     }
 }

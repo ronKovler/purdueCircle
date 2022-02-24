@@ -27,6 +27,14 @@ public class Topic {
     @Column(name = "topic_name")
     private String topicName;
 
+    public String getTopicName() {
+        return topicName;
+    }
+
+    public void setTopicName(String topicName) {
+        this.topicName = topicName;
+    }
+
     @OneToMany(mappedBy="topic")
     private Set<Post> postsInTopic = new HashSet<>();
 

@@ -6,6 +6,8 @@ public class PostDTO {
     private String topicName;
     private int postId;
 
+    private String username;
+
     public String getContent() {
         return content;
     }
@@ -42,6 +44,15 @@ public class PostDTO {
         this.content = content;
         this.userId = userId;
         this.topicName = topicName;
+    }
+
+    public PostDTO(Post post) {
+        this.content = post.getContent();
+        this.userId = post.getUser().getUserID();
+        this.username = post.getUser().getUsername();
+        this.topicName = post.getTopic().getTopicName();
+        this.postId = post.getPostID();
+
     }
 
     public PostDTO(int postId) {
