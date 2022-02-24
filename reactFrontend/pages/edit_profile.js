@@ -32,7 +32,7 @@ export default function EditProfileScreen({navigation}) {
                     'username': username
                 })
             })
-            await fetch (serverAddress + "/api/modify/modify_first_name", {
+            /*await fetch (serverAddress + "/api/modify/modify_first_name", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -73,8 +73,9 @@ export default function EditProfileScreen({navigation}) {
                     'lastName': lastName,
                     'username': username
                 })
-            })
-            if (!update) setUsernameError("Username already taken!");
+            })*/
+            //if (!update) setUsernameError("Username already taken!");
+            navigation.navigate('Home');
         } catch (error){
             console.error(error)
         }
