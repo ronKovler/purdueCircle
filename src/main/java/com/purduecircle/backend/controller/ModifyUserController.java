@@ -26,64 +26,66 @@ public class ModifyUserController {
     @CrossOrigin
     @RequestMapping(value="modify_first_name", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> modifyFirstName(@RequestBody UserDTO newUserDTO) throws URISyntaxException {
+    public ResponseEntity<Integer> modifyFirstName(@RequestBody User argUser) throws URISyntaxException {
 
-        User newUser = new User(newUserDTO.getPassword(), newUserDTO.getFirstName(), newUserDTO.getLastName(), newUserDTO.getUsername());
         HttpHeaders responseHeaders = new HttpHeaders();
-        if (newUserDTO.getFirstName().equals("")) {
+        if (argUser.getFirstName().equals("")) {
             return ResponseEntity.ok().headers(responseHeaders).body(1);
         }
-        User user = userRepository.findByUserID(newUser.getUserID());
-        user.setFirstName(newUser.getFirstName());
+        User user = userRepository.findByEmailEquals(argUser.getEmail());
+        user.setFirstName(argUser.getFirstName());
+        userRepository.save(user);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
     @CrossOrigin
     @RequestMapping(value="modify_last_name", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> modifyLastName(@RequestBody UserDTO newUserDTO) throws URISyntaxException {
+    public ResponseEntity<Integer> modifyLastName(@RequestBody User argUser) throws URISyntaxException {
 
         HttpHeaders responseHeaders = new HttpHeaders();
-        if (newUserDTO.getLastName().equals("")) {
+        if (argUser.getLastName().equals("")) {
             return ResponseEntity.ok().headers(responseHeaders).body(1);
         }
-        User user = userRepository.findByUserID(newUserDTO.getUserId());
-        user.setLastName(newUserDTO.getLastName());
+        User user = userRepository.findByEmailEquals(argUser.getEmail());
+        user.setLastName(argUser.getLastName());
+        userRepository.save(user);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
     @CrossOrigin
     @RequestMapping(value="modify_username", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> modifyUsername(@RequestBody UserDTO newUserDTO) throws URISyntaxException{
+    public ResponseEntity<Integer> modifyUsername(@RequestBody User argUser) throws URISyntaxException{
         HttpHeaders responseHeaders = new HttpHeaders();
-        if (newUserDTO.getUsername().equals("")) {
+        if (argUser.getUsername().equals("")) {
             return ResponseEntity.ok().headers(responseHeaders).body(1);
         }
-        User newUser = new User(newUserDTO.getPassword(), newUserDTO.getFirstName(), newUserDTO.getLastName(), newUserDTO.getUsername());
-        User checkExists = userRepository.findByUsername(newUser.getUsername().toLowerCase());
+        User checkExists = userRepository.findByUsername(argUser.getUsername().toLowerCase());
         if (checkExists != null) {
             // Username already in use
             System.out.println("Username already used: " + checkExists.getUsername());
             return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
 
-        User user = userRepository.findByUserID(newUser.getUserID());
-        user.setUsername(newUser.getUsername().toLowerCase());
+        User user = userRepository.findByEmailEquals(argUser.getEmail());
+        user.setUsername(argUser.getUsername().toLowerCase());
+        userRepository.save(user);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
-    // TODO: regex should be checked on frontend
     @CrossOrigin
     @RequestMapping(value="modify_password", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> modifyPassword(@RequestBody UserDTO newUserDTO) throws URISyntaxException {
+    public ResponseEntity<Integer> createAccount(@RequestBody User argUser) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        if (newUserDTO.getUsername().equals("")) {
+        if (argUser.getPassword().equals("")) {
             return ResponseEntity.ok().headers(responseHeaders).body(1);
         }
-        User user = userRepository.findByUserID(newUserDTO.getUserId());
-        user.setPassword(newUserDTO.getPassword());
+        User user = userRepository.findByEmailEquals(argUser.getEmail());
+        user.setPassword(argUser.getPassword());
+        System.out.printf("Changing password to: " + argUser.getPassword());
+        userRepository.save(user);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 

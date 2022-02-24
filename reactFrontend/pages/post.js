@@ -13,7 +13,7 @@ export default function Post(props) {
     const [followingUser, setFollowingUser] = useState(false)
     const [liked, setLiked] = useState(false)
     const postID = props.postID
-    const userID = 1
+    const userID = props.userID
     const navigation = useNavigation();
 
     async function getPostInfo() {
@@ -44,7 +44,7 @@ export default function Post(props) {
             setIsLoading(false)
         }
     }
-    
+
 
     //TODO: Force login if interacted while not logged in
     async function toggleFollowUser() {

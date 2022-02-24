@@ -62,7 +62,7 @@ public class UserController {
         HttpHeaders responseHeaders = new HttpHeaders();
 
         // Ensure email is not already in use
-        User checkExists = userRepository.findByEmail(newUser.getEmail());
+        User checkExists = userRepository.findByEmailEquals(newUser.getEmail());
         if (checkExists != null) {
             System.out.println("Email already used: " + checkExists.getEmail());
             return ResponseEntity.ok().headers(responseHeaders).body(-1);
