@@ -8,6 +8,7 @@ import User from "./user";
 export default function PostCreation({ navigation }) {
   const [inputtedText, setInputtedText] = useState('')
   const [topic, setTopic] = useState('')
+    const [loading, setLoading] = useState(true)
 
   const SendPost = async () => {
       try {
@@ -31,6 +32,22 @@ export default function PostCreation({ navigation }) {
 
       } catch (error){
           console.error(error)
+      }
+  }
+
+  async function getTopics(){
+      try{
+          const response = await fetch(serverAddress + '/api/post/get_topics', {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json; charset=utf-8',
+                  'Access-Control-Allow-Origin': '*',
+              }
+          })
+          const topics = await response.json()
+          return topics
+      } catch (error){
+          console.log(error)
       }
   }
 
@@ -59,7 +76,7 @@ export default function PostCreation({ navigation }) {
                 </View>
             </View>
             <View style={[styles.text, {padding: 5, flex: 1}]}>
-              <AsyncCreatableSelect placeholder="Topic"/>
+                <AsyncCreatableSelect placeholder="Topic" isLoading={loading} isSearchable={true} />
             </View>
             <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]} placeholder='Text' onChangeText={() => setInputtedText(inputtedText)} />
             <Pressable onPress={() => SendPost()}><Text style={styles.button}>Create</Text></Pressable>
