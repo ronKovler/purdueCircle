@@ -7,6 +7,7 @@ class Authentication {
     this.firstName = "";
     this.lastName = "";
     this.password = "";
+    this.userId = -1;
   }
 
   async login(userID, username, firstName, lastName, password) {
@@ -17,6 +18,7 @@ class Authentication {
       this.firstName = firstName;
       this.lastName = lastName;
       this.password = password;
+      this.userId = userID;
     } catch (error){
       console.error(error)
     }
