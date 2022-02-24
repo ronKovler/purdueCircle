@@ -24,17 +24,13 @@ export default function HomeScreen({navigation}) {
             body: JSON.stringify({
                 'email': props.postID
             })
-        }).json().then( postData => {
-            Post.setUser(postData.user)
-            Post.setTopic(postData.topic)
-            Post.setContent(postData.content)
         })
 
     }
 
-    async function getPost(){
+    /*async function getPost(){
         Post.get
-    }
+    }*/
 
     return (
       <View style={styled.container}>
@@ -94,7 +90,7 @@ export default function HomeScreen({navigation}) {
                   <View style={{flex: 1, backgroundColor: '737373'}}/>
                   <ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>
                       <Post/><Post/><Post/><Post/><Post/><Post/>
-                      <Post/><Post/><Post/><Post/><Post/> {Post.getPostInfo(2)}
+                      <Post/><Post/><Post/><Post/><Post/>
                   </ScrollView>
                   <View style={{flex: 2, backgroundColor: '737373'}}/>
               </View>
