@@ -49,10 +49,10 @@ public class PostController {
     @CrossOrigin
     @RequestMapping(value="get_post", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Post> getPost(@RequestBody Post post) throws URISyntaxException {
+    public ResponseEntity<Post> getPost(@RequestBody PostDTO postDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         //DON'T TOUCH ABOVE
-        Post getPost = postRepository.findByPostID(post.getPostID());
+        Post getPost = postRepository.findByPostID(postDTO.getPostId());
 
         return ResponseEntity.ok().headers(responseHeaders).body(getPost);
     }

@@ -31,6 +31,8 @@ public class UserController {
     private TopicFollowerRepository topicFollowerRepository;
     @Autowired
     private UserFollowerRepository userFollowerRepository;
+    @Autowired
+    private ReactionRepository reactionRepository;
 
     @GetMapping("/checkConnection")
     public String testConnection() {
@@ -74,11 +76,12 @@ public class UserController {
             return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
 
-        // Saves user to database
-        userRepository.save(newUser);
         // Ensure username is all lowercase
         newUser.setUsername(newUser.getUsername().toLowerCase());
-        return ResponseEntity.ok().headers(responseHeaders).body(checkExists.getUserID());
+        // Saves user to database
+        userRepository.save(newUser);
+
+        return ResponseEntity.ok().headers(responseHeaders).body(newUser.getUserID());
     }
 
     @CrossOrigin
@@ -156,6 +159,19 @@ public class UserController {
         Post post = postRepository.findByPostID(reactionDTO.getPostID());
         Reaction newReaction = new Reaction(0, user, post);
         post.addReaction(newReaction);
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+    }
+
+    @CrossOrigin
+    @RequestMapping(value="unlike_post", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> unlikePost(@RequestBody ReactionDTO reactionDTO) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.findByUserID(reactionDTO.getUserID());
+        Post post = postRepository.findByPostID(reactionDTO.getPostID());
+        Reaction reaction = reactionRepository.getReactionByPostAndUser(post, user);
+        reactionRepository.delete(reaction);
+        post.removeReaction(reaction);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 

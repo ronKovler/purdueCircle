@@ -37,7 +37,7 @@ export default function HomeScreen({navigation}) {
           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
               <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
               <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
-                  {isLoggedIn ?
+                  {User.isLoggedIn ?
                     <View style={styles.buttonContainer}>
                         <Pressable onPress={() => LogOut()}><Text
                           style={styles.button}>Log Out</Text></Pressable>
@@ -45,7 +45,7 @@ export default function HomeScreen({navigation}) {
                   <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
                       <HeaderLogo style={styles.headerIcon}/>
                   </View>
-                  {!isLoggedIn ?
+                  {!User.isLoggedIn ?
                     <View style={styles.buttonContainer}>
                         <Pressable onPress={() => navigation.navigate('Login')}><Text
                           style={styles.button}>Login</Text></Pressable>
@@ -65,7 +65,7 @@ export default function HomeScreen({navigation}) {
                   <View style={{flex: 3}}>
                       <Image style={styles.image} source={require('../assets/choo.png')}/>
                   </View>
-                  {isLoggedIn ?
+                  {User.isLoggedIn ?
                     <View style={{flex: 6, justifyContent: 'center'}}>
                         <View style={{flex: 2}}/>
                         <View style={{flex: 1}}>
