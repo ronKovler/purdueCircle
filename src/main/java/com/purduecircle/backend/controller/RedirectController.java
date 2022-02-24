@@ -12,9 +12,9 @@ import java.net.URL;
 
 public class RedirectController {
 
-    //@RequestMapping("/")
+    /*@RequestMapping("/")
     public ResponseEntity<Void> redirect() {
         return ResponseEntity.status(HttpStatus.FOUND).location(
                 URI.create("https://main.dmztjxlx50f6b.amplifyapp.com/")).build();
-    }
+    }*/
 }

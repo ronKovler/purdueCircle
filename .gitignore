@@ -34,3 +34,4 @@ build/
 /AWSkey.pem
 /buildExport.txt
 /node_modules/
+/src/main/resources/AWSkey.pem
