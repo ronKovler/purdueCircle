@@ -13,6 +13,12 @@ export default function HomeScreen({navigation}) {
         navigation.navigate('Login')
     }
 
+    const Login = async () =>{
+        navigation.navigate('Login')
+        setIsLoggedIn(true)
+        await User.login()
+    }
+
     async function getTimeline(props){
         let posts, response
         response = await fetch(serverAddress + '/api/post/get_post', {
