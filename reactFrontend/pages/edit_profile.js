@@ -8,6 +8,7 @@ export default function EditProfileScreen({navigation}) {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [password, setPassword] = useState("")
+    const [usernameError, setUsernameError] = useState("")
 
     const LogOut = async () => {
         await User.logout()
@@ -59,7 +60,7 @@ export default function EditProfileScreen({navigation}) {
                     'username': username
                 })
             })
-            await fetch (serverAddress + "/api/modify/modify_username", {
+            const update = await fetch (serverAddress + "/api/modify/modify_username", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -73,6 +74,7 @@ export default function EditProfileScreen({navigation}) {
                     'username': username
                 })
             })
+            if (!update) setUsernameError("Username already taken!");
         } catch (error){
             console.error(error)
         }
@@ -111,6 +113,7 @@ export default function EditProfileScreen({navigation}) {
               <View style={{flex: 3, backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
                 <Text style={styles.header}>{User.username}'s Profile Information</Text>
                 <View style={{justifyContent: 'center'}}>
+                    {usernameError.length > 0 && <Text style={{color: 'red'}}>{usernameError}</Text>}
                     <TextInput
                         style={styles.accountInputBox}
                         placeholder={User.username}
