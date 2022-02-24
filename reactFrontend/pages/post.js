@@ -5,16 +5,16 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function Post(props) {
   //TODO: Implement default state according to pass props aligned with post list returned
-  const [user, setUser] = useState('user')
-  const [topic, setTopic] = useState('topic')
+  const [user, setUser] = useState(props.user.displayName)
+  const [topic, setTopic] = useState(props.topic)
   const [comments, setComments] = useState('comments')
-  const [content, setContent] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec tellus ac quam ullamcorper dictum facilisis non orci. Vivamus hendrerit et dui id scelerisque. Suspendisse potenti. Integer ante mauris, tempor. hijcsdahijklcadslojn;kcds;ljnkdfsvq lkjdfsvpoun')
+  const [content, setContent] = useState(props.content)
   const [isLoading, setIsLoading] = useState(true)
   const [followingTopic, setFollowingTopic] = useState(false)
   const [followingUser, setFollowingUser] = useState(false)
   const [liked, setLiked] = useState(false)
   const postID = props.postID
-  const userID = props.userID
+  const userID = props.user.userID
   const navigation = useNavigation();
 
   const getPostInfo = async () => {
@@ -57,8 +57,8 @@ export default function Post(props) {
           'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify({
-            'userID': User.getUserId(),
-            'otherUserID': userID,
+            userID: await User.getUserId(),
+            otherUserID: userID,
         }),
       }).then(() => setFollowingUser(!followingUser), () => console.log("Promise unfulfilled"))
     } catch (error) {
@@ -75,7 +75,7 @@ export default function Post(props) {
     if (!liked) {
       url += 'like_post'
     } else{
-      url += ''
+      url += 'unlike_post'
     }
     try {
       await fetch(url, {
@@ -85,8 +85,8 @@ export default function Post(props) {
           'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify({
-          userID: User.getUserId(),
-          postID: postID
+          'userID': User.getUserId(),
+          'postID': postID
         }),
       }).then(() => setLiked(!liked), () => console.log("Promise unfulfilled"))
     } catch (error){
@@ -100,12 +100,12 @@ export default function Post(props) {
     }
     let url = serverAddress + "/api/user/"
     if (!followingTopic) { // add user to follow list if following
-      url += "/api/user/follow_topic"
+      url += "follow_topic"
     } else{
-      url += "/api/user/unfollow_topic"
+      url += "unfollow_topic"
     }
     try {
-      await fetch(url, JSON.stringify({
+      await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
@@ -115,7 +115,7 @@ export default function Post(props) {
             'userID': User.getUserId(),
             'topic_name': topic,
         }),
-      })).then(() => setFollowingTopic(!followingTopic), () => console.log("Promise unfulfilled"))
+      }).then(() => setFollowingTopic(!followingTopic))
     } catch (error){
       console.error(error)
     }
@@ -156,7 +156,7 @@ export default function Post(props) {
                       <Text style={postStyles.followButton}>Unfollow</Text>}
                   </Pressable> : null}
               <Pressable>
-                <Text style={postStyles.topic}>{topic}</Text>
+                <Text style={postStyles.topicStyle}>{topic}</Text>
               </Pressable>
           </View>
         </View>
@@ -213,7 +213,7 @@ const postStyles = StyleSheet.create({
     paddingLeft: 4,
     paddingRight: 7,
   },
-  topic: {
+  topicStyle: {
     flex: 1,
     fontWeight: 'bold',
     // alignSelf: 'flex-end',

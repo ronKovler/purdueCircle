@@ -20,18 +20,14 @@ export default function HomeScreen({navigation}) {
     }
 
     async function getTimeline(props){
-        let posts, response
-        response = await fetch(serverAddress + '/api/post/get_post', {
+        let response = await fetch(serverAddress + '/api/post/hot_timeline', {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': '*',
             },
-            body: JSON.stringify({
-                'email': props.postID
-            })
-        })
-
+        }).json()
+        return response
     }
 
     /*async function getPost(){
@@ -98,6 +94,7 @@ export default function HomeScreen({navigation}) {
                       <Post/><Post/><Post/><Post/><Post/><Post/>
                       <Post/><Post/><Post/><Post/><Post/>
                   </ScrollView>
+                  <FlatList data={getTimeline()} renderItem={Post}/>
                   <View style={{flex: 2, backgroundColor: '737373'}}/>
               </View>
               <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
