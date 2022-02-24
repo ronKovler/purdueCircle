@@ -30,6 +30,7 @@ public class Topic {
     @OneToMany(mappedBy="topic")
     private Set<Post> postsInTopic = new HashSet<>();
 
-
+    @OneToMany(mappedBy="topic")
+    private Set<TopicFollower> followers = new HashSet<>();
 
 }
