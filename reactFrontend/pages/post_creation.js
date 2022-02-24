@@ -2,6 +2,7 @@ import { Text, TextInput, View, StyleSheet, Pressable, Image, TouchableOpacity }
 import React, { useState } from 'react'
 import {styles} from './stylesheet'
 import AsyncCreatableSelect from 'react-select/async-creatable'
+import User from "./user";
 
 //TODO: Integrate topic selection with database
 export default function PostCreation({ navigation }) {
@@ -17,14 +18,15 @@ export default function PostCreation({ navigation }) {
                   'Access-Control-Allow-Origin': '*',
               },
               body: JSON.stringify({
-                  'topic': topic,
-                  'content': inputtedText
+                  'content': inputtedText,
+                  'userId': User.userId,
+                  'topicName': topic,
               })
           })
           const postID = await response.json();
           console.log(postID)
 
-          if (userID < 0) console.log("Failed to Create Post!");
+          if (User.userId < 0) console.log("Failed to Create Post!");
           else navigation.navigate('Home');
 
       } catch (error){
