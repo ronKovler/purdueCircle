@@ -5,13 +5,17 @@ class Authentication {
     this.isLoggedIn = true;
   }
 
-  async login(userID){
+  async login(userID) {
     try{
       await AsyncStorage.setItem('user', userID)
       this.isLoggedIn = true;
     } catch (error){
       console.error(error)
     }
+  }
+
+  async isLoggedIn() {
+    return this.isLoggedIn();
   }
 
   async logout(){
