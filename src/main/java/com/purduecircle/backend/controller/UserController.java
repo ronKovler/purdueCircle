@@ -7,6 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.purduecircle.backend.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import java.net.URISyntaxException;
@@ -158,8 +163,10 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Post>> showHotTimeline() throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        // TODO
-        List<Post> topPosts = new ArrayList<Post>();
+        Timestamp yesterday = Timestamp.from(Instant.now().minus(24, ChronoUnit.HOURS));
+
+        List<Post> topPosts = postRepository.findByTimePostedAfterTimeStamp(yesterday);
+
         return ResponseEntity.ok().headers(responseHeaders).body(topPosts);
     }
 }
