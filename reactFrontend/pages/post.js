@@ -68,6 +68,7 @@ export default function Post(props) {
 
   async function toggleLike() {
     if(!User.isLoggedIn){
+        log.console("UHHHH")
       return
     }
     let url = serverAddress + '/api/user/'

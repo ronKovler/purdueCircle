@@ -5,7 +5,7 @@ class Authentication {
     this.isLoggedIn = true;
   }
 
-  async login(userID){
+  async login(userID) {
     try{
       await AsyncStorage.setItem('user', userID)
       this.isLoggedIn = true;
