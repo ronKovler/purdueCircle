@@ -44,10 +44,7 @@ export default function Post(props) {
             setIsLoading(false)
         }
     }
-
-    // useEffect(() => {
-    //     getPostInfo().then(() => console.log("Got Post"))
-    // }, [])
+    
 
     //TODO: Force login if interacted while not logged in
     async function toggleFollowUser() {

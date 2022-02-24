@@ -34,6 +34,7 @@ public class PostController {
         //DON'T TOUCH ABOVE
         User user = userRepository.findByUserID(postDTO.getUserId());
         Topic topic = topicRepository.findByTopicName(postDTO.getTopicName());
+        
 
         if (postDTO != null && topic == null) {
             topic = new Topic(postDTO.getTopicName());

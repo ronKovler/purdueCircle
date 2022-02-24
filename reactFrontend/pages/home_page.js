@@ -9,6 +9,8 @@ export default function HomeScreen({navigation}) {
     const [loading, setLoading] = useState(true)
     const [timelineData, setTimelineData] = useState(null)
 
+    //TODO: Setup timer to get new posts
+
     const LogOut = async () => {
         setIsLoggedIn(false)
         await User.logout()
@@ -21,8 +23,8 @@ export default function HomeScreen({navigation}) {
     }, [])
 
     const Login = async () => {
-        navigation.navigate('Login')
         setIsLoggedIn(true)
+        navigation.navigate('Login')
     }
 
     async function getTimeline() {
@@ -116,7 +118,7 @@ export default function HomeScreen({navigation}) {
                     {/*    <Post/><Post/><Post/><Post/><Post/><Post/>*/}
                     {/*    <Post/><Post/><Post/><Post/><Post/>*/}
                     {/*</ScrollView>*/}
-                    <FlatList data={timelineData} renderItem={renderPost} keyExtractor={item => item.postId}/>
+                    <FlatList data={timelineData} renderItem={renderPost} keyExtractor={item => item.postId} extraData={isLoggedIn}/>
                     <View style={{flex: 2, backgroundColor: '737373'}}/>
                 </View>
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
