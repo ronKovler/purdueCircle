@@ -18,7 +18,7 @@ export default function EditProfileScreen({navigation}) {
     //helper functions
     const SendUpdates = async () => {
         try {
-            await fetch (serverAddress + "/api/modify/modify_password", {
+            const newPassword = await fetch (serverAddress + "/api/modify/modify_password", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -29,10 +29,12 @@ export default function EditProfileScreen({navigation}) {
                     'password': password,
                     'firstName': firstName,
                     'lastName': lastName,
-                    'username': username
+                    'username': username,
+                    'email': User.email
                 })
             })
-            /*await fetch (serverAddress + "/api/modify/modify_first_name", {
+            console.log(newPassword)
+            await fetch (serverAddress + "/api/modify/modify_first_name", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -43,7 +45,8 @@ export default function EditProfileScreen({navigation}) {
                     'password': password,
                     'firstName': firstName,
                     'lastName': lastName,
-                    'username': username
+                    'username': username,
+                    'email': User.email
                 })
             })
             await fetch (serverAddress + "/api/modify/modify_last_name", {
@@ -57,7 +60,8 @@ export default function EditProfileScreen({navigation}) {
                     'password': password,
                     'firstName': firstName,
                     'lastName': lastName,
-                    'username': username
+                    'username': username,
+                    'email': User.email
                 })
             })
             const update = await fetch (serverAddress + "/api/modify/modify_username", {
@@ -71,11 +75,12 @@ export default function EditProfileScreen({navigation}) {
                     'password': password,
                     'firstName': firstName,
                     'lastName': lastName,
-                    'username': username
+                    'username': username,
+                    'email': User.email
                 })
-            })*/
-            //if (!update) setUsernameError("Username already taken!");
-            navigation.navigate('Home');
+            })
+            if (!update) setUsernameError("Username already taken!");
+            else navigation.navigate('Home');
         } catch (error){
             console.error(error)
         }

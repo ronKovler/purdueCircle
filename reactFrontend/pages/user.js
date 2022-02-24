@@ -10,19 +10,20 @@ class Authentication {
         this.userId = -1;
     }
 
-    async login(userID, username, firstName, lastName, password) {
-        try {
-            await AsyncStorage.setItem('user', userID)
-            this.isLoggedIn = true;
-            this.username = username;
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.password = password;
-            this.userId = userID;
-        } catch (error) {
-            console.error(error)
-        }
+  async login(userID, username, firstName, lastName, password, email) {
+    try{
+      await AsyncStorage.setItem('user', userID)
+      this.isLoggedIn = true;
+      this.username = username;
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.password = password;
+      this.userId = userID;
+      this.email = email;
+    } catch (error){
+      console.error(error)
     }
+  }
 
     async logout() {
         try {
