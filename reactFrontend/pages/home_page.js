@@ -56,7 +56,7 @@ export default function HomeScreen({navigation}) {
                   <View style={{flex: 3}}>
                       <Image style={styles.image} source={require('../assets/choo.png')}/>
                   </View>
-                  {User.isLoggedIn ?
+                  {isLoggedIn ?
                     <View style={{flex: 6, justifyContent: 'center'}}>
                         <View style={{flex: 2}}/>
                         <View style={{flex: 1}}>

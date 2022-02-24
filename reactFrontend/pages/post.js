@@ -1,8 +1,9 @@
 import {Pressable, StyleSheet, Text, View, Image} from "react-native";
 import React, {useState} from "react";
 import User from "./user";
+import { useNavigation } from '@react-navigation/native';
 
-export default function Post({navigation}, props) {
+export default function Post(props) {
   //TODO: Implement default state according to pass props aligned with post list returned
   const [user, setUser] = useState('user')
   const [topic, setTopic] = useState('topic')
@@ -14,6 +15,7 @@ export default function Post({navigation}, props) {
   const [liked, setLiked] = useState(false)
   const postID = props.postID
   const userID = props.userID
+  const navigation = useNavigation();
 
   const getPostInfo = async () => {
     try {
@@ -41,16 +43,23 @@ export default function Post({navigation}, props) {
     if(!User.isLoggedIn){
       return
     }
-    let url = serverAddress + '/api/user/'
+    let url = serverAddress + "/api/user/"
     if (!followingUser) {
-      url += 'follow_user'
+      url += "follow_user"
     } else{
-      url += 'unfollow_user'
+      url += "unfollow_user"
     }
     try {
       await fetch(url, {
-        userID: User.getUserId(),
-        otherUserID: userID,
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify({
+            'userID': User.getUserId(),
+            'otherUserID': userID,
+        }),
       }).then(() => setFollowingUser(!followingUser), () => console.log("Promise unfulfilled"))
     } catch (error) {
       console.error(error)
@@ -88,16 +97,23 @@ export default function Post({navigation}, props) {
     if(!User.isLoggedIn){
       return
     }
-    let url = serverAddress
+    let url = serverAddress + "/api/user/"
     if (!followingTopic) { // add user to follow list if following
-      url += 'follow_topic'
+      url += "/api/user/follow_topic"
     } else{
-      url += 'unfollow_topic'
+      url += "/api/user/unfollow_topic"
     }
     try {
       await fetch(url, JSON.stringify({
-        'userID': User.getUserId(),
-        'topic_name': topic,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify({
+            'userID': User.getUserId(),
+            'topic_name': topic,
+        }),
       })).then(() => setFollowingTopic(!followingTopic), () => console.log("Promise unfulfilled"))
     } catch (error){
       console.error(error)
@@ -117,7 +133,7 @@ export default function Post({navigation}, props) {
                          source={{uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farchive.org%2Fdownload%2Ftwitter-default-pfp%2Fe.png&f=1&nofb=1'}}/>
                 </Pressable>
                 <Pressable style={{paddingLeft: 10}}
-                           onClick={() => navigation.navigate("Profile Page")}>
+                           onClick={() => console.log("printed?")}>
                   <Text style={postStyles.username}>{user}</Text>
                 </Pressable>
                 {User.isLoggedIn ?
@@ -138,7 +154,9 @@ export default function Post({navigation}, props) {
                       <Text style={postStyles.followButton}>Follow</Text> :
                       <Text style={postStyles.followButton}>Unfollow</Text>}
                   </Pressable> : null}
+              <Pressable>
                 <Text style={postStyles.topic}>{topic}</Text>
+              </Pressable>
           </View>
         </View>
       </View>
