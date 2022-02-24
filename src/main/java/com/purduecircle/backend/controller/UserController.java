@@ -1,6 +1,7 @@
 package com.purduecircle.backend.controller;
 
 import com.purduecircle.backend.repository.*;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -165,7 +166,7 @@ public class UserController {
         HttpHeaders responseHeaders = new HttpHeaders();
         Timestamp yesterday = Timestamp.from(Instant.now().minus(24, ChronoUnit.HOURS));
 
-        List<Post> topPosts = postRepository.findByTimePostedAfterTimeStamp(yesterday);
+        List<Post> topPosts = postRepository.findByTimePostedGreaterThanEqualOrderByTimePostedDesc(yesterday);
 
         return ResponseEntity.ok().headers(responseHeaders).body(topPosts);
     }
