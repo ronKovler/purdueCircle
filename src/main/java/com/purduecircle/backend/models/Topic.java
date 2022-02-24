@@ -25,7 +25,7 @@ public class Topic {
 
     @Id
     @Column(name = "topic_name")
-    private String topicName;
+    private String topicName;   // TODO: eventually check that all are lowercase
 
     public String getTopicName() {
         return topicName;

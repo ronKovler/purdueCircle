@@ -18,8 +18,9 @@ public class ModifyUserController {
     private UserRepository userRepository;
 
     /**
-    /* Returns -1 if email or username is already taken, otherwise saves information
+    /* Returns -1 if username is already taken, otherwise saves information
     /* to database and returns true
+    /* Returns 1 if an empty string was passed
     */
 
     @CrossOrigin
@@ -30,7 +31,7 @@ public class ModifyUserController {
         User newUser = new User(newUserDTO.getPassword(), newUserDTO.getFirstName(), newUserDTO.getLastName(), newUserDTO.getUsername());
         HttpHeaders responseHeaders = new HttpHeaders();
         if (newUserDTO.getFirstName().equals("")) {
-            return ResponseEntity.ok().headers(responseHeaders).body(-1);
+            return ResponseEntity.ok().headers(responseHeaders).body(1);
         }
         User user = userRepository.findByUserID(newUser.getUserID());
         user.setFirstName(newUser.getFirstName());
@@ -44,7 +45,7 @@ public class ModifyUserController {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         if (newUserDTO.getLastName().equals("")) {
-            return ResponseEntity.ok().headers(responseHeaders).body(-1);
+            return ResponseEntity.ok().headers(responseHeaders).body(1);
         }
         User user = userRepository.findByUserID(newUserDTO.getUserId());
         user.setLastName(newUserDTO.getLastName());
@@ -57,7 +58,7 @@ public class ModifyUserController {
     public ResponseEntity<Integer> modifyUsername(@RequestBody UserDTO newUserDTO) throws URISyntaxException{
         HttpHeaders responseHeaders = new HttpHeaders();
         if (newUserDTO.getUsername().equals("")) {
-            return ResponseEntity.ok().headers(responseHeaders).body(-1);
+            return ResponseEntity.ok().headers(responseHeaders).body(1);
         }
         User newUser = new User(newUserDTO.getPassword(), newUserDTO.getFirstName(), newUserDTO.getLastName(), newUserDTO.getUsername());
         User checkExists = userRepository.findByUsername(newUser.getUsername().toLowerCase());
@@ -79,7 +80,7 @@ public class ModifyUserController {
     public ResponseEntity<Integer> modifyPassword(@RequestBody UserDTO newUserDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         if (newUserDTO.getUsername().equals("")) {
-            return ResponseEntity.ok().headers(responseHeaders).body(-1);
+            return ResponseEntity.ok().headers(responseHeaders).body(1);
         }
         User user = userRepository.findByUserID(newUserDTO.getUserId());
         user.setPassword(newUserDTO.getPassword());

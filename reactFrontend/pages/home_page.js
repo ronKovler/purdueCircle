@@ -79,7 +79,7 @@ export default function HomeScreen({navigation}) {
                 </View>
                 <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
                 </View>
-            </View>: <Text>Loading...</Text>}
+            </View>: <Text style={{alignText: 'center'}}>Loading...</Text>}
             {!loading ?
             <View style={{flex: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '737373'}}>
                 <View style={{
