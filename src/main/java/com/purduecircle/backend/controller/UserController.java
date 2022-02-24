@@ -150,10 +150,10 @@ public class UserController {
     @CrossOrigin
     @RequestMapping(value="like_post", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> likePost(@RequestBody User argUser, Post argPost) throws URISyntaxException {
+    public ResponseEntity<Integer> likePost(@RequestBody int userID, int postID) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.findByUserID(argUser.getUserID());
-        Post post = postRepository.findByPostID(argPost.getPostID());
+        User user = userRepository.findByUserID(userID);
+        Post post = postRepository.findByPostID(postID);
         Reaction newReaction = new Reaction(0, user, post);
         post.addReaction(newReaction);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
