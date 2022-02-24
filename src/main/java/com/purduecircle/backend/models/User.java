@@ -92,6 +92,14 @@ public class User {
         this.lastName = lastName;
     }
 
+    public User(int userID, String password, String firstName, String lastName, String username) {
+        this.userID = userID;
+        this.password = password;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public User() {}
 
     /* add topic to list of topics this user is following */

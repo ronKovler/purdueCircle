@@ -11,6 +11,16 @@ public class UserDTO {
 
     private String password;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    private String email;
+
     public UserDTO(User user) {
         this.username = user.getUsername();
         this.userId = user.getUserID();
@@ -18,6 +28,7 @@ public class UserDTO {
         this.lastName = user.getLastName();
         int length = user.getPassword().length();
         this.password = "*".repeat(length);
+        this.email = user.getEmail();
     }
 
     public UserDTO(String password, String username, String firstName, String lastName, int userId) {
