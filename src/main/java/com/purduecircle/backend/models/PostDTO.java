@@ -5,8 +5,17 @@ public class PostDTO {
     private int userId;
     private String topicName;
     private int postId;
+    private String email;
 
     private String username;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getContent() {
         return content;
@@ -40,10 +49,11 @@ public class PostDTO {
         this.postId = postId;
     }
 
-    public PostDTO(String content, int userId, String topicName) {
+    public PostDTO(String content, int userId, String topicName, String email) {
         this.content = content;
         this.userId = userId;
         this.topicName = topicName;
+        this.email = email;
     }
 
     public String getUsername() {

@@ -35,9 +35,7 @@ public class PostController {
     public ResponseEntity<Integer> tryLogin(@RequestBody PostDTO postDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         //DON'T TOUCH ABOVE
-        User user = userRepository.findByUserID((long)postDTO.getUserId());
-        System.out.println("===================================================");
-        System.out.println("===================================================Username: " + user.getUsername());
+        User user = userRepository.findByEmailEquals(postDTO.getEmail());
         Topic topic = topicRepository.findByTopicName(postDTO.getTopicName());
 
         // If topic doesn't exist, create it
