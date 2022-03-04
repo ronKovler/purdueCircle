@@ -9,7 +9,7 @@ import HomeScreen from './pages/home_page';
 import EditProfile from './pages/edit_profile';
 import {Text} from "react-native";
 
-global.serverAddress = "https://purduecircle.me:8443";
+global.serverAddress = "https://backend.purduecircle.me:8443";
 
 const Stack = createNativeStackNavigator();
 
