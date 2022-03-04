@@ -8,6 +8,14 @@ public class PostDTO {
 
     private String username;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getContent() {
         return content;
     }
