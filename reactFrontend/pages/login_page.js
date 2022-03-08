@@ -1,7 +1,7 @@
 import {Text, TextInput, View, Pressable, TouchableOpacity, AsyncStorage} from 'react-native';
 import React, {useState} from 'react';
 import {styles, Logo} from './stylesheet';
-import User from './user';
+import currentUser from "./user";
 
 export default function LoginScreen({navigation}) {
     const [email, setEmail] = useState('')
@@ -28,10 +28,11 @@ export default function LoginScreen({navigation}) {
             console.log(user.userId);
             console.log(user.username);
             if (user.userId >= 0) {
-                await User.login(user.userId, user.username, user.firstName, user.lastName, user.password, user.email);
+                await currentUser.login(user.userId);
+
                 navigation.navigate('Home');
             } else { //password failed
-                User.isLoggedIn=false;
+                currentUser.isLoggedIn=false;
                 console.log("FAILED FUCKER TRY AGAIN");
 
                 //ADD ERROR DIALOGUE HERE-------------------------------------------

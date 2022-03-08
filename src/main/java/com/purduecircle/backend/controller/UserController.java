@@ -192,4 +192,13 @@ public class UserController {
         }
         return ResponseEntity.ok().headers(responseHeaders).body(topPostsDTO);
     }
+
+    @CrossOrigin
+    @RequestMapping(value="get_user", method = RequestMethod.GET,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> getUser(User user) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        user = userRepository.findByUserID(user.getUserID());
+        return ResponseEntity.ok().headers(responseHeaders).body(user);
+    }
 }

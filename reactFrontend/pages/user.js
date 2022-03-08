@@ -1,46 +1,60 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class Authentication {
-    constructor() {
-        this.isLoggedIn = false;
-        this.username = "";
-        this.firstName = "";
-        this.lastName = "";
-        this.password = "";
-        this.userId = -1;
-    }
+class User {
+	constructor() {
+		this.checkLogin().then(items => {
+			this.isLoggedIn = true;
+			this.userId = items[0].userID;
+		}, () => {
+			this.isLoggedIn = false
+		})
+	}
 
-  async login(userID, username, firstName, lastName, password, email) {
-    try{
-      await AsyncStorage.setItem('user', userID)
-      this.isLoggedIn = true;
-      this.username = username;
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.password = password;
-      this.userId = userID;
-      this.email = email;
-    } catch (error){
-      console.error(error)
-    }
-  }
+// TODO: add secondary auth key for persistent user sessions
+	checkLogin = async () => {
+		const key = JSON.parse(await AsyncStorage.getItem('user'))
+		if (key !== -1) {
+			const response = fetch(serverAddress + '/api/user/get_user', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+					'Access-Control-Allow-Origin': '*',
+				},
+				body: JSON.stringify({
+					'userID': id
+				})
+			})
+			return Promise.resolve(JSON.parse(await response.json()))
+		}
+		return Promise.reject()
+	}
 
-    async logout() {
-        try {
-            await AsyncStorage.setItem('user', '-1')
-            this.isLoggedIn = false;
-            console.log('-1')
-        } catch (error) {
-            console.error(error)
-        }
-    }
+	logout = async () => {
+		try {
+			await AsyncStorage.setItem('user', '-1')
+			this.isLoggedIn = false;
+			console.log('-1')
+		} catch (error) {
+			console.error(error)
+		}
+	}
 
-    async getUserId() {
-        let no = await AsyncStorage.getItem('user')
-        return JSON.parse(no)
-    }
+	login = async (userID) => {
+		try {
+			await AsyncStorage.setItem('user', userID)
+			this.isLoggedIn = true;
+			this.userId = userID;
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
+	async getUserId() {
+		let no = await AsyncStorage.getItem('user')
+		return JSON.parse(no)
+	}
 }
 
-const User = new Authentication()
+let currentUser = new User();
 
-export default User
+export default currentUser
