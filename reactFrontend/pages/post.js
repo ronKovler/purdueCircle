@@ -148,7 +148,7 @@ export default function Post(props) {
                         {!props.moves ?
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Pressable
-                                    onClick={() => navigation.navigate("Profile Page")}>
+                                    onClick={() => navigation.navigate('Profile Page')}>
                                     <Image style={postStyles.icon}
                                            source={{uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farchive.org%2Fdownload%2Ftwitter-default-pfp%2Fe.png&f=1&nofb=1'}}/>
                                 </Pressable>

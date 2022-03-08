@@ -2,11 +2,11 @@ import React, {Component, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Pressable, FlatList, Image} from 'react-native';
 import {styles, HeaderLogo, Choo, Logo} from './stylesheet';
 import Post from "./post";
-import currentUser from "./user";
+import User from "./user";
 import {useIsFocused} from "@react-navigation/native";
 
 export default function HomeScreen({navigation}) {
-    const [isLoggedIn, setIsLoggedIn] = useState(currentUser.isLoggedIn);
+    const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn);
     const [loading, setLoading] = useState(true)
     const [timelineData, setTimelineData] = useState(null)
     const isFocused = useIsFocused()
@@ -14,9 +14,9 @@ export default function HomeScreen({navigation}) {
     //TODO: Setup timer to get new posts
 
     const LogOut = async () => {
-        await currentUser.logout()
+        await User.logout()
         navigation.navigate('Login')
-        setIsLoggedIn(currentUser.isLoggedIn)
+        setIsLoggedIn(User.isLoggedIn)
     }
 
     useEffect(async () => {
@@ -27,7 +27,7 @@ export default function HomeScreen({navigation}) {
 
     const Login = async () => {
         navigation.navigate('Login')
-        setIsLoggedIn(currentUser.isLoggedIn)
+        setIsLoggedIn(User.isLoggedIn)
     }
 
     async function getTimeline() {
@@ -44,8 +44,8 @@ export default function HomeScreen({navigation}) {
     }
 
     async function checkLoggedIn() {
-        let test = await currentUser.getUserId()
-        currentUser.isLoggedIn = test !== -1
+        let test = await User.getUserId()
+        User.isLoggedIn = test !== -1
         setIsLoggedIn(test !== -1)
     }
 
