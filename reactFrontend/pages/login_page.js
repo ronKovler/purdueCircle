@@ -1,7 +1,7 @@
 import {Text, TextInput, View, Pressable, TouchableOpacity, AsyncStorage} from 'react-native';
 import React, {useState} from 'react';
 import {styles, Logo} from './stylesheet';
-import currentUser from "./user";
+import User from "./user";
 
 export default function LoginScreen({navigation}) {
     const [email, setEmail] = useState('')
@@ -28,11 +28,11 @@ export default function LoginScreen({navigation}) {
             console.log(user.userId);
             console.log(user.username);
             if (user.userId >= 0) {
-                await currentUser.login(user.userId);
+                await User.login(user.userId);
 
                 navigation.navigate('Home');
             } else { //password failed
-                currentUser.isLoggedIn=false;
+                User.isLoggedIn=false;
                 console.log("FAILED FUCKER TRY AGAIN");
 
                 //ADD ERROR DIALOGUE HERE-------------------------------------------
@@ -101,7 +101,7 @@ return (
         </TouchableOpacity>
         <Text style={styles.header}>Login</Text>
         <TextInput style={styles.accountInputBox}
-                   placeholder='Username/Email'
+                   placeholder='Email'
                    onChangeText={email => setEmail(email)}/>
         {emailError.length > 0 && <Text style={{color: 'red'}}>{emailError}</Text>}
         <TextInput style={styles.accountInputBox}

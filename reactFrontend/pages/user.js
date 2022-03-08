@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class User {
+class UserAuth {
 	constructor() {
 		this.checkLogin().then(items => {
 			this.isLoggedIn = true;
@@ -55,6 +55,6 @@ class User {
 	}
 }
 
-let currentUser = new User();
+let User = new UserAuth();
 
-export default currentUser
+export default User

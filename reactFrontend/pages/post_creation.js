@@ -21,7 +21,7 @@ export default function PostCreation({navigation}) {
                 body: JSON.stringify({
                     'content': inputtedText,
                     'userId': User.userId,
-                    'topicName': topic
+                    'topicName': 'topic'
                 })
             })
             const postID = await response.json();

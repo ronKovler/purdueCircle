@@ -4,10 +4,10 @@ import { styles, HeaderLogo, Choo, Logo } from './stylesheet';
 import User from "./user";
 
 export default function EditProfileScreen({navigation}) {
-    const [username, setUsername] = useState("")
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [password, setPassword] = useState("")
+    const [username, setUsername] = User.username;
+    const [firstName, setFirstName] = User.firstName;
+    const [lastName, setLastName] = User.lastName;
+    const [password, setPassword] = User.password;
     const [usernameError, setUsernameError] = useState("")
 
     const LogOut = async () => {

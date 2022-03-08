@@ -1,14 +1,45 @@
-import {Text, TextInput, View, Button, Image, StyleSheet, Pressable, ScrollView} from 'react-native';
-import React, { useState } from 'react'
+import {Text, TextInput, View, Button, Image, StyleSheet, Pressable, ScrollView, FlatList} from 'react-native';
+import React, {useEffect, useState} from 'react'
 import {HeaderLogo, styles} from './stylesheet';
 import Post from "./post";
 import Topic from "./topic";
-import currentUser from "./user";
+import User from "./user";
 
 export default function ProfilePage ({navigation}) {
     const LogOut = async () => {
-        await currentUser.logout()
+        await User.logout()
         navigation.navigate('Login');
+    }
+    const [userlineData, setUserlineData] = useState(null);
+    const userID = useState(-1);
+    const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(async () => {
+        const data = await getUserline();
+        setUserlineData(data);
+    }, [])
+
+    const renderPost = ({item}) => {
+        console.log(item)
+        return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
+                     userID={item.userId}/>
+    };
+
+    async function getUserline() {
+        const response = await fetch(serverAddress + '/api/user/user_timeline', {
+            method: 'POST',
+            body: JSON.stringify({
+                'userID': 1
+            }),
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
+        let json = await response.json()
+        setLoading(false)
+        return json
     }
 
   return (
@@ -16,7 +47,7 @@ export default function ProfilePage ({navigation}) {
       <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
         <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
-          {currentUser.isLoggedIn ?
+          {User.isLoggedIn ?
           <View style={styles.buttonContainer}>
                 <Pressable onPress={() => LogOut()}><Text
                   style={styles.button}>Log Out</Text></Pressable>
@@ -43,7 +74,7 @@ export default function ProfilePage ({navigation}) {
               <View style={{flex: 1}}/>
               <View style={{flex: 1}}>
                 <Text style={styles.header}>
-                  {currentUser.username}'s Followed Topics
+                  {User.username}'s Followed Topics
                 </Text>
               </View>
               <View style={{flex: 10}}>
@@ -60,12 +91,14 @@ export default function ProfilePage ({navigation}) {
         <View style={{flex: 5, flexDirection: 'column'}}>
           <View style={{flex: 1, backgroundColor: '737373'}}/>
           <View style={{flex: 7, backgroundColor: '737373'}}>
-            <Text style={styles.header}>{currentUser.username}'s Posts</Text>
+            <Text style={styles.header}>{User.username}'s Posts</Text>
           </View>
-          <ScrollView style={{flex: 93, flexBasis: 100}} showsVerticalScrollIndicator={false}>
+          {/*<ScrollView style={{flex: 93, flexBasis: 100}} showsVerticalScrollIndicator={false}>
             <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
             <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
-          </ScrollView>
+          </ScrollView>*/}
+          <FlatList data={userlineData} renderItem={renderPost} keyExtractor={item => item.postId}
+                    extraData={isLoggedIn}/>
           <View style={{flex: 2, backgroundColor: '737373'}}/>
         </View>
         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
