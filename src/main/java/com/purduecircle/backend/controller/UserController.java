@@ -94,7 +94,7 @@ public class UserController {
         Topic topic = topicRepository.findByTopicName(topicStr);
         if (topic == null) {
             // Adds topic to database
-            topic = new Topic(topicStr);
+            topic = new Topic(topicStr.toLowerCase());
         }
         TopicFollower newTopicFollower = new TopicFollower(user, topic);
         topicFollowerRepository.save(newTopicFollower);
