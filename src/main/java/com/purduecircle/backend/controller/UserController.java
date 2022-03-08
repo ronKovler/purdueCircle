@@ -161,7 +161,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> likePost(@RequestBody ReactionDTO reactionDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.findByUserID(reactionDTO.getUserID());
+        User user = userRepository.getByUserID(reactionDTO.getUserID());
         Post post = postRepository.findByPostID(reactionDTO.getPostID());
         Reaction newReaction = new Reaction(0, user, post);
         post.addReaction(newReaction);
@@ -174,7 +174,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> unlikePost(@RequestBody ReactionDTO reactionDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.findByUserID(reactionDTO.getUserID());
+        User user = userRepository.getByUserID(reactionDTO.getUserID());
         Post post = postRepository.findByPostID(reactionDTO.getPostID());
         Reaction reaction = reactionRepository.getReactionByPostAndUser(post, user);
         post.removeReaction(reaction);
@@ -229,5 +229,22 @@ public class UserController {
         }
 
         return ResponseEntity.ok().headers(new HttpHeaders()).body(userTimelinePosts);
+    }
+
+    @CrossOrigin
+    @RequestMapping(value="search", method = RequestMethod.GET,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<String>> getSearchResults(@RequestBody String search) {
+        List<User> usersFound = userRepository.findAllByUsernameStartingWith(search);
+        List<Topic> topicsFound = topicRepository.findAllByTopicNameStartingWith(search);
+        List<String> results = new ArrayList<>();
+        for (User user : usersFound) {
+            results.add(user.getUsername());
+        }
+        for (Topic topic : topicsFound) {
+            results.add(topic.getTopicName());
+        }
+
+        return ResponseEntity.ok().headers(new HttpHeaders()).body(results);
     }
 }
