@@ -12,6 +12,7 @@ export default function Post(props) {
     const [followingTopic, setFollowingTopic] = useState(false)
     const [followingUser, setFollowingUser] = useState(false)
     const [liked, setLiked] = useState(false)
+    const [anonymous, setAnonymous] = useState(false)
     const postID = props.postID
     const userID = props.userID
     const navigation = useNavigation();
@@ -35,6 +36,7 @@ export default function Post(props) {
                     setUser(response.username)
                     setTopic(response.topic)
                     setContent(response.content)
+                    setAnonymous(response.anonymous)
                 }
             )
 
@@ -152,7 +154,8 @@ export default function Post(props) {
                                 </Pressable>
                                 <Pressable style={{paddingLeft: 10}}
                                            onClick={() => console.log("printed?")}>
-                                    <Text style={postStyles.username}>{user}</Text>
+                                    {!anonymous && <Text style={postStyles.username}>{user}</Text>}
+                                    {anonymous && <Text style={postStyles.username}>Anonymous</Text>}
                                 </Pressable>
                                 {User.isLoggedIn ?
                                     <Pressable

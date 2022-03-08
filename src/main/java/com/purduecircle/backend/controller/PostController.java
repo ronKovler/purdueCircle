@@ -35,6 +35,7 @@ public class PostController {
     public ResponseEntity<Integer> tryLogin(@RequestBody PostDTO postDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         //DON'T TOUCH ABOVE
+        System.out.println("\t\t\t CONTENT: \"" + postDTO.getContent() + "\"");
         User user = userRepository.findByEmailEquals(postDTO.getEmail());
         Topic topic = topicRepository.findByTopicName(postDTO.getTopicName());
 
@@ -75,6 +76,22 @@ public class PostController {
 
 
         return ResponseEntity.ok().headers(responseHeaders).body(topicListString);
+    }
+
+    @CrossOrigin
+    @RequestMapping(value="get_topicline", method = RequestMethod.GET,
+            /*consumes = MediaType.APPLICATION_JSON_VALUE,*/ produces = MediaType.APPLICATION_JSON_VALUE)
+
+    public ResponseEntity<List<PostDTO>> getTopicline (@RequestBody String topicName) {
+        Topic topic = topicRepository.findByTopicName(topicName);
+        List<Post> topicPosts = postRepository.findAllByTopic(topic);
+        Collections.sort(topicPosts);
+        List<PostDTO> topicPostDTOs = new ArrayList<>();
+        for (Post post : topicPosts) {
+            topicPostDTOs.add(new PostDTO(post));
+        }
+
+        return ResponseEntity.ok().headers(new HttpHeaders()).body(topicPostDTOs);
     }
 
 }

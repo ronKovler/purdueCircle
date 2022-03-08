@@ -32,7 +32,7 @@ public class Topic {
     }
 
     public void setTopicName(String topicName) {
-        this.topicName = topicName;
+        this.topicName = topicName.toLowerCase();
     }
 
     @OneToMany(mappedBy="topic")

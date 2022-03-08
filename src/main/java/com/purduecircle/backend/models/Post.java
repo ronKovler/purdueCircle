@@ -18,7 +18,7 @@ import com.purduecircle.backend.repository.TopicRepository;
 
 @Entity
 @Table(name = "posts")
-public class Post {
+public class Post implements Comparable<Post>{
 
     public Post(String content, User user, Topic topic) {
         this.content = content;
@@ -39,6 +39,9 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userID")
     private User user;
+
+    @Column(name="anonymous")
+    private boolean anonymous;
 
     @Column(name="time_posted")
     private Timestamp timePosted;
@@ -66,6 +69,15 @@ public class Post {
     /*
     Getters and Setters
      */
+
+    public boolean isAnonymous() {
+        return anonymous;
+    }
+
+    public void setAnonymous(boolean anonymous) {
+        this.anonymous = anonymous;
+    }
+
     public int getPostID() {
         return postID;
     }
@@ -82,7 +94,7 @@ public class Post {
         return user;
     }
 
-    public Timestamp getTime_posted() {
+    public Timestamp getTimePosted() {
         return timePosted;
     }
 
@@ -98,4 +110,7 @@ public class Post {
         return reactions;
     }
 
+    public int compareTo(Post post) {
+        return this.getTimePosted().compareTo(post.getTimePosted());
+    }
 }

@@ -15,12 +15,12 @@ import javax.persistence.*;
 @Table(name = "topic_followers")
 public class TopicFollower {
 
-    public TopicFollower() {};
+    public TopicFollower() {}
 
     public TopicFollower(User follower, Topic topic) {
+        this.topic = topic;
         this.follower = follower;
-        this.follower = follower;
-    };
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -7,6 +7,7 @@ import CreateAccountScreen from './pages/create_account';
 import PostCreation from './pages/post_creation';
 import HomeScreen from './pages/home_page';
 import EditProfile from './pages/edit_profile';
+import TopicLine from './pages/topicline';
 import {Text} from "react-native";
 
 global.serverAddress = "https://purduecircle.me:8443";
@@ -33,6 +34,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{headerShown:false}}>
         <Stack.Screen name="Login" component={LoginScreen}/>
         <Stack.Screen name="Home" component={HomeScreen}/>
+        <Stack.Screen name="Topicline" component={TopicLine}/>
         <Stack.Screen name="Create Post" component={PostCreation}/>
         <Stack.Screen name="Profile Page" component={ProfilePage}/>
         <Stack.Screen name="Edit Profile" component={EditProfile}/>

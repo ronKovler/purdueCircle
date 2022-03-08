@@ -34,4 +34,28 @@ public class UserFollower {
     @ManyToOne
     @JoinColumn(name = "userID")
     private User user;
+
+    public int getUserFollowerID() {
+        return userFollowerID;
+    }
+
+    public void setUserFollowerID(int userFollowerID) {
+        this.userFollowerID = userFollowerID;
+    }
+
+    public User getFollower() {
+        return follower;
+    }
+
+    public void setFollower(User follower) {
+        this.follower = follower;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

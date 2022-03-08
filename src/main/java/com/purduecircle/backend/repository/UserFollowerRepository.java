@@ -12,6 +12,7 @@ import java.util.List;
 public interface UserFollowerRepository extends JpaRepository<UserFollower, Integer> {
 
     UserFollower findByUserAndFollower(User user, User follower);
+    List<UserFollower> findAllByFollower(User follower);
     void deleteByUserAndFollower(User user, User follower);
 
 }

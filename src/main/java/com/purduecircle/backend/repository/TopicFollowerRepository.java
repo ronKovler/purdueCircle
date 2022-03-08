@@ -14,4 +14,6 @@ public interface TopicFollowerRepository extends JpaRepository<TopicFollower, In
     TopicFollower findByFollowerAndTopic(User follower, Topic topic);
     void deleteByFollowerAndTopic(User follower, Topic topic);
 
+    List<TopicFollower> findAllByFollower(User follower); //might be wrong
+
 }
