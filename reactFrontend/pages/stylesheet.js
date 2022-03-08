@@ -130,8 +130,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
     // position: "absolute",
     // justifyContent: 'center',
+  },
+  searchContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    paddingTop: 20,
+    padding: 50
   }
-
 })
 
 export {styles, Logo, HeaderLogo};

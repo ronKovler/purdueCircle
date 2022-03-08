@@ -57,7 +57,6 @@ export default function HomeScreen({navigation}) {
                      userID={item.userId}/>
     };
 
-
     return (
         <View style={styled.container}>
             {!loading ?
@@ -107,6 +106,11 @@ export default function HomeScreen({navigation}) {
                         {isLoggedIn ?
                             <View style={{flex: 6, justifyContent: 'center'}}>
                                 <View style={{flex: 2}}/>
+                                <View style={{flex: 1}}>
+                                    <Pressable onPress={() => navigation.navigate('Search')}>
+                                        <Text style={styles.button}>Search</Text>
+                                    </Pressable>
+                                </View>
                                 <View style={{flex: 1}}>
                                     <Pressable>
                                         <Text style={styles.button}>Hot Posts</Text>
