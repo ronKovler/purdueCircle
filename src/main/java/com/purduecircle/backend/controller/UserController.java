@@ -34,9 +34,12 @@ public class UserController {
     @Autowired
     private ReactionRepository reactionRepository;
 
-    @GetMapping("/checkConnection")
-    public String testConnection() {
-        return "Connection Successful";
+    public static final String ANSI_RESET = "\u001B[0m";
+
+    public static final String ANSI_YELLOW = "\u001B[33m";
+
+    public String pColor(String text) {
+        return ANSI_YELLOW + text + ANSI_RESET;
     }
 
     /**
@@ -45,9 +48,12 @@ public class UserController {
      * handled here within this method
      * @return String, might change to a file or whatever down the line
      */
-    @RequestMapping("/")
-    public String home() {
-        return "Add Code here to handle home page";
+    @RequestMapping(path="{id}")
+    public void home(@PathVariable("id") int ID) {
+        System.out.println("Id received: " + ID);
+        User user = userRepository.getByUserID(ID);
+        System.out.println(pColor("User found by \"getByUserID(int)\": " + user.getUsername()));
+
     }
 
     /**
@@ -90,7 +96,7 @@ public class UserController {
     public ResponseEntity<Integer> followTopic(@RequestBody User argUser, String topicStr) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         // Find actual user and topic in database
-        User user = userRepository.findByUserID(argUser.getUserID());
+        User user = userRepository.getByUserID(argUser.getUserID());
         Topic topic = topicRepository.findByTopicName(topicStr);
         if (topic == null) {
             // Adds topic to database
@@ -155,7 +161,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> likePost(@RequestBody ReactionDTO reactionDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.findByUserID(reactionDTO.getUserID());
+        User user = userRepository.getByUserID(reactionDTO.getUserID());
         Post post = postRepository.findByPostID(reactionDTO.getPostID());
         Reaction newReaction = new Reaction(0, user, post);
         post.addReaction(newReaction);
@@ -168,7 +174,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> unlikePost(@RequestBody ReactionDTO reactionDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.findByUserID(reactionDTO.getUserID());
+        User user = userRepository.getByUserID(reactionDTO.getUserID());
         Post post = postRepository.findByPostID(reactionDTO.getPostID());
         Reaction reaction = reactionRepository.getReactionByPostAndUser(post, user);
         post.removeReaction(reaction);
@@ -191,5 +197,54 @@ public class UserController {
             topPostsDTO.add(temp);
         }
         return ResponseEntity.ok().headers(responseHeaders).body(topPostsDTO);
+    }
+
+    @CrossOrigin
+    @RequestMapping(value="user_timeline", method = RequestMethod.GET,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PostDTO>> showUserTimeline(@RequestBody int userID) {
+        User getTimelineUser = userRepository.getByUserID(userID);
+        List<TopicFollower> tpfList = topicFollowerRepository.findAllByFollower(getTimelineUser);
+
+        //adds all posts from topics following
+        List<Topic> topicList = new ArrayList<>();
+        List<Post> tempPosts = new ArrayList<>();
+        for (TopicFollower tf : tpfList) {
+            topicList.add(tf.getTopic());
+            List<Post> topicPosts = postRepository.findAllByTopic(tf.getTopic());
+            tempPosts.addAll(topicPosts);
+        }
+
+        //adds all posts from people user is following
+        List<UserFollower> ufList = userFollowerRepository.findAllByFollower(getTimelineUser);
+        for (UserFollower uf : ufList) {
+            List<Post> followingUsersPosts = postRepository.findAllByUser(uf.getUser());
+            tempPosts.addAll(followingUsersPosts);
+        }
+
+        Collections.sort(tempPosts);
+        List<PostDTO> userTimelinePosts = new ArrayList<>();
+        for (Post post : tempPosts) {
+            userTimelinePosts.add(new PostDTO(post));
+        }
+
+        return ResponseEntity.ok().headers(new HttpHeaders()).body(userTimelinePosts);
+    }
+
+    @CrossOrigin
+    @RequestMapping(value="search", method = RequestMethod.GET,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<String>> getSearchResults(@RequestBody String search) {
+        List<User> usersFound = userRepository.findAllByUsernameStartingWith(search);
+        List<Topic> topicsFound = topicRepository.findAllByTopicNameStartingWith(search);
+        List<String> results = new ArrayList<>();
+        for (User user : usersFound) {
+            results.add(user.getUsername());
+        }
+        for (Topic topic : topicsFound) {
+            results.add(topic.getTopicName());
+        }
+
+        return ResponseEntity.ok().headers(new HttpHeaders()).body(results);
     }
 }

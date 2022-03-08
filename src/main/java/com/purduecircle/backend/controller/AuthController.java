@@ -29,6 +29,11 @@ public class AuthController {
         User checkExists = userRepository.findByEmailEqualsAndPasswordEquals(newUser.getEmail(),
                 newUser.getPassword());
 
+        if (checkExists == null) {
+            checkExists = userRepository.findByUsernameEqualsAndPasswordEquals(newUser.getUsername(),
+                    newUser.getPassword());
+        }
+
         if (checkExists != null) {
             System.out.println("FOUND CHECK EXISTS USER: " + checkExists.getUsername());
             UserDTO existsDTO = new UserDTO(checkExists);
