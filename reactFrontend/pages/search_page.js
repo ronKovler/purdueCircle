@@ -21,6 +21,7 @@ export default function SearchPage({navigation}) {
             })
         })
         let json = await response.json()
+        setQueried(true)
         return json
     }
 
@@ -35,7 +36,12 @@ export default function SearchPage({navigation}) {
                     <Text style={styles.button}>Go!</Text>
                 </Pressable>
             </View>
-            <View style={{flex: 15}}></View>
+            {!queried && <View style={{flex: 15}}/>}
+            {queried && 
+                <View style={styles.container}>
+                    
+                </View>
+            }
         </View>
     );
 }
