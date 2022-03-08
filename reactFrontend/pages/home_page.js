@@ -1,31 +1,33 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacity, Image} from 'react-native';
+import React, {Component, useEffect, useState} from 'react';
+import {View, Text, StyleSheet, Pressable, FlatList, Image} from 'react-native';
 import {styles, HeaderLogo, Choo, Logo} from './stylesheet';
 import Post from "./post";
-import User from "./user";
+import currentUser from "./user";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function HomeScreen({navigation}) {
-    const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
+    const [isLoggedIn, setIsLoggedIn] = useState(currentUser.isLoggedIn);
     const [loading, setLoading] = useState(true)
     const [timelineData, setTimelineData] = useState(null)
+    const isFocused = useIsFocused()
 
     //TODO: Setup timer to get new posts
 
     const LogOut = async () => {
-        await User.logout()
+        await currentUser.logout()
         navigation.navigate('Login')
-        setIsLoggedIn(false)
+        setIsLoggedIn(currentUser.isLoggedIn)
     }
 
     useEffect(async () => {
         const data = await getTimeline();
         await checkLoggedIn();
         setTimelineData(data);
-    }, [])
+    }, [isFocused])
 
     const Login = async () => {
         navigation.navigate('Login')
-        setIsLoggedIn(true)
+        setIsLoggedIn(currentUser.isLoggedIn)
     }
 
     async function getTimeline() {
@@ -42,8 +44,8 @@ export default function HomeScreen({navigation}) {
     }
 
     async function checkLoggedIn() {
-        let test = await User.getUserId()
-        User.isLoggedIn = test !== -1
+        let test = await currentUser.getUserId()
+        currentUser.isLoggedIn = test !== -1
         setIsLoggedIn(test !== -1)
     }
 

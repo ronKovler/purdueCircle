@@ -1,13 +1,13 @@
-import {Text, TextInput, View, Button, Image, StyleSheet, Pressable, ScrollView, TouchableOpacity} from 'react-native';
+import {Text, TextInput, View, Button, Image, StyleSheet, Pressable, ScrollView} from 'react-native';
 import React, { useState } from 'react'
 import {HeaderLogo, styles} from './stylesheet';
 import Post from "./post";
 import Topic from "./topic";
-import User from "./user";
+import currentUser from "./user";
 
 export default function ProfilePage ({navigation}) {
     const LogOut = async () => {
-        await User.logout()
+        await currentUser.logout()
         navigation.navigate('Login');
     }
 
@@ -16,20 +16,20 @@ export default function ProfilePage ({navigation}) {
       <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
         <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
-          {User.isLoggedIn ?
+          {currentUser.isLoggedIn ?
           <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={() => LogOut()}><Text
-                  style={styles.button}>Log Out</Text></TouchableOpacity>
+                <Pressable onPress={() => LogOut()}><Text
+                  style={styles.button}>Log Out</Text></Pressable>
           </View> : <View style={{flex: 1}}/>}
           <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Pressable onPress={() => navigation.navigate('Home')}>
                 <HeaderLogo style={styles.headerIcon}/>
-            </TouchableOpacity>
+            </Pressable>
           </View>
           <View style={{flex: 1}}>
-            <TouchableOpacity onPress={() => navigation.navigate('Edit Profile')}>
+            <Pressable onPress={() => navigation.navigate('Edit Profile')}>
               <Text style={styles.button}>Edit Profile</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
@@ -43,7 +43,7 @@ export default function ProfilePage ({navigation}) {
               <View style={{flex: 1}}/>
               <View style={{flex: 1}}>
                 <Text style={styles.header}>
-                  {User.username}'s Followed Topics
+                  {currentUser.username}'s Followed Topics
                 </Text>
               </View>
               <View style={{flex: 10}}>
@@ -60,7 +60,7 @@ export default function ProfilePage ({navigation}) {
         <View style={{flex: 5, flexDirection: 'column'}}>
           <View style={{flex: 1, backgroundColor: '737373'}}/>
           <View style={{flex: 7, backgroundColor: '737373'}}>
-            <Text style={styles.header}>{User.username}'s Posts</Text>
+            <Text style={styles.header}>{currentUser.username}'s Posts</Text>
           </View>
           <ScrollView style={{flex: 93, flexBasis: 100}} showsVerticalScrollIndicator={false}>
             <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>

@@ -100,6 +100,10 @@ public class User {
         this.lastName = lastName;
     }
 
+    public User(int userID){
+        this.userID = userID;
+    }
+
     public User() {}
 
     /* add topic to list of topics this user is following */
