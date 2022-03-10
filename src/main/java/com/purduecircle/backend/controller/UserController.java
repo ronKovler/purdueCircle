@@ -165,6 +165,7 @@ public class UserController {
         Post post = postRepository.findByPostID(reactionDTO.getPostID());
         Reaction newReaction = new Reaction(0, user, post);
         post.addReaction(newReaction);
+        reactionRepository.save(newReaction);
         int numReactions = post.getReactions().size();
         return ResponseEntity.ok().headers(responseHeaders).body(numReactions);
     }
@@ -200,10 +201,10 @@ public class UserController {
     }
 
     @CrossOrigin
-    @RequestMapping(value="user_timeline", method = RequestMethod.GET,
+    @RequestMapping(value="user_timeline", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PostDTO>> showUserTimeline(@RequestBody int userID) {
-        User getTimelineUser = userRepository.getByUserID(userID);
+    public ResponseEntity<List<PostDTO>> showUserTimeline(@RequestBody User user) {
+        User getTimelineUser = userRepository.getByUserID(user.getUserID());
         List<TopicFollower> tpfList = topicFollowerRepository.findAllByFollower(getTimelineUser);
 
         //adds all posts from topics following

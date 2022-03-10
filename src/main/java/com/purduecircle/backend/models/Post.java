@@ -1,6 +1,7 @@
 package com.purduecircle.backend.models;
 
 import javax.persistence.*;
+import java.time.DateTimeException;
 import java.util.HashSet;
 import java.util.Set;
 import java.sql.Timestamp;
@@ -24,6 +25,7 @@ public class Post implements Comparable<Post>{
         this.content = content;
         this.user = user;
         this.topic = topic;
+        this.timePosted = new Timestamp(System.currentTimeMillis());
     }
 
     public Post() {}

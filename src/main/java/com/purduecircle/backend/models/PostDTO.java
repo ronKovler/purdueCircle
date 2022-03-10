@@ -64,6 +64,15 @@ public class PostDTO {
         this.userId = userId;
         this.topicName = topicName;
         this.email = email;
+
+    }
+
+    public PostDTO(){}
+
+    public PostDTO(String content, int userId, String topicName) {
+        this.content = content;
+        this.userId = userId;
+        this.topicName = topicName;
     }
 
     public PostDTO(String content, int userId, String topicName, String email, boolean anonymous) {

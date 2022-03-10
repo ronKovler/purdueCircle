@@ -85,6 +85,10 @@ public class User {
         this.password = password;
     }
 
+    public User(int userID) {
+        this.userID = userID;
+    }
+
     public User(String password, String firstName, String lastName, String username) {
         this.password = password;
         this.username = username;
@@ -100,8 +104,13 @@ public class User {
         this.lastName = lastName;
     }
 
-    public User(int userID){
+    public User(int userID, String password, String firstName, String lastName, String username, String email) {
         this.userID = userID;
+        this.password = password;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
     }
 
     public User() {}

@@ -1,8 +1,9 @@
 import {Text, TextInput, View, StyleSheet, Pressable, Image, TouchableOpacity} from 'react-native'
 import React, {useState} from 'react'
 import {styles} from './stylesheet'
-import AsyncCreatableSelect from 'react-select/async-creatable'
+import CreatableSelect from 'react-select/creatable'
 import User from "./user";
+import Autocomplete from 'react-native-dropdown-autocomplete-textinput';
 
 //TODO: Integrate topic selection with database
 export default function PostCreation({navigation}) {
@@ -52,6 +53,19 @@ export default function PostCreation({navigation}) {
         }
     }
 
+    const topicOptions = async () => {
+        const response = await fetch(serverAddress + '/api/post/get_topics', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
+        let options = await response.json()
+
+        console.log(options);
+        return options;
+    }
 
     return (
         <View style={[styles.container, {padding: 15}]}>
@@ -85,7 +99,7 @@ export default function PostCreation({navigation}) {
                         </View>
                     </View>
                     <View style={[styles.text, {padding: 5, flex: 1}]}>
-                        <AsyncCreatableSelect placeholder="Topic"/>
+                        <Autocomplete data={topicOptions()} displayKey="name" onSelect={value => console.warn('value', value)} maxHeight={200}/>
                     </View>
                     <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]}
                                placeholder='Text' onChangeText={() => setInputtedText(inputtedText)}/>

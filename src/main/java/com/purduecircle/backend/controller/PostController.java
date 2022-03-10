@@ -32,11 +32,11 @@ public class PostController {
     @CrossOrigin
     @RequestMapping(value="create_post", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> tryLogin(@RequestBody PostDTO postDTO) throws URISyntaxException {
+    public ResponseEntity<Integer> createPost(@RequestBody PostDTO postDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         //DON'T TOUCH ABOVE
         System.out.println("\t\t\t CONTENT: \"" + postDTO.getContent() + "\"");
-        User user = userRepository.findByEmailEquals(postDTO.getEmail());
+        User user = userRepository.getByUserID(postDTO.getUserId());
         Topic topic = topicRepository.findByTopicName(postDTO.getTopicName());
 
         // If topic doesn't exist, create it

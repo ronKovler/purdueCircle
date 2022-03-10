@@ -23,6 +23,7 @@ public class Reaction {
         this.reactionType = reaction_type;
         this.user = user;
         this.post = post;
+        this.timeReacted = new Timestamp(System.currentTimeMillis());
 
         //this.post.set
     }
