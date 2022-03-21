@@ -1,4 +1,4 @@
-import {Text, TextInput, View, StyleSheet, Pressable, Image, TouchableOpacity} from 'react-native'
+import {Text, TextInput, View, StyleSheet, Pressable, Image, TouchableOpacity, Linking, Modal} from 'react-native'
 import React, {useState} from 'react'
 import {styles} from './stylesheet'
 import CreatableSelect from 'react-select/creatable'
@@ -10,6 +10,9 @@ export default function PostCreation({navigation}) {
     const [inputtedText, setInputtedText] = useState('')
     const [topic, setTopic] = useState('')
     const [loading, setLoading] = useState(true)
+    const [link, setLink] = useState('')
+    const [image, setImage] = useState('')
+    const [modalVisible, setModalVisible] = useState(false)
 
     const SendPost = async () => {
         try {
@@ -22,7 +25,9 @@ export default function PostCreation({navigation}) {
                 body: JSON.stringify({
                     'content': inputtedText,
                     'userId': User.userId,
-                    'topicName': 'topic'
+                    'topicName': 'topic',
+                    'hyperLink': link,
+                    'image': image
                 })
             })
             const postID = await response.json();
@@ -85,10 +90,33 @@ export default function PostCreation({navigation}) {
                         style={{textAlign: 'center', color: '#ffc000', fontWeight: 'bold', fontSize: 18, padding: 10}}>Create
                         Post</Text>
                 </View>
+                <View style={styles.centeredView}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setModalVisible(!modalVisible);
+                            }}
+                    >
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Hello World!</Text>
+                                <Pressable
+                                    style={styles.button}
+                                    onPress={() => setModalVisible(!modalVisible)}
+                                >
+                                    <Text style={styles.textStyle}>Hide Modal</Text>
+                                </Pressable>
+                        </View>
+                    </View>
+                    </Modal>
+                </View>
                 <View style={{flex: 5}}>
                     <View style={{flex: 1, flexDirection: 'row'}}>
                         <View style={{flex: 1}}>
-                            <Pressable>
+                            <Pressable onPress={() => setModalVisible(!modalVisible)}>
                                 <Text style={styles.button}>Embed Link</Text>
                             </Pressable>
                         </View>
@@ -98,8 +126,9 @@ export default function PostCreation({navigation}) {
                             </Pressable>
                         </View>
                     </View>
-                    <View style={[styles.text, {padding: 5, flex: 1}]}>
-                        <Autocomplete data={topicOptions()} displayKey="name" onSelect={value => console.warn('value', value)} maxHeight={200}/>
+                    <View style={[styles.text, {padding: 0, flex: 1}]}>
+                        <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}>Topic:</Text>
+                        <Autocomplete data={topicOptions()} displayKey="name" placeholder={'Placeholder'} onSelect={value => console.warn('value', value)} maxHeight={200}/>
                     </View>
                     <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]}
                                placeholder='Text' onChangeText={() => setInputtedText(inputtedText)}/>
