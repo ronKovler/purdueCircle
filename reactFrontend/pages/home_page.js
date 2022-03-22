@@ -54,7 +54,7 @@ export default function HomeScreen({navigation}) {
     const renderPost = ({item}) => {
         console.log(item)
         return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
-                     userID={item.userId}/>
+                     userID={item.userId} anonymous={item.anonymous}/>
     };
 
     return (
@@ -131,10 +131,6 @@ export default function HomeScreen({navigation}) {
                     </View>
                     <View style={{flex: 5, flexDirection: 'column'}}>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
-                        {/*<ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>*/}
-                        {/*    <Post/><Post/><Post/><Post/><Post/><Post/>*/}
-                        {/*    <Post/><Post/><Post/><Post/><Post/>*/}
-                        {/*</ScrollView>*/}
                         <FlatList data={timelineData} renderItem={renderPost} keyExtractor={item => item.postId}
                                   extraData={isLoggedIn}/>
                         <View style={{flex: 2, backgroundColor: '737373'}}/>

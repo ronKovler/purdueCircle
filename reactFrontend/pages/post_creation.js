@@ -12,7 +12,7 @@ export default function PostCreation({navigation}) {
     const [link, setLink] = useState('')
     const [image, setImage] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
-    const[anonymous, setAnonymous] = useState(false)
+    const [anonymous, setAnonymous] = useState(false)
 
     const SendPost = async () => {
         try {
@@ -24,8 +24,8 @@ export default function PostCreation({navigation}) {
                 },
                 body: JSON.stringify({
                     'content': inputtedText,
-                    'userId': User.userId,
-                    'topicName': 'topic',
+                    'userId': 1,
+                    'topicName': topic,
                     'hyperLink': link,
                     'image': image,
                     'anonymous': anonymous
@@ -127,7 +127,7 @@ export default function PostCreation({navigation}) {
                         </View>
                     </View>
                     <View style={[styles.text, {padding: 0, flex: 1}]}>
-                        <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}>Topic:</Text>
+                        <TextInput placeholder='Topic' onChangeText={newText => setTopic(newText)} style={{flex: 1, backgroundColor: '#d9d9d9', padding: 5}}/>
                     </View>
                     <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]}
                                placeholder='Text' onChangeText={newText => setInputtedText(newText)}/>

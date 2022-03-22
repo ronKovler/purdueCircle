@@ -11,6 +11,8 @@ export default function SearchPage({navigation}) {
     const [searchData, setSearchData] = useState(null)
 
     async function sendSearch() {
+        if (search.length != 0) {
+            setQueried(true)
         const response = await fetch(serverAddress + 'api/search', {
             method: 'POST',
             headers: {
@@ -22,14 +24,14 @@ export default function SearchPage({navigation}) {
             })
         })
         let json = await response.json()
-        setQueried(true)
-        return json
-    }
 
-    useEffect(async () => {
-        const data = await sendSearch();
-        setSearchData(data);
-    }, [isFocused])
+        useEffect(async () => {
+            const data = await sendSearch();
+            setSearchData(data);
+        }, [])
+        return json
+        }
+    }
 
     const renderSearch = ({item}) => {
         console.log(item)
@@ -40,12 +42,14 @@ export default function SearchPage({navigation}) {
         if (item.type == "user") {
             return <User username={item.username} name={item.name}/>
         }
-        
     };
 
     return (
         <View style={styles.container}>
             <View style={styles.searchContainer}>
+                <Pressable onPress={() => navigation.navigate('Home')}>
+                    <HeaderLogo style={styles.headerIcon}/>
+                </Pressable>
                 <TextInput style={styles.accountInputBox}
                     placeholder='Search...'
                     onChangeText={search => setSearch(search)}
@@ -57,6 +61,7 @@ export default function SearchPage({navigation}) {
             {!queried && <View style={{flex: 15}}/>}
             {queried && 
                 <View style={{flex: 15}}>
+                    <Text>Testing testing testing testing</Text>
                     <FlatList
                         data={searchData}
                         renderItem={renderSearch}
