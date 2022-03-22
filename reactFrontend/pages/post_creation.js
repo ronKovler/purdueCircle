@@ -1,15 +1,18 @@
-import {Text, TextInput, View, StyleSheet, Pressable, Image, TouchableOpacity} from 'react-native'
+import {Text, TextInput, View, StyleSheet, Pressable, Image, TouchableOpacity, Modal, CheckBox} from 'react-native'
 import React, {useState} from 'react'
 import {styles} from './stylesheet'
 import CreatableSelect from 'react-select/creatable'
 import User from "./user";
-import Autocomplete from 'react-native-dropdown-autocomplete-textinput';
 
 //TODO: Integrate topic selection with database
 export default function PostCreation({navigation}) {
     const [inputtedText, setInputtedText] = useState('')
     const [topic, setTopic] = useState('')
     const [loading, setLoading] = useState(true)
+    const [link, setLink] = useState('')
+    const [image, setImage] = useState('')
+    const [modalVisible, setModalVisible] = useState(false)
+    const[anonymous, setAnonymous] = useState(false)
 
     const SendPost = async () => {
         try {
@@ -22,7 +25,10 @@ export default function PostCreation({navigation}) {
                 body: JSON.stringify({
                     'content': inputtedText,
                     'userId': User.userId,
-                    'topicName': 'topic'
+                    'topicName': 'topic',
+                    'hyperLink': link,
+                    'image': image,
+                    'anonymous': anonymous
                 })
             })
             const postID = await response.json();
@@ -85,10 +91,32 @@ export default function PostCreation({navigation}) {
                         style={{textAlign: 'center', color: '#ffc000', fontWeight: 'bold', fontSize: 18, padding: 10}}>Create
                         Post</Text>
                 </View>
+                <View style={styles.centeredView}>
+                    <Modal
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setModalVisible(!modalVisible);
+                            }}
+                    >
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Hello World!</Text>
+                                <Pressable
+                                    style={styles.button}
+                                    onPress={() => setModalVisible(!modalVisible)}
+                                >
+                                    <Text style={styles.textStyle}>Hide Modal</Text>
+                                </Pressable>
+                        </View>
+                    </View>
+                    </Modal>
+                </View>
                 <View style={{flex: 5}}>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
+                    <View style={{flex: 1, flexDirection: 'row', paddingBottom: 20}}>
                         <View style={{flex: 1}}>
-                            <Pressable>
+                            <Pressable onPress={() => setModalVisible(!modalVisible)}>
                                 <Text style={styles.button}>Embed Link</Text>
                             </Pressable>
                         </View>
@@ -98,11 +126,18 @@ export default function PostCreation({navigation}) {
                             </Pressable>
                         </View>
                     </View>
-                    <View style={[styles.text, {padding: 5, flex: 1}]}>
-                        <Autocomplete data={topicOptions()} displayKey="name" onSelect={value => console.warn('value', value)} maxHeight={200}/>
+                    <View style={[styles.text, {padding: 0, flex: 1}]}>
+                        <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}>Topic:</Text>
                     </View>
                     <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]}
-                               placeholder='Text' onChangeText={() => setInputtedText(inputtedText)}/>
+                               placeholder='Text' onChangeText={newText => setInputtedText(newText)}/>
+                    <View style={{flexDirection: "row"}}>
+                        <CheckBox
+                            value={anonymous}
+                            onValueChange={setAnonymous}
+                        />
+                        <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}> Post as anonymous</Text>
+                    </View>
                     <Pressable onPress={() => SendPost()}><Text style={styles.button}>Create</Text></Pressable>
                 </View>
             </View>
@@ -112,22 +147,21 @@ export default function PostCreation({navigation}) {
 }
 
 // TODO: Get post URL from API and updated for images and URLs next sprint
-/*
-function SendPost(topic, text){
-  fetch("https://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/create_post", {
-    method: 'POST',
-    body: JSON.stringify({
-      'topic': topic,
-      'content': inputtedText
-    })
-  })
 
-  const postID = await response.json();
-  console.log(userID)
-  if (userID < 0) console.log("Failed to Create Post!");
-  else navigation.navigate('Home');
-}
-*/
+// function SendPost(topic, text){
+//   fetch("https://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:8080/api/create_post", {
+//     method: 'POST',
+//     body: JSON.stringify({
+//       'topic': topic,
+//       'content': inputtedText
+//     })
+//   })
+
+//   const postID = await response.json();
+//   console.log(userID)
+//   if (userID < 0) console.log("Failed to Create Post!");
+//   else navigation.navigate('Home');
+// }
 
 function CreateURLPost() {
     const [url, setURL] = useState('')

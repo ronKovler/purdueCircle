@@ -44,36 +44,36 @@ export default function LoginScreen({navigation}) {
         }
     }
 
-//
-// const GetLogin = async () => {
-//     try {
-//         const response = await fetch(
-//             'http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:443/api/auth/login', {
-//                 method: 'GET',
-//                 mode: 'no-cors',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     'Access-Control-Allow-Origin': 'no-cors',
-//                     'Authorization': 'F]-K&A9%(n5hmS-y',
-//                 },
-//             }
-//         );
-//         const json = await response.json();
-//         console.log(id.toString());
-//         setId(json.id);
-//         if (id <= 0) {
-//             console.log("FAILED FUCKER TRY AGAIN");
-//             setEmail(id.toString());
-//         }
-//         setEmail("TEST");
-//         setSuccess(true);
-//         setCorrect(true);
-//         return json;
-//     } catch (error) {
-//         console.error(error);
-//         //setCorrect(false)
-//     }
-// }
+
+const GetLogin = async () => {
+    try {
+        const response = await fetch(
+            'http://ec2-18-190-24-178.us-east-2.compute.amazonaws.com:443/api/auth/login', {
+                method: 'GET',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': 'no-cors',
+                    'Authorization': 'F]-K&A9%(n5hmS-y',
+                },
+            }
+        );
+        const json = await response.json();
+        console.log(id.toString());
+        setId(json.id);
+        if (id <= 0) {
+            console.log("FAILED FUCKER TRY AGAIN");
+            setEmail(id.toString());
+        }
+        setEmail("TEST");
+        setSuccess(true);
+        setCorrect(true);
+        return json;
+    } catch (error) {
+        console.error(error);
+        //setCorrect(false)
+    }
+}
 
 const validateEmail = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
