@@ -128,10 +128,9 @@ export default function PostCreation({navigation}) {
                     </View>
                     <View style={[styles.text, {padding: 0, flex: 1}]}>
                         <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}>Topic:</Text>
-                        <Autocomplete data={topicOptions()} displayKey="name" placeholder={'Placeholder'} onSelect={value => console.warn('value', value)} maxHeight={200}/>
                     </View>
                     <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]}
-                               placeholder='Text' onChangeText={() => setInputtedText(inputtedText)}/>
+                               placeholder='Text' onChangeText={newText => setInputtedText(newText)}/>
                     <Pressable onPress={() => SendPost()}><Text style={styles.button}>Create</Text></Pressable>
                 </View>
             </View>
