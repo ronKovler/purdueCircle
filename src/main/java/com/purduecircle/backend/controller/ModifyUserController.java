@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.net.URISyntaxException;
 
 @RestController
+@CrossOrigin("www.purduecircle.me")
 @RequestMapping("/api/modify/")
 public class ModifyUserController {
 
@@ -23,7 +24,6 @@ public class ModifyUserController {
     /* Returns 1 if an empty string was passed
     */
 
-    @CrossOrigin
     @RequestMapping(value="modify_first_name", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> modifyFirstName(@RequestBody User argUser) throws URISyntaxException {
@@ -38,7 +38,6 @@ public class ModifyUserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
-    @CrossOrigin
     @RequestMapping(value="modify_last_name", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> modifyLastName(@RequestBody User argUser) throws URISyntaxException {
@@ -53,7 +52,6 @@ public class ModifyUserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
-    @CrossOrigin
     @RequestMapping(value="modify_username", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> modifyUsername(@RequestBody User argUser) throws URISyntaxException{
@@ -74,7 +72,6 @@ public class ModifyUserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
-    @CrossOrigin
     @RequestMapping(value="modify_password", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> createAccount(@RequestBody User argUser) throws URISyntaxException {
@@ -90,7 +87,6 @@ public class ModifyUserController {
     }
 
     // TODO: regex should be checked on frontend
-    @CrossOrigin
     @RequestMapping(value="modify_phone_number", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> modifyPhoneNumber(@RequestBody User newUser) throws URISyntaxException {

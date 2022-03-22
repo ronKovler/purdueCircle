@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URISyntaxException;
 
 @RestController()
+@CrossOrigin("www.purduecircle.me")
 @RequestMapping("/api/auth/")
 public class AuthController {
     @Autowired
     UserRepository userRepository;
 
-    @CrossOrigin
     @RequestMapping(value="login", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> tryLogin(@RequestBody User newUser) throws URISyntaxException {

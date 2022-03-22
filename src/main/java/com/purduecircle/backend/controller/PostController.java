@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/post/")
+@CrossOrigin("www.purduecircle.me")
 public class PostController {
 
     @Autowired  //Autowired annotation automatically injects an instance
@@ -29,7 +30,6 @@ public class PostController {
     @Autowired
     private TopicRepository topicRepository;
 
-    @CrossOrigin
     @RequestMapping(value="create_post", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> createPost(@RequestBody PostDTO postDTO) throws URISyntaxException {
@@ -51,7 +51,6 @@ public class PostController {
         return ResponseEntity.ok().headers(responseHeaders).body(post.getPostID());
     }
 
-    @CrossOrigin
     @RequestMapping(value="get_post", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Post> getPost(@RequestBody PostDTO postDTO) throws URISyntaxException {
@@ -62,7 +61,6 @@ public class PostController {
         return ResponseEntity.ok().headers(responseHeaders).body(getPost);
     }
 
-    @CrossOrigin
     @RequestMapping(value="get_topics", method = RequestMethod.GET,
             /*consumes = MediaType.APPLICATION_JSON_VALUE,*/ produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getTopics() throws URISyntaxException {
@@ -78,7 +76,6 @@ public class PostController {
         return ResponseEntity.ok().headers(responseHeaders).body(topicListString);
     }
 
-    @CrossOrigin
     @RequestMapping(value="get_topicline", method = RequestMethod.GET,
             /*consumes = MediaType.APPLICATION_JSON_VALUE,*/ produces = MediaType.APPLICATION_JSON_VALUE)
 

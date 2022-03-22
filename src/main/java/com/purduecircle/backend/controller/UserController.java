@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/user/")
+@CrossOrigin("www.purduecircle.me")
 public class UserController {
 
     @Autowired  // Autowired annotation automatically injects an instance
@@ -61,7 +62,6 @@ public class UserController {
     /* to database and returns true
     */
 
-    @CrossOrigin
     @RequestMapping(value="create_account", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> createAccount(@RequestBody User newUser) throws URISyntaxException {
@@ -90,7 +90,6 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(newUser.getUserID());
     }
 
-    @CrossOrigin
     @RequestMapping(value="follow_topic", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> followTopic(@RequestBody User argUser, String topicStr) throws URISyntaxException {
@@ -108,7 +107,6 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
-    @CrossOrigin
     @RequestMapping(value="unfollow_topic", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> unfollowTopic(@RequestBody User argUser, String topicStr) throws URISyntaxException {
@@ -123,7 +121,6 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
-    @CrossOrigin
     @RequestMapping(value="follow_user", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> followUser(@RequestBody User argUser, User argUserToFollow) throws URISyntaxException {
@@ -138,7 +135,6 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(userThatsFollowing.getUserID());
     }
 
-    @CrossOrigin
     @RequestMapping(value="unfollow_user", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> unfollowUser(@RequestBody User argUser, User argUserToUnfollow) throws URISyntaxException {
@@ -156,7 +152,6 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(userThatsFollowing.getUserID());
     }
 
-    @CrossOrigin
     @RequestMapping(value="like_post", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> likePost(@RequestBody ReactionDTO reactionDTO) throws URISyntaxException {
@@ -170,7 +165,6 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(numReactions);
     }
 
-    @CrossOrigin
     @RequestMapping(value="unlike_post", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> unlikePost(@RequestBody ReactionDTO reactionDTO) throws URISyntaxException {
@@ -184,7 +178,6 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(numReactions);
     }
 
-    @CrossOrigin
     @RequestMapping(value="hot_timeline", method = RequestMethod.GET,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostDTO>> showHotTimeline() throws URISyntaxException {
@@ -200,7 +193,6 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(topPostsDTO);
     }
 
-    @CrossOrigin
     @RequestMapping(value="user_timeline", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostDTO>> showUserTimeline(@RequestBody User user) {
@@ -232,7 +224,6 @@ public class UserController {
         return ResponseEntity.ok().headers(new HttpHeaders()).body(userTimelinePosts);
     }
 
-    @CrossOrigin
     @RequestMapping(value="search", method = RequestMethod.GET,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getSearchResults(@RequestBody String search) {
@@ -249,7 +240,6 @@ public class UserController {
         return ResponseEntity.ok().headers(new HttpHeaders()).body(results);
     }
 
-    @CrossOrigin
     @RequestMapping(value="get_user", method = RequestMethod.GET,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> getUser(User user) throws URISyntaxException {
