@@ -56,7 +56,7 @@ export default function HomeScreen({navigation}) {
     const renderPost = ({item}) => {
         console.log(item)
         return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
-                     userID={item.userId}/>
+                     userID={item.userId} anonymous={item.anonymous}/>
     };
 
     return (

@@ -12,7 +12,7 @@ export default function Post(props) {
     const [followingTopic, setFollowingTopic] = useState(false)
     const [followingUser, setFollowingUser] = useState(false)
     const [liked, setLiked] = useState(false)
-    const [anonymous, setAnonymous] = useState(false)
+    const [anonymous, setAnonymous] = useState(props.anonymous)
     const postID = props.postID
     const userID = props.userID
     const navigation = useNavigation();
@@ -152,11 +152,13 @@ export default function Post(props) {
                                     <Image style={postStyles.icon}
                                            source={{uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farchive.org%2Fdownload%2Ftwitter-default-pfp%2Fe.png&f=1&nofb=1'}}/>
                                 </Pressable>
-                                <Pressable style={{paddingLeft: 10}}
-                                           onClick={() => console.log("printed?")}>
-                                    {!anonymous && <Text style={postStyles.username}>{user}</Text>}
-                                    {anonymous && <Text style={postStyles.username}>Anonymous</Text>}
-                                </Pressable>
+                                { anonymous ?
+                                    <Pressable style={{paddingLeft: 10}}
+                                               onClick={() => console.log("printed?")}>
+                                        <Text style={postStyles.username}>Anonymous</Text>
+                                    </Pressable> :
+                                    <Text style={postStyles.username}>{user}</Text>
+                                }
                                 {User.isLoggedIn ?
                                     <Pressable
                                         onPress={() => toggleFollowUser()}>
