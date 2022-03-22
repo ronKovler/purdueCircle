@@ -28,7 +28,7 @@ export default function ProfilePage ({navigation}) {
 
     async function getUserline() {
         const response = await fetch(serverAddress + '/api/user/user_timeline', {
-            method: 'POST',
+            method: 'GET',
             body: JSON.stringify({
                 'userID': 1
             }),

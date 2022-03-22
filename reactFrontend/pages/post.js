@@ -39,6 +39,21 @@ export default function Post(props) {
                     setAnonymous(response.anonymous)
                 }
             )
+            await fetch(serverAddress + 'api/post/is_liked', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: {
+                    'postID': postID,
+                    'userID': 1
+                }
+            }).then(response => response.json()).then(
+                response => {
+                    setLiked(response)
+                }
+            )
 
         } catch (error) {
             console.error(error)
@@ -100,7 +115,6 @@ export default function Post(props) {
                 }),
             }).then(() => {
                 setLiked(!liked)
-                console.log(response)
             }, () => console.log("Promise unfulfilled"))
         } catch (error) {
             console.error(error)
