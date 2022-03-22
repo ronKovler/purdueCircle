@@ -14,7 +14,7 @@ export default function Post(props) {
     const [liked, setLiked] = useState(false)
     const [anonymous, setAnonymous] = useState(props.anonymous)
     const postID = props.postID
-    const userID = props.userID
+    const [userID, setUserID] = useState(props.userID)
     const navigation = useNavigation();
 
     async function getPostInfo() {
@@ -32,7 +32,7 @@ export default function Post(props) {
             }).then(response => response.json()).then(
                 response => {
                     console.log(response)
-                    this.userID = response.userID
+                    setUserID(response.userID)
                     setUser(response.username)
                     setTopic(response.topic)
                     setContent(response.content)
@@ -159,7 +159,7 @@ export default function Post(props) {
                                     </Pressable> :
                                     <Text style={postStyles.username}>{user}</Text>
                                 }
-                                {User.isLoggedIn ?
+                                {(User.isLoggedIn && User.userId !== userID) ?
                                     <Pressable
                                         onPress={() => toggleFollowUser()}>
                                         {!followingUser ?
