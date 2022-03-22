@@ -15,7 +15,7 @@ export default function HomeScreen({navigation}) {
 
     const LogOut = async () => {
         await User.logout()
-        navigation.navigate('Login')
+        await navigation.navigate('Login')
         setIsLoggedIn(User.isLoggedIn)
     }
 
@@ -26,7 +26,7 @@ export default function HomeScreen({navigation}) {
     }, [isFocused])
 
     const Login = async () => {
-        navigation.navigate('Login')
+        await navigation.navigate('Login')
         setIsLoggedIn(User.isLoggedIn)
     }
 
@@ -44,9 +44,7 @@ export default function HomeScreen({navigation}) {
     }
 
     async function checkLoggedIn() {
-        let test = await User.getUserId()
-        User.isLoggedIn = test !== -1
-        setIsLoggedIn(test !== -1)
+        setIsLoggedIn(User.isLoggedIn)
     }
 
     /*async function getPost(){

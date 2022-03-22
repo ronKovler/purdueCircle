@@ -8,7 +8,7 @@ import User from "./user";
 export default function ProfilePage ({navigation}) {
     const LogOut = async () => {
         await User.logout()
-        navigation.navigate('Login');
+        await navigation.navigate('Login');
     }
     const [userlineData, setUserlineData] = useState(null);
     const userID = useState(-1);

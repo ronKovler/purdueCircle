@@ -2,29 +2,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class UserAuth {
 	constructor() {
-		this.checkLogin().then(items => {
-			this.isLoggedIn = true;
-			this.userId = items[0].userID;
-		}, () => {
-			this.isLoggedIn = false
-		})
+		this.userId = -1;
+		this.username = null;
 	}
 
 // TODO: add secondary auth key for persistent user sessions
 	checkLogin = async () => {
-		const key = JSON.parse(await AsyncStorage.getItem('user'))
+		const key = await AsyncStorage.getItem('user')
 		if (key !== -1) {
-			const response = fetch(serverAddress + '/api/user/get_user', {
+			const response = await fetch(serverAddress + '/api/user/get_user', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json; charset=utf-8',
-					'Access-Control-Allow-Origin': '*',
+					'Access-Control-Allow-Origin': serverAddress,
 				},
 				body: JSON.stringify({
-					'userID': id
+					'userId': key
 				})
 			})
-			return Promise.resolve(JSON.parse(await response.json()))
+			this.userId = key;
+			return Promise.resolve(await response.json())
 		}
 		return Promise.reject()
 	}
