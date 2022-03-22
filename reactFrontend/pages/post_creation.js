@@ -12,7 +12,7 @@ export default function PostCreation({navigation}) {
     const [link, setLink] = useState('')
     const [image, setImage] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
-    const[anonymous, setAnonymous] = useState(false)
+    const [anonymous, setAnonymous] = useState(false)
 
     const SendPost = async () => {
         try {
