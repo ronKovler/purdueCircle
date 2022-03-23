@@ -45,6 +45,12 @@ public class UserDTO {
 
     }
 
+    public UserDTO(int userId) {
+        this.userId = userId;
+    }
+
+    public UserDTO(){}
+
     public String getFirstName() {
         return firstName;
     }

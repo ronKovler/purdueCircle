@@ -2,6 +2,7 @@ package com.purduecircle.backend.models;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Table;
 
@@ -196,5 +197,6 @@ public class User {
     public void setPhoneNumber(String phone_number) {
         this.phoneNumber = phone_number;
     }
+    
 
 }

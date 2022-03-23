@@ -1,6 +1,7 @@
 package com.purduecircle.backend.controller;
 
 import com.purduecircle.backend.repository.PostRepository;
+import com.purduecircle.backend.repository.ReactionRepository;
 import com.purduecircle.backend.repository.TopicRepository;
 import com.purduecircle.backend.repository.UserRepository;
 import org.springframework.http.HttpHeaders;
@@ -30,13 +31,18 @@ public class PostController {
     @Autowired
     private TopicRepository topicRepository;
 
+    @Autowired
+    private ReactionRepository reactionRepository;
+
     @RequestMapping(value="create_post", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> createPost(@RequestBody PostDTO postDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         //DON'T TOUCH ABOVE
         System.out.println("\t\t\t CONTENT: \"" + postDTO.getContent() + "\"");
+        System.out.println("\t\t\t USERID: " + postDTO.getUserId());
         User user = userRepository.getByUserID(postDTO.getUserId());
+        String topicName = postDTO.getTopicName().toLowerCase();
         Topic topic = topicRepository.findByTopicName(postDTO.getTopicName());
 
         // If topic doesn't exist, create it
@@ -45,7 +51,7 @@ public class PostController {
             topicRepository.save(topic);
         }
 
-        Post post = new Post(postDTO.getContent(), user, topic);
+        Post post = new Post(postDTO.getContent(), user, topic, postDTO.isAnonymous());
         System.out.println(postDTO.getContent());
         postRepository.save(post);
         return ResponseEntity.ok().headers(responseHeaders).body(post.getPostID());
@@ -61,6 +67,25 @@ public class PostController {
         return ResponseEntity.ok().headers(responseHeaders).body(getPost);
     }
 
+    @RequestMapping(value="is_liked", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> checkUserPostLiked(@RequestBody ReactionDTO reactionDTO) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        //DON'T TOUCH ABOVE
+        Post post = postRepository.findByPostID(reactionDTO.getPostID());
+        User user = userRepository.findByUserID(reactionDTO.getUserID());
+        Reaction reaction = reactionRepository.getReactionByPostAndUser(post, user);
+        if (reaction == null) {
+            return ResponseEntity.ok().headers(responseHeaders).body(false);
+        }
+        if (reaction.getReactionType() == 0) {
+            return ResponseEntity.ok().headers(responseHeaders).body(true);
+        }
+        return ResponseEntity.ok().headers(responseHeaders).body(false);
+
+    }
+
+    @CrossOrigin
     @RequestMapping(value="get_topics", method = RequestMethod.GET,
             /*consumes = MediaType.APPLICATION_JSON_VALUE,*/ produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getTopics() throws URISyntaxException {

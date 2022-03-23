@@ -98,6 +98,7 @@ public class PostDTO {
         System.out.println(post.getUser().getUsername());
         this.topicName = post.getTopic().getTopicName();
         this.postId = post.getPostID();
+        this.anonymous = post.isAnonymous();
 
     }
 

@@ -47,4 +47,44 @@ public class Reaction {
     @Column(name="reaction_type")
     private int reactionType;
 
+
+    public int getReactionID() {
+        return reactionID;
+    }
+
+    public void setReactionID(int reactionID) {
+        this.reactionID = reactionID;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Timestamp getTimeReacted() {
+        return timeReacted;
+    }
+
+    public void setTimeReacted(Timestamp timeReacted) {
+        this.timeReacted = timeReacted;
+    }
+
+    public int getReactionType() {
+        return reactionType;
+    }
+
+    public void setReactionType(int reactionType) {
+        this.reactionType = reactionType;
+    }
 }

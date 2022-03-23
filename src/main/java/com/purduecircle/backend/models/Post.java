@@ -28,6 +28,14 @@ public class Post implements Comparable<Post>{
         this.timePosted = new Timestamp(System.currentTimeMillis());
     }
 
+    public Post(String content, User user, Topic topic, boolean anonymous) {
+        this.anonymous = anonymous;
+        this.content = content;
+        this.user = user;
+        this.topic = topic;
+        this.timePosted = new Timestamp(System.currentTimeMillis());
+    }
+
     public Post() {}
 
     @Id

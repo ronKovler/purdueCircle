@@ -54,6 +54,10 @@ public class UserController {
         System.out.println("Id received: " + ID);
         User user = userRepository.getByUserID(ID);
         System.out.println(pColor("User found by \"getByUserID(int)\": " + user.getUsername()));
+        List<UserFollower> userFollowerList = userFollowerRepository.findAllByUser(user);
+        for (int i = 0; i < userFollowerList.size(); i++) {
+            System.out.println("FOLLOWER " + i + " : " + userFollowerList.get(i).getFollower().getUsername());
+        }
 
     }
 
@@ -227,8 +231,8 @@ public class UserController {
     @RequestMapping(value="search", method = RequestMethod.GET,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getSearchResults(@RequestBody String search) {
-        List<User> usersFound = userRepository.findAllByUsernameStartingWith(search);
-        List<Topic> topicsFound = topicRepository.findAllByTopicNameStartingWith(search);
+        List<User> usersFound = userRepository.findAllByUsernameStartingWith(search.toLowerCase());
+        List<Topic> topicsFound = topicRepository.findAllByTopicNameStartingWith(search.toLowerCase());
         List<String> results = new ArrayList<>();
         for (User user : usersFound) {
             results.add(user.getUsername());
@@ -236,15 +240,18 @@ public class UserController {
         for (Topic topic : topicsFound) {
             results.add(topic.getTopicName());
         }
+        List<Object> resultList = new ArrayList<>();
 
         return ResponseEntity.ok().headers(new HttpHeaders()).body(results);
     }
 
     @RequestMapping(value="get_user", method = RequestMethod.GET,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> getUser(User user) throws URISyntaxException {
+    public ResponseEntity<UserDTO> getUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        user = userRepository.getByUserID(user.getUserID());
-        return ResponseEntity.ok().headers(responseHeaders).body(user);
+        System.out.println("\t\t\tUSER ID RECIEVED: " + userDTO.getUserId());
+        User user = userRepository.getByUserID(userDTO.getUserId());
+        System.out.println("GET USER REQUEST FOUND: " + user.getUsername());
+        return ResponseEntity.ok().headers(responseHeaders).body(new UserDTO(user));
     }
 }
