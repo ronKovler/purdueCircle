@@ -22,7 +22,8 @@ import java.util.List;
 @CrossOrigin("www.purduecircle.me")
 public class PostController {
 
-    @Autowired  //Autowired annotation automatically injects an instance
+    /* Autowired annotation automatically injects an instance */
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
