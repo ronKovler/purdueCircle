@@ -20,7 +20,7 @@ export default function CreateAccountScreen({navigation}) {
     let ID = await fetch(serverAddress + '/api/user/create_account', {
       method: "POST",
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': serverAddress,
         'Content-Type': 'application/json; charset=utf-8',
       },
       body: JSON.stringify({

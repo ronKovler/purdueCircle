@@ -11,6 +11,8 @@ import TopicLine from './pages/topicline';
 import SearchPage from './pages/search_page';
 import {Text} from "react-native";
 import User from "./pages/user";
+import {Image} from "react-native-web";
+import {styles} from "./pages/stylesheet";
 
 global.serverAddress = "https://purduecircle.me:8443";
 
@@ -43,7 +45,7 @@ export default function App() {
     })
     return (
         <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
-            {isLoading ? null :
+            {isLoading ? <Image style={[styles.image, {alignSelf: 'center'}]} source={require('./assets/choo.png')}/> :
                 <Stack.Navigator screenOptions={{headerShown: false}}>
                     <Stack.Screen name="Login" component={LoginScreen}/>
                     <Stack.Screen name="Home" component={HomeScreen}/>
