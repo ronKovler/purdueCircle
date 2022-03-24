@@ -46,6 +46,12 @@ public class Post implements Comparable<Post>{
     @Column(name="content", length=255)
     private String content;
 
+    @Column(name="image_path", length = 1024)
+    private String imagePath;
+
+    @Column(name="link", length = 1024)
+    private String link;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userID")
     private User user;
@@ -98,6 +104,27 @@ public class Post implements Comparable<Post>{
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    // Called by saveImage()
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public void saveImage() {
+        setImagePath("todo");
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public User getUser() {

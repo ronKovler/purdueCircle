@@ -43,12 +43,6 @@ public class UserController {
         return ANSI_YELLOW + text + ANSI_RESET;
     }
 
-    /**
-     * TODO Add code to handle home page.
-     * any request (GET, POST, PUT, etc.) to the root URL(/) will be
-     * handled here within this method
-     * @return String, might change to a file or whatever down the line
-     */
     @RequestMapping(path="{id}")
     public void home(@PathVariable("id") int ID) {
         System.out.println("Id received: " + ID);
@@ -254,4 +248,5 @@ public class UserController {
         System.out.println("GET USER REQUEST FOUND: " + user.getUsername());
         return ResponseEntity.ok().headers(responseHeaders).body(new UserDTO(user));
     }
+
 }

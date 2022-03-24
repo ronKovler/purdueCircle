@@ -43,7 +43,7 @@ public class Reaction {
     @Column(name="time_reacted")
     private Timestamp timeReacted;
 
-    // Like = 0, dislike = 1
+    // Like = 0, dislike = 1 (TODO dislike)
     @Column(name="reaction_type")
     private int reactionType;
 

@@ -8,14 +8,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import com.purduecircle.backend.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.nio.file.*;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/post/")
@@ -113,8 +117,44 @@ public class PostController {
         for (Post post : topicPosts) {
             topicPostDTOs.add(new PostDTO(post));
         }
-
         return ResponseEntity.ok().headers(new HttpHeaders()).body(topicPostDTOs);
     }
+
+
+    @PostMapping("/upload_image")
+    public ResponseEntity<String> uploadToLocalFileSystem(@RequestParam("file") MultipartFile file) {
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String extension = "";
+        for (int i = fileName.length() - 1; i >= 0 ; i--) {
+            if (fileName.charAt(i) != '.') {
+                extension = fileName.charAt(i) + extension;
+            } else {
+                extension = '.' + extension;
+                break;
+            }
+        }
+        int count = -1;
+        try {
+            count = new File("/home/ubuntu/userImages/").list().length;
+        } catch (NullPointerException e) {
+            System.out.println("\t\t\t\tDirectory check failed!!!!!!!!!");
+        }
+
+        Path path = Paths.get("/home/ubuntu/userImages/" + count + extension);
+        try {
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /*
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/files/download/")
+                .path(fileName)
+                .toUriString();
+
+         */
+        return ResponseEntity.ok(path.toString());
+    }
+
 
 }
