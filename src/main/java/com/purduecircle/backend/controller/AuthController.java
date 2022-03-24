@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 
+
+
 @RestController()
-@CrossOrigin("www.purduecircle.me")
+//@CrossOrigin("www.purduecircle.me")
+@CrossOrigin
+
 @RequestMapping("/api/auth/")
 public class AuthController {
     @Autowired

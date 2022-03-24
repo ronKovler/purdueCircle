@@ -19,7 +19,8 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/user/")
-@CrossOrigin("www.purduecircle.me")
+//@CrossOrigin("www.purduecircle.me")
+@CrossOrigin
 public class UserController {
 
     @Autowired  // Autowired annotation automatically injects an instance
@@ -42,7 +43,7 @@ public class UserController {
     public String pColor(String text) {
         return ANSI_YELLOW + text + ANSI_RESET;
     }
-
+    //purduecircle.me:8443/api/user/search?{num}
     @RequestMapping(path="{id}")
     public void home(@PathVariable("id") int ID) {
         System.out.println("Id received: " + ID);
@@ -222,29 +223,76 @@ public class UserController {
         return ResponseEntity.ok().headers(new HttpHeaders()).body(userTimelinePosts);
     }
 
-    @RequestMapping(value="search", method = RequestMethod.GET,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<String>> getSearchResults(@RequestBody String search) {
-        List<User> usersFound = userRepository.findAllByUsernameStartingWith(search.toLowerCase());
-        List<Topic> topicsFound = topicRepository.findAllByTopicNameStartingWith(search.toLowerCase());
+    // 0 = search for username, 1 = search for topic
+    @RequestMapping(value="search/{type}/{search}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<String>> getSearchResults(@PathVariable("type") int type, @PathVariable("search") String search) {
+
         List<String> results = new ArrayList<>();
-        for (User user : usersFound) {
-            results.add(user.getUsername());
+
+        if (type == 0) {
+            // search for users
+            List<User> usersFound = userRepository.findAllByUsernameStartingWith(search.toLowerCase());
+            for (User user : usersFound) {
+                results.add(user.getUsername());
+            }
         }
-        for (Topic topic : topicsFound) {
-            results.add(topic.getTopicName());
+
+        if (type == 1) {
+            //search for topics
+            List<Topic> topicsFound = topicRepository.findAllByTopicNameStartingWith(search.toLowerCase());
+            for (Topic topic : topicsFound) {
+                results.add(topic.getTopicName());
+            }
         }
-        List<Object> resultList = new ArrayList<>();
 
         return ResponseEntity.ok().headers(new HttpHeaders()).body(results);
     }
+    // all the users posts, chronologically
+    @RequestMapping(value="get_userline/{userID}", method = RequestMethod.GET
+            , produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PostDTO>> getUserline(@PathVariable("userID") int userID) {
+        User user = userRepository.findByUserID(userID);
+        if (user == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
 
-    @RequestMapping(value="get_user", method = RequestMethod.GET,
+        List<Post> usersPosts = postRepository.findAllByUser(user);
+        Collections.sort(usersPosts);
+        Collections.reverse(usersPosts);
+
+        List<PostDTO> usersPostDTOs = new ArrayList<>();
+        for (Post post : usersPosts) {
+            usersPostDTOs.add(new PostDTO(post));
+        }
+
+        return ResponseEntity.ok().body(usersPostDTOs);
+    }
+
+    // Get all posts under topic
+    @RequestMapping(value="get_topic_page/{topicName}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PostDTO>> getTopicPage(@PathVariable("topicName") String topicName) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+
+        Topic topic = topicRepository.findByTopicName(topicName);
+        List<Post> topicPosts = postRepository.findAllByTopic(topic);
+
+        List<PostDTO> topicPostsDTOs = new ArrayList<>();
+        for (Post post : topicPosts) {
+            topicPostsDTOs.add(new PostDTO(post));
+        }
+
+        return ResponseEntity.ok().headers(responseHeaders).body(topicPostsDTOs);
+    }
+
+    @RequestMapping(value="get_user", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> getUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         System.out.println("\t\t\tUSER ID RECIEVED: " + userDTO.getUserId());
         User user = userRepository.getByUserID(userDTO.getUserId());
+
         System.out.println("GET USER REQUEST FOUND: " + user.getUsername());
         return ResponseEntity.ok().headers(responseHeaders).body(new UserDTO(user));
     }
