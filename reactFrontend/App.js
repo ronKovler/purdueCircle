@@ -38,7 +38,7 @@ export default function App() {
         await User.checkLogin().then(items => {
             User.isLoggedIn = true;
             User.username = items.username;
-            User.userId = items.userID;
+            User.userId = items.userId;
         }, () => {
             User.isLoggedIn = false;
         })

@@ -70,21 +70,17 @@ export default function Post(props) {
         }
         let url = serverAddress + "/api/user/"
         if (!followingUser) {
-            url += "follow_user"
+            url += "follow_user/" + User.userId + "/" + userID
         } else {
-            url += "unfollow_user"
+            url += "unfollow_user/" + User.userId + "/" + userID
         }
         try {
             await fetch(url, {
-                method: "POST",
+                method: "GET",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': '*',
                 },
-                body: JSON.stringify({
-                    userID: await User.getUserId(),
-                    otherUserID: userID,
-                }),
             }).then(() => setFollowingUser(!followingUser), () => console.log("Promise unfulfilled"))
         } catch (error) {
             console.error(error)
