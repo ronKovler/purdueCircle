@@ -173,7 +173,7 @@ export default function Post(props) {
                                     </Pressable> :
                                     <Text style={postStyles.username}>{user}</Text>
                                 }
-                                {(User.isLoggedIn && User.userId !== userID) ?
+                                {(User.isLoggedIn && User.userId !== userID && !anonymous) ?
                                     <Pressable
                                         onPress={() => toggleFollowUser()}>
                                         {!followingUser ?
