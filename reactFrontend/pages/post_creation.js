@@ -24,7 +24,7 @@ export default function PostCreation({navigation}) {
                 },
                 body: JSON.stringify({
                     'content': inputtedText,
-                    'userId': 1,
+                    'userId': User.userId,
                     'topicName': topic,
                     'hyperLink': link,
                     'image': image,

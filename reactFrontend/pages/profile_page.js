@@ -27,11 +27,8 @@ export default function ProfilePage ({navigation}) {
     };
 
     async function getUserline() {
-        const response = await fetch(serverAddress + '/api/user/user_timeline', {
+        const response = await fetch(serverAddress + '/api/user/get_userline/' + User.userId, {
             method: 'GET',
-            body: JSON.stringify({
-                'userID': 1
-            }),
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
                 'Access-Control-Allow-Origin': '*',
@@ -98,10 +95,30 @@ export default function ProfilePage ({navigation}) {
             <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
           </ScrollView>*/}
           <FlatList data={userlineData} renderItem={renderPost} keyExtractor={item => item.postId}
-                    extraData={isLoggedIn}/>
+                    extraData={isLoggedIn} style={{flexGrow: 0}}/>
           <View style={{flex: 2, backgroundColor: '737373'}}/>
         </View>
-        <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
+        <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
+            <View style={{flex: 3}}>
+            </View>
+            <View style={{flex: 6}}>
+                <View style={{flex: 1}}/>
+                <View style={{flex: 1}}>
+                    <Text style={styles.header}>
+                        {User.username}'s Followed Topics
+                    </Text>
+                </View>
+                <View style={{flex: 10}}>
+                    <View style={{flex: 1, backgroundColor: 'dimgrey'}}/>
+                    <ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>
+                        <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
+                        <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
+                        <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
+                    </ScrollView>
+                    <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
+                </View>
+            </View>
+        </View>
       </View>
     </View>
   )

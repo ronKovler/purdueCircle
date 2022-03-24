@@ -4,7 +4,7 @@ import {styles, HeaderLogo, Choo, Logo} from './stylesheet';
 import Post from "./post";
 import User from "./user";
 
-export default function TopicLine({navigation}) {
+export default function Topic_page({navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
     const [loading, setLoading] = useState(true)
     const [topiclineData, setTopiclineData] = useState(null)
