@@ -57,8 +57,15 @@ public class PostController {
         }
 
         Post post = new Post(postDTO.getContent(), user, topic, postDTO.isAnonymous());
-        // TODO: if link isn't null, set; if image path isn't null, sete
-        System.out.println(postDTO.getContent());
+
+        // If link isn't null, set; if image path isn't null, set
+        if (postDTO.getLink() != null) {
+            post.setLink(postDTO.getLink());
+        }
+        if (postDTO.getImagePath() != null) {
+            post.setImagePath(postDTO.getImagePath());
+        }
+
         postRepository.save(post);
         return ResponseEntity.ok().headers(responseHeaders).body(post.getPostID());
     }

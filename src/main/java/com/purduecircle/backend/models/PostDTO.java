@@ -6,6 +6,8 @@ public class PostDTO {
     private String topicName;
     private int postId;
     private boolean anonymous;
+    private String imagePath;
+    private String link;
 
     /*Possibly remove these fields in place of getByUserID*/
     private String email;
@@ -51,6 +53,22 @@ public class PostDTO {
         this.postId = postId;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }  
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }  
+
     public boolean isAnonymous() {
         return anonymous;
     }
@@ -81,6 +99,16 @@ public class PostDTO {
         this.topicName = topicName;
         this.email = email;
         this.anonymous = anonymous;
+    }
+
+    public PostDTO(String content, int userId, String topicName, String email, boolean anonymous, String imagePath, String link) {
+        this.content = content;
+        this.userId = userId;
+        this.topicName = topicName;
+        this.email = email;
+        this.anonymous = anonymous;
+        this.imagePath = imagePath;
+        this.link = link;
     }
 
     public String getUsername() {
