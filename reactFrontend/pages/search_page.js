@@ -1,4 +1,4 @@
-import {Text, TextInput, View, Button, Image, StyleSheet, Pressable, ScrollView, TouchableOpacity, FlatList} from 'react-native';
+import {Text, TextInput, View, Button, Image, StyleSheet, Pressable, ScrollView, FlatList, Picker} from 'react-native';
 import React, { useState } from 'react'
 import {HeaderLogo, styles} from './stylesheet';
 import Post from "./post";
@@ -9,27 +9,29 @@ export default function SearchPage({navigation}) {
     const [search, setSearch] = useState('')
     const [queried, setQueried] = useState(false)
     const [searchData, setSearchData] = useState(null)
+    const [selectedValue, setSelectedValue] = useState("post")
 
     async function sendSearch() {
         if (search.length != 0) {
             setQueried(true)
-        const response = await fetch(serverAddress + 'api/search', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json; charset=utf-8',
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify({
-                'search': search
+            const response = await fetch(serverAddress + 'api/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify({
+                    'search': search,
+                    'searchType': selectedValue
+                })
             })
-        })
-        let json = await response.json()
+            let json = await response.json()
 
-        useEffect(async () => {
-            const data = await sendSearch();
-            setSearchData(data);
-        }, [])
-        return json
+            useEffect(async () => {
+                const data = await sendSearch();
+                setSearchData(data);
+            }, [])
+            return json
         }
     }
 
@@ -54,9 +56,22 @@ export default function SearchPage({navigation}) {
                     placeholder='Search...'
                     onChangeText={search => setSearch(search)}
                 />
+                <Text style={{textAlign: 'center', color: '#ffc000', fontWeight: 'bold', fontSize: 18, paddingTop: 17,padding: 10}}>
+                    Search by: 
+                </Text>
+                <Picker
+                    selectedValue={selectedValue}
+                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                >
+                    <Picker.Item label="Post" value="post"/>
+                    <Picker.Item label="User" value="user"/>
+                </Picker>
                 <Pressable onPress={() => sendSearch()}>
                     <Text style={styles.button}>Go!</Text>
                 </Pressable>
+                <View style={{flexDirection: "column"}}>
+                    
+                </View>
             </View>
             {!queried && <View style={{flex: 15}}/>}
             {queried && 
