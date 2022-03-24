@@ -57,6 +57,7 @@ public class PostController {
         }
 
         Post post = new Post(postDTO.getContent(), user, topic, postDTO.isAnonymous());
+        // TODO: if link isn't null, set; if image path isn't null, sete
         System.out.println(postDTO.getContent());
         postRepository.save(post);
         return ResponseEntity.ok().headers(responseHeaders).body(post.getPostID());
@@ -122,6 +123,7 @@ public class PostController {
 
 
     @PostMapping("/upload_image")
+
     public ResponseEntity<String> uploadToLocalFileSystem(@RequestParam("file") MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String extension = "";
