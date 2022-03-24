@@ -21,7 +21,8 @@ import com.purduecircle.backend.repository.TopicRepository;
 @Table(name = "posts")
 public class Post implements Comparable<Post>{
 
-    public Post(String content, User user, Topic topic) {
+    public Post(String content, User user, Topic topic, boolean anonymous) {
+        this.anonymous = anonymous;
         this.content = content;
         this.user = user;
         this.topic = topic;
@@ -117,9 +118,9 @@ public class Post implements Comparable<Post>{
         this.imagePath = imagePath;
     }
 
-    public void saveImage() {
-        setImagePath("todo");
-    }
+//    public void saveImage() {
+//        setImagePath("todo");
+//    }
 
     public String getLink() {
         return link;

@@ -23,7 +23,8 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/post/")
-@CrossOrigin("www.purduecircle.me")
+//@CrossOrigin("www.purduecircle.me")
+@CrossOrigin
 public class PostController {
 
     /* Autowired annotation automatically injects an instance */
@@ -52,7 +53,7 @@ public class PostController {
 
         // If topic doesn't exist, create it
         if (topic == null) {
-            topic = new Topic(postDTO.getTopicName());
+            topic = new Topic(topicName);
             topicRepository.save(topic);
         }
 

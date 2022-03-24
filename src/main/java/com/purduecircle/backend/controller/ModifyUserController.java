@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.net.URISyntaxException;
 
 @RestController
-@CrossOrigin("www.purduecircle.me")
+//@CrossOrigin("www.purduecircle.me")
+@CrossOrigin
 @RequestMapping("/api/modify/")
 public class ModifyUserController {
 
