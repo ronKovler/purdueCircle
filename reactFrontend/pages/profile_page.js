@@ -94,8 +94,10 @@ export default function ProfilePage ({navigation}) {
             <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
             <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
           </ScrollView>*/}
-          <FlatList data={userlineData} renderItem={renderPost} keyExtractor={item => item.postId}
-                    extraData={isLoggedIn} style={{flexGrow: 0}}/>
+          <View style={{flexBasis: 1, flex: 100}}>
+            <FlatList data={userlineData} renderItem={renderPost} keyExtractor={item => item.postId}
+                      extraData={isLoggedIn} style={{flexGrow: 0}} showsVerticalScrollIndicator={false}/>
+          </View>
           <View style={{flex: 2, backgroundColor: '737373'}}/>
         </View>
         <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
