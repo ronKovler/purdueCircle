@@ -8,7 +8,7 @@ class UserAuth {
 
 // TODO: add secondary auth key for persistent user sessions
 	checkLogin = async () => {
-		const key = await AsyncStorage.getItem('user')
+		const key = JSON.parse(await AsyncStorage.getItem('user'))
 		if (key !== -1) {
 			const response = await fetch(serverAddress + '/api/user/get_user', {
 				method: 'POST',

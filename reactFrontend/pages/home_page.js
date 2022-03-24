@@ -7,7 +7,7 @@ import {useIsFocused} from "@react-navigation/native";
 
 export default function HomeScreen({navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(true);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [timelineData, setTimelineData] = useState(null)
     const isFocused = useIsFocused()
 
