@@ -9,9 +9,10 @@ export default function PostCreation({navigation}) {
     const [inputtedText, setInputtedText] = useState('')
     const [topic, setTopic] = useState('')
     const [loading, setLoading] = useState(true)
-    const [link, setLink] = useState('')
-    const [image, setImage] = useState('')
-    const [modalVisible, setModalVisible] = useState(false)
+    const [link, setLink] = useState('Link...')
+    const [image, setImage] = useState('Image...')
+    const [linkModalVisible, setLinkModalVisible] = useState(false)
+    const [imageModalVisible, setImageModalVisible] = useState(false)
     const [anonymous, setAnonymous] = useState(false)
 
     const SendPost = async () => {
@@ -94,20 +95,40 @@ export default function PostCreation({navigation}) {
                 <View style={styles.centeredView}>
                     <Modal
                         transparent={true}
-                        visible={modalVisible}
+                        visible={linkModalVisible}
                         onRequestClose={() => {
                             Alert.alert("Modal has been closed.");
-                            setModalVisible(!modalVisible);
+                            setLinkModalVisible(!linkModalVisible);
                             }}
                     >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Hello World!</Text>
+                            <TextInput placeholder={link} style={styles.modalText} onChangeText={newText => setLink(newText)}/>
                                 <Pressable
                                     style={styles.button}
-                                    onPress={() => setModalVisible(!modalVisible)}
+                                    onPress={() => setLinkModalVisible(!linkModalVisible)}
                                 >
-                                    <Text style={styles.textStyle}>Hide Modal</Text>
+                                    <Text style={styles.textStyle}>Done</Text>
+                                </Pressable>
+                        </View>
+                    </View>
+                    </Modal>
+                    <Modal
+                        transparent={true}
+                        visible={imageModalVisible}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setImageModalVisible(!imageModalVisible);
+                            }}
+                    >
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <TextInput placeholder={image} style={styles.modalText} onChangeText={newText => setImage(newText)}/>
+                                <Pressable
+                                    style={styles.button}
+                                    onPress={() => setImageModalVisible(!imageModalVisible)}
+                                >
+                                    <Text style={styles.textStyle}>Done</Text>
                                 </Pressable>
                         </View>
                     </View>
@@ -116,17 +137,29 @@ export default function PostCreation({navigation}) {
                 <View style={{flex: 5}}>
                     <View style={{flex: 1, flexDirection: 'row', paddingBottom: 20}}>
                         <View style={{flex: 1}}>
-                            <Pressable onPress={() => setModalVisible(!modalVisible)}>
+                            <Pressable onPress={() => setLinkModalVisible(!linkModalVisible)}>
                                 <Text style={styles.button}>Embed Link</Text>
                             </Pressable>
                         </View>
                         <View style={{flex: 1}}>
-                            <Pressable>
+                            <Pressable onPress={() => setImageModalVisible(!imageModalVisible)}>
                                 <Text style={styles.button}>Attach Image</Text>
                             </Pressable>
                         </View>
                     </View>
-                    <View style={[styles.text, {padding: 0, flex: 1}]}>
+                    <View style={{flex: 1, flexDirection: 'row', paddingBottom: 20}}>
+                        <View style={{flex: 1}}>
+                            {link != 'Link...' && !linkModalVisible &&
+                                <Text style={styles.createPostText}>{link.length < 21 ? `${link}` : `${link.substring(0, 20)}...`}</Text>
+                            }
+                        </View>
+                        <View style={{flex: 1}}>
+                            {image != 'Image...' && !imageModalVisible &&
+                                <Text style={styles.createPostText}>{image.length < 21 ? `${image}` : `${image.substring(0, 20)}...`}</Text>
+                            }
+                        </View>
+                    </View>
+                    <View style={[styles.text, {padding: 10, flex: 1}]}>
                         <TextInput placeholder='Topic' onChangeText={newText => setTopic(newText)} style={{flex: 1, backgroundColor: '#d9d9d9', padding: 5}}/>
                     </View>
                     <TextInput multiline={true} style={[styles.accountInputBox, createStyles.textInput]}

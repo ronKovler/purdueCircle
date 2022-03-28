@@ -1,4 +1,4 @@
-import {Text, TextInput, View, Button, Image, StyleSheet, Pressable, ScrollView, FlatList, Picker} from 'react-native';
+import {Text, TextInput, View, Pressable, FlatList, Picker} from 'react-native';
 import React, { useState, useEffect } from 'react'
 import {HeaderLogo, styles} from './stylesheet';
 import Post from "./post";
@@ -40,14 +40,25 @@ export default function SearchPage({navigation}) {
         setSearchData(data);
     }, [])
 
+    const data = [
+        {
+            content: 'topic1'
+        },
+        {
+            content: 'topic2'
+        },
+        {
+            content: 'topic3'
+        }
+    ]
+
     const renderSearch = ({item}) => {
         console.log(item)
-        if (selectedValue === "topic") {
-            return <Topic topic={item.content}/>
-        }
-        if (selectedValue === "user") {
-            return <User username={item.content}/>
-        }
+        return (
+            <Pressable>
+                <Text style={styles.button}>{item.content}</Text>
+            </Pressable>
+        )
     };
 
     return (
@@ -65,7 +76,7 @@ export default function SearchPage({navigation}) {
                 </Text>
                 <Picker
                     selectedValue={selectedValue}
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                    onValueChange={(itemValue) => setSelectedValue(itemValue)}
                 >
                     <Picker.Item label="Topic" value="topic"/>
                     <Picker.Item label="User" value="user"/>
@@ -77,11 +88,10 @@ export default function SearchPage({navigation}) {
             {!queried && <View style={{flex: 15}}/>}
             {queried && 
                 <View style={{flex: 15}}>
-                    <Text>Testing testing testing testing</Text>
                     <FlatList
                         data={searchData}
                         renderItem={renderSearch}
-                        // keyExtractor={(item) => item.content}
+                        keyExtractor={item => item.content}
                         extraData={searchData}
                     />
                 </View>
