@@ -45,9 +45,6 @@ export default function PostCreation({navigation}) {
 
     const SendPost = async () => {
         try {
-<<<<<<< HEAD
-            console.log(link)
-=======
             let imagePath;
             if(image !== "Image..."){
                 let formData = new FormData();
@@ -63,7 +60,6 @@ export default function PostCreation({navigation}) {
                     body: formData
                 }))
             }
->>>>>>> 347674b2cf9a31a08f206d2abcd1842bd4bc2e80
             const response = await fetch(serverAddress + "/api/post/create_post", {
                 method: "POST",
                 headers: {
@@ -74,13 +70,8 @@ export default function PostCreation({navigation}) {
                     'content': inputtedText,
                     'userID': User.userID,
                     'topicName': topic,
-<<<<<<< HEAD
                     'link': link,
-                    'image': image,
-=======
-                    'hyperLink': link,
                     'imagePath': imagePath,
->>>>>>> 347674b2cf9a31a08f206d2abcd1842bd4bc2e80
                     'anonymous': anonymous
                 })
             })
