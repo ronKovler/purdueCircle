@@ -52,9 +52,12 @@ export default function HomeScreen({navigation}) {
     }*/
 
     const renderPost = ({item}) => {
-        console.log(item)
+        let link = item.link
+        if(item.link !== null && !item.link.includes('https://') && !item.link.includes('http://')){
+            link = 'https://' + item.link;
+        }
         return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
-                     userID={item.userID} anonymous={item.anonymous} link={item.link} imagePath={item.imagePath}/>
+                     userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath}/>
     };
 
     return (
