@@ -97,7 +97,7 @@ export default function SearchPage({navigation}) {
             {queried && 
                 <View style={{flex: 15}}>
                     <FlatList
-                        data={data}
+                        data={searchData}
                         renderItem={renderSearch}
                         keyExtractor={item => item.content}
                         extraData={searchData}
