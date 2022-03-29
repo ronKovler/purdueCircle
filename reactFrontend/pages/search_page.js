@@ -11,10 +11,14 @@ export default function SearchPage({navigation}) {
     const [queried, setQueried] = useState(false)
     const [searchData, setSearchData] = useState(null)
     const [selectedValue, setSelectedValue] = useState("topic")
-    const isFocused = useIsFocused()
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        //do nothing
+    }, [isFocused]);
 
     async function sendSearch() {
-        if (search.length != 0) {
+        if (search.length !== 0) {
             setQueried(true)
             let url = serverAddress + "/api/user/search"
             if (selectedValue === "user") {

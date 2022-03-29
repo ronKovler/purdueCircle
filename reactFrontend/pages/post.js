@@ -206,7 +206,10 @@ export default function Post(props) {
                         : null
                     }
                 </View>
-                <Text style={{color: 'blue'}} onPress={() => Linking.openURL(link)}>{link}</Text>
+                {link !== null ?
+                    <Text style={{color: 'blue'}} onPress={() => Linking.openURL(link)}>{link}</Text>
+                    : null
+                }
                 <View style={{flexBasis: 1, padding: 5}}>
                     {User.isLoggedIn ?
                         <Pressable onPress={() => toggleLike()}>

@@ -1,7 +1,8 @@
 import {Text, TextInput, View, Pressable, TouchableOpacity, AsyncStorage} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {styles, Logo} from './stylesheet';
 import User from "./user";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function LoginScreen({navigation}) {
     const [email, setEmail] = useState('')
@@ -10,6 +11,11 @@ export default function LoginScreen({navigation}) {
     const [success, setSuccess] = useState(false)
     const [correct, setCorrect] = useState(true)
     const [emailError, setEmailError] = useState("")
+    const isFocused = useIsFocused()
+
+    useEffect(() => {
+        //do nothing
+    }, [isFocused]);
 
     const SendLogin = async () => {
         try {

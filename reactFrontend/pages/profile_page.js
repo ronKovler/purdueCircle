@@ -4,6 +4,7 @@ import {Choo, HeaderLogo, styles} from './stylesheet';
 import Post from "./post";
 import Topic from "./topic";
 import User from "./user";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function ProfilePage ({route, navigation}) {
     const LogOut = async () => {
@@ -16,8 +17,12 @@ export default function ProfilePage ({route, navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
     const [isLoading, setIsLoading] = useState(true);
     const [username, setUsername] = useState("");
+<<<<<<< HEAD
     const [followsData, setFollowsData] = useState(null)
     const [topicsData, setTopicsData] = useState(null)
+=======
+    const isFocused = useIsFocused()
+>>>>>>> 347674b2cf9a31a08f206d2abcd1842bd4bc2e80
 
     useEffect(async () => {
         const data = await getUserline();
@@ -41,7 +46,7 @@ export default function ProfilePage ({route, navigation}) {
         setFollowsData(followsData)
         setTopicsData(topicData)
         setIsLoading(false);
-    }, [])
+    }, [isFocused])
 
     const renderPost = ({item}) => {
         return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}

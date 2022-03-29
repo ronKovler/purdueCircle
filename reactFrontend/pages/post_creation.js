@@ -1,7 +1,20 @@
-import {Text, TextInput, View, StyleSheet, Pressable, Image, TouchableOpacity, Modal, CheckBox} from 'react-native'
-import React, {useState} from 'react'
+import {
+    Text,
+    TextInput,
+    View,
+    StyleSheet,
+    Pressable,
+    Image,
+    TouchableOpacity,
+    Modal,
+    CheckBox,
+    Button
+} from 'react-native'
+import React, {useEffect, useState} from 'react'
 import {styles} from './stylesheet'
 import User from "./user";
+import {useIsFocused} from "@react-navigation/native";
+import * as ImagePicker from 'expo-image-picker'
 
 //TODO: Integrate topic selection with database
 export default function PostCreation({navigation}) {
@@ -13,22 +26,61 @@ export default function PostCreation({navigation}) {
     const [linkModalVisible, setLinkModalVisible] = useState(false)
     const [imageModalVisible, setImageModalVisible] = useState(false)
     const [anonymous, setAnonymous] = useState(false)
+    const isFocused = useIsFocused()
+
+    useEffect(() => {
+        //do nothing
+    }, [isFocused]);
+
+    const pickImage = async () =>{
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            quality: .3,
+        });
+
+        if(!result.cancelled){
+            setImage(result.uri);
+        }
+    }
 
     const SendPost = async () => {
         try {
+<<<<<<< HEAD
             console.log(link)
+=======
+            let imagePath;
+            if(image !== "Image..."){
+                let formData = new FormData();
+                const response = await fetch(image);
+                const blob = await response.blob();
+                formData.append("file", blob)
+                imagePath = JSON.parse(await fetch(serverAddress + '/api/post/upload_image', {
+                    method: "POST",
+                    headers: {
+                        // 'Content-Type': '',
+                        'Access-Control-Allow-Origin': serverAddress,
+                    },
+                    body: formData
+                }))
+            }
+>>>>>>> 347674b2cf9a31a08f206d2abcd1842bd4bc2e80
             const response = await fetch(serverAddress + "/api/post/create_post", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': serverAddress,
                 },
                 body: JSON.stringify({
                     'content': inputtedText,
                     'userID': User.userID,
                     'topicName': topic,
+<<<<<<< HEAD
                     'link': link,
                     'image': image,
+=======
+                    'hyperLink': link,
+                    'imagePath': imagePath,
+>>>>>>> 347674b2cf9a31a08f206d2abcd1842bd4bc2e80
                     'anonymous': anonymous
                 })
             })
@@ -123,11 +175,11 @@ export default function PostCreation({navigation}) {
                     >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <TextInput placeholder={image} style={styles.modalText} onChangeText={newText => setImage(newText)}/>
+                            <Pressable onPress={() => pickImage()}><Text>Pick Image</Text></Pressable>
+                            {image !== "Image..." ? <Image source={{uri : image}} style={{width: 200, height: 200}}/> : null}
                                 <Pressable
                                     style={styles.button}
-                                    onPress={() => setImageModalVisible(!imageModalVisible)}
-                                >
+                                    onPress={() => setImageModalVisible(!imageModalVisible)}>
                                     <Text style={styles.textStyle}>Done</Text>
                                 </Pressable>
                         </View>
@@ -155,7 +207,7 @@ export default function PostCreation({navigation}) {
                         </View>
                         <View style={{flex: 1}}>
                             {image !== 'Image...' && !imageModalVisible &&
-                                <Text style={styles.createPostText}>{image.length < 21 ? `${image}` : `${image.substring(0, 20)}...`}</Text>
+                                <Text style={styles.createPostText}>Image Attached Successfully</Text>
                             }
                         </View>
                     </View>
