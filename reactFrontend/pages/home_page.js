@@ -132,7 +132,7 @@ export default function HomeScreen({navigation}) {
                     <View style={{flex: 5, flexDirection: 'column'}}>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
                         <FlatList data={timelineData} renderItem={renderPost} keyExtractor={item => item.postID}
-                                  extraData={isLoggedIn}/>
+                                  extraData={isLoggedIn} showsVerticalScrollIndicator={false}/>
                         <View style={{flex: 2, backgroundColor: '737373'}}/>
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>

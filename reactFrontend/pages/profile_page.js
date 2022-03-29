@@ -11,6 +11,7 @@ export default function ProfilePage ({route, navigation}) {
         await User.logout()
         await navigation.navigate('Login');
     }
+
     const [userlineData, setUserlineData] = useState(null);
     const userID = route.params.id;
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)

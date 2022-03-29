@@ -5,15 +5,14 @@ import Post from "./post";
 import User from "./user";
 import {useIsFocused} from "@react-navigation/native";
 
-export default function TopicPage({navigation, route}) {
+export default function TopicPage({route, navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
     const [loading, setLoading] = useState(true)
     const [timelineData, setTimelineData] = useState(null)
     const isFocused = useIsFocused()
-    const [topic, setTopic] = useState(route.params.content)
+    const [topic, setTopic] = useState(route.params)
 
-    console.log(route.params.content)
-
+    console.log("Topic: " + route.params)
     //TODO: Setup timer to get new posts
 
     const LogOut = async () => {
