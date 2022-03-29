@@ -2,6 +2,7 @@ import {Pressable, StyleSheet, Text, View, Image} from "react-native";
 import React, {useEffect, useState} from "react";
 import User from "./user";
 import {useNavigation} from '@react-navigation/native';
+import {Link} from "@react-navigation/native";
 
 export default function Post(props) {
     const [user, setUser] = useState(props.user)
@@ -165,8 +166,8 @@ export default function Post(props) {
                                                onClick={() => console.log("printed?")}>
                                         <Text style={postStyles.username}>Anonymous</Text>
                                     </Pressable> :
-                                    <Text style={postStyles.username}>{user}</Text>
-                                }
+                                    <Link style={postStyles.username} to={'/user/' + userID}>{user}</Link>
+                                    }
                                 {(User.isLoggedIn && User.userID !== userID && !anonymous) ?
                                     <Pressable
                                         onPress={() => toggleFollowUser()}>

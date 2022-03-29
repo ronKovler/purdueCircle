@@ -1,7 +1,6 @@
 import {Text, TextInput, View, StyleSheet, Pressable, Image, TouchableOpacity, Modal, CheckBox} from 'react-native'
 import React, {useState} from 'react'
 import {styles} from './stylesheet'
-import CreatableSelect from 'react-select/creatable'
 import User from "./user";
 
 //TODO: Integrate topic selection with database
@@ -149,12 +148,12 @@ export default function PostCreation({navigation}) {
                     </View>
                     <View style={{flex: 1, flexDirection: 'row', paddingBottom: 20}}>
                         <View style={{flex: 1}}>
-                            {link != 'Link...' && !linkModalVisible &&
+                            {link !== 'Link...' && !linkModalVisible &&
                                 <Text style={styles.createPostText}>{link.length < 21 ? `${link}` : `${link.substring(0, 20)}...`}</Text>
                             }
                         </View>
                         <View style={{flex: 1}}>
-                            {image != 'Image...' && !imageModalVisible &&
+                            {image !== 'Image...' && !imageModalVisible &&
                                 <Text style={styles.createPostText}>{image.length < 21 ? `${image}` : `${image.substring(0, 20)}...`}</Text>
                             }
                         </View>

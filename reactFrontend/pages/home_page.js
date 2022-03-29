@@ -79,7 +79,7 @@ export default function HomeScreen({navigation}) {
                                     style={styles.button}>Register</Text></Pressable>
                             </View> :
                             <View style={styles.buttonContainer}>
-                                <Pressable onPress={() => navigation.navigate('Profile Page')}><Text
+                                <Pressable onPress={() => navigation.navigate('Profile Page', {id: User.userID})}><Text
                                     style={styles.button}>View Profile</Text></Pressable>
                             </View>}
                     </View>
