@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     minWidth: 60,
     minHeight: 60,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   button: {
     textAlign: "center",

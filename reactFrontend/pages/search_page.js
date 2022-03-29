@@ -54,8 +54,16 @@ export default function SearchPage({navigation}) {
 
     const renderSearch = ({item}) => {
         console.log(item)
+        var nav
+        if (selectedValue == "topic") {
+            nav = "Topic Page"
+        } else {
+            nav = "Profile Page"
+        }
+        var topic = item.content
+        console.log("Topic: " + topic)
         return (
-            <Pressable>
+            <Pressable onPress={() => navigation.navigate(nav, item)}>
                 <Text style={styles.button}>{item.content}</Text>
             </Pressable>
         )
@@ -89,7 +97,7 @@ export default function SearchPage({navigation}) {
             {queried && 
                 <View style={{flex: 15}}>
                     <FlatList
-                        data={searchData}
+                        data={data}
                         renderItem={renderSearch}
                         keyExtractor={item => item.content}
                         extraData={searchData}

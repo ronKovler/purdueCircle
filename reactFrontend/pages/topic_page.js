@@ -1,35 +1,40 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacity, Image} from 'react-native';
+import React, {Component, useEffect, useState} from 'react';
+import {View, Text, StyleSheet, Pressable, FlatList, Image} from 'react-native';
 import {styles, HeaderLogo, Choo, Logo} from './stylesheet';
 import Post from "./post";
 import User from "./user";
+import {useIsFocused} from "@react-navigation/native";
 
-export default function Topic_page({navigation}) {
+export default function TopicPage({navigation, route}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
     const [loading, setLoading] = useState(true)
-    const [topiclineData, setTopiclineData] = useState(null)
+    const [timelineData, setTimelineData] = useState(null)
+    const isFocused = useIsFocused()
+    const [topic, setTopic] = useState(route.params.content)
+
+    console.log(route.params.content)
 
     //TODO: Setup timer to get new posts
 
     const LogOut = async () => {
         await User.logout()
-        navigation.navigate('Login')
-        setIsLoggedIn(false)
+        await navigation.navigate('Login')
+        setIsLoggedIn(User.isLoggedIn)
     }
 
     useEffect(async () => {
-        const data = await getTopicLine();
+        const data = await getTimeline();
         await checkLoggedIn();
-        setTopiclineData(data);
-    }, [])
+        setTimelineData(data);
+    }, [isFocused])
 
     const Login = async () => {
-        navigation.navigate('Login')
-        setIsLoggedIn(true)
+        await navigation.navigate('Login')
+        setIsLoggedIn(User.isLoggedIn)
     }
 
-    async function getTopicline() {
-        const response = await fetch(serverAddress + '/api/post/get_topicline', {
+    async function getTimeline() {
+        const response = await fetch(serverAddress + '/api/user/topicline/' + topic, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
@@ -42,9 +47,7 @@ export default function Topic_page({navigation}) {
     }
 
     async function checkLoggedIn() {
-        let test = await User.getUserId()
-        User.isLoggedIn = test !== -1
-        setIsLoggedIn(test !== -1)
+        setIsLoggedIn(User.isLoggedIn)
     }
 
     /*async function getPost(){
@@ -54,7 +57,7 @@ export default function Topic_page({navigation}) {
     const renderPost = ({item}) => {
         console.log(item)
         return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
-                     userID={item.userId}/>
+                     userID={item.userId} anonymous={item.anonymous}/>
     };
 
     return (
@@ -68,8 +71,9 @@ export default function Topic_page({navigation}) {
                                 <Pressable onPress={() => LogOut()}><Text
                                     style={styles.button}>Log Out</Text></Pressable>
                             </View> : <View style={{flex: 1}}/>}
-                        <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
+                        <View style={{flexDirection: 'column', justifyContent: 'center', flex: 2}}>
                             <HeaderLogo style={styles.headerIcon}/>
+                            <Text style={{alignItems: 'center', textAlign: 'center', fontSize: 16, fontWeight: 'bold',}}>{topic}</Text>
                         </View>
                         {!isLoggedIn ?
                             <View style={styles.buttonContainer}>
@@ -107,6 +111,11 @@ export default function Topic_page({navigation}) {
                             <View style={{flex: 6, justifyContent: 'center'}}>
                                 <View style={{flex: 2}}/>
                                 <View style={{flex: 1}}>
+                                    <Pressable onPress={() => navigation.navigate('Search')}>
+                                        <Text style={styles.button}>Search</Text>
+                                    </Pressable>
+                                </View>
+                                <View style={{flex: 1}}>
                                     <Pressable>
                                         <Text style={styles.button}>Hot Posts</Text>
                                     </Pressable>
@@ -126,11 +135,7 @@ export default function Topic_page({navigation}) {
                     </View>
                     <View style={{flex: 5, flexDirection: 'column'}}>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
-                        {/*<ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>*/}
-                        {/*    <Post/><Post/><Post/><Post/><Post/><Post/>*/}
-                        {/*    <Post/><Post/><Post/><Post/><Post/>*/}
-                        {/*</ScrollView>*/}
-                        <FlatList data={topiclineData} renderItem={renderPost} keyExtractor={item => item.postId}
+                        <FlatList data={timelineData} renderItem={renderPost} keyExtractor={item => item.postId}
                                   extraData={isLoggedIn}/>
                         <View style={{flex: 2, backgroundColor: '737373'}}/>
                     </View>
