@@ -17,12 +17,9 @@ export default function ProfilePage ({route, navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
     const [isLoading, setIsLoading] = useState(true);
     const [username, setUsername] = useState("");
-<<<<<<< HEAD
     const [followsData, setFollowsData] = useState(null)
     const [topicsData, setTopicsData] = useState(null)
-=======
     const isFocused = useIsFocused()
->>>>>>> 347674b2cf9a31a08f206d2abcd1842bd4bc2e80
 
     useEffect(async () => {
         const data = await getUserline();
