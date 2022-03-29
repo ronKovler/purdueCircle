@@ -34,7 +34,7 @@ export default function TopicPage({navigation, route}) {
     }
 
     async function getTimeline() {
-        const response = await fetch(serverAddress + '/api/user/topicline/' + topic, {
+        const response = await fetch(serverAddress + '/api/user/get_topic_page/' + topic, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',

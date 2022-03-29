@@ -74,23 +74,23 @@ public class PostController {
         return ResponseEntity.ok().headers(responseHeaders).body(post.getPostID());
     }
 
-    @RequestMapping(value="get_post", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Post> getPost(@RequestBody PostDTO postDTO) throws URISyntaxException {
+    @RequestMapping(value="get_post/{postID}", method = RequestMethod.GET,
+             produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Post> getPost(@PathVariable("postID") int postID) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         //DON'T TOUCH ABOVE
-        Post getPost = postRepository.findByPostID(postDTO.getPostId());
+        Post getPost = postRepository.findByPostID(postID);
 
         return ResponseEntity.ok().headers(responseHeaders).body(getPost);
     }
 
-    @RequestMapping(value="is_liked", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> checkUserPostLiked(@RequestBody ReactionDTO reactionDTO) throws URISyntaxException {
+    @RequestMapping(value="is_liked/{userID}/{postID}", method = RequestMethod.GET,
+             produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> checkUserPostLiked(@PathVariable("userID") int userID, @PathVariable("postID") int postID) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         //DON'T TOUCH ABOVE
-        Post post = postRepository.findByPostID(reactionDTO.getPostID());
-        User user = userRepository.findByUserID(reactionDTO.getUserID());
+        Post post = postRepository.findByPostID(postID);
+        User user = userRepository.findByUserID(userID);
         Reaction reaction = reactionRepository.getReactionByPostAndUser(post, user);
         if (reaction == null) {
             return ResponseEntity.ok().headers(responseHeaders).body(false);

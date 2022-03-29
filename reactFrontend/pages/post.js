@@ -20,15 +20,13 @@ export default function Post(props) {
     async function getPostInfo() {
         try {
             console.log(postID)
-            await fetch(serverAddress + '/api/post/get_post', {
-                method: 'POST',
+            await fetch(serverAddress + '/api/post/get_post/' + postID , {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': '*',
                 },
-                body: {
-                    'postID': postID
-                }
+
             }).then(response => response.json()).then(
                 response => {
                     console.log(response)
@@ -39,16 +37,16 @@ export default function Post(props) {
                     setAnonymous(response.anonymous)
                 }
             )
-            await fetch(serverAddress + 'api/post/is_liked', {
-                method: 'POST',
+            await fetch(serverAddress + 'api/post/is_liked/' + 1 + "/" + postID, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': '*',
-                },
-                body: {
-                    'postID': postID,
-                    'userID': 1
-                }
+                }//,
+                //body: {
+                    //'postID': postID,
+                    //'userID': 1
+                //}
             }).then(response => response.json()).then(
                 response => {
                     setLiked(response)
@@ -70,9 +68,9 @@ export default function Post(props) {
         }
         let url = serverAddress + "/api/user/"
         if (!followingUser) {
-            url += "follow_user/" + User.userId + "/" + userID
+            url += "follow_user/" + User.userID + "/" + userID
         } else {
-            url += "unfollow_user/" + User.userId + "/" + userID
+            url += "unfollow_user/" + User.userID + "/" + userID
         }
         try {
             await fetch(url, {

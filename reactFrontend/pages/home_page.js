@@ -53,7 +53,7 @@ export default function HomeScreen({navigation}) {
 
     const renderPost = ({item}) => {
         console.log(item)
-        return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
+        return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
                      userID={item.userID} anonymous={item.anonymous}/>
     };
 
@@ -131,7 +131,7 @@ export default function HomeScreen({navigation}) {
                     </View>
                     <View style={{flex: 5, flexDirection: 'column'}}>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
-                        <FlatList data={timelineData} renderItem={renderPost} keyExtractor={item => item.postId}
+                        <FlatList data={timelineData} renderItem={renderPost} keyExtractor={item => item.postID}
                                   extraData={isLoggedIn}/>
                         <View style={{flex: 2, backgroundColor: '737373'}}/>
                     </View>

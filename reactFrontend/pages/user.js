@@ -10,15 +10,16 @@ class UserAuth {
 	checkLogin = async () => {
 		const key = JSON.parse(await AsyncStorage.getItem('user'))
 		if (key !== -1) {
-			const response = await fetch(serverAddress + '/api/user/get_user', {
-				method: 'POST',
+			const response = await fetch(serverAddress + '/api/user/get_user/' + key, {
+				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json; charset=utf-8',
 					'Access-Control-Allow-Origin': serverAddress,
-				},
-				body: JSON.stringify({
-					'userID': key
-				})
+				}//,
+				// body: JSON.stringify({
+				// 	'userID': key
+				// }
+				// )
 			})
 			this.userID = key;
 			return Promise.resolve(await response.json())

@@ -195,10 +195,11 @@ public class UserController {
 
 
 
-    @RequestMapping(value="user_timeline", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PostDTO>> showUserTimeline(@RequestBody User user) {
-        User getTimelineUser = userRepository.getByUserID(user.getUserID());
+    // Homepage, all the topics and users a user follows
+    @RequestMapping(value="get_user_timeline/{userID}", method = RequestMethod.GET,
+             produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PostDTO>> showUserTimeline(@PathVariable int userID) {
+        User getTimelineUser = userRepository.getByUserID(userID);
         List<TopicFollower> tpfList = topicFollowerRepository.findAllByFollower(getTimelineUser);
 
         //adds all posts from topics following
@@ -292,12 +293,34 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(topicPostsDTOs);
     }
 
-    @RequestMapping(value="get_user", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> getUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
+    // Get all saved posts from user
+    @RequestMapping(value="get_saved_posts_line/{userID}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PostDTO>> getSavedPostLine(@PathVariable("userID") int userID) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        System.out.println("\t\t\tUSER ID RECIEVED: " + userDTO.getUserID());
-        User user = userRepository.getByUserID(userDTO.getUserID());
+
+        User user = userRepository.getByUserID(userID);
+        List<SavedPost> savePostObjs = savedPostsRepository.findAllByUser(user);
+
+        List<Post> savePostPostObjs = new ArrayList<>();
+        for (SavedPost post : savePostObjs) {
+            savePostPostObjs.add(postRepository.findByPostID(post.getSavedPostID()));
+        }
+        
+        List<PostDTO> savedPostsDTOs = new ArrayList<>();
+        for (Post post : savePostPostObjs) {
+            savedPostsDTOs.add(new PostDTO(post));
+        }
+
+        return ResponseEntity.ok().headers(responseHeaders).body(savedPostsDTOs);
+    }
+
+    @RequestMapping(value="get_user/{userID}", method = RequestMethod.GET,
+             produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> getUser(@PathVariable int userID) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        System.out.println("\t\t\tUSER ID RECIEVED: " + userID);
+        User user = userRepository.getByUserID(userID);
 
         System.out.println("GET USER REQUEST FOUND: " + user.getUsername());
         return ResponseEntity.ok().headers(responseHeaders).body(new UserDTO(user));
