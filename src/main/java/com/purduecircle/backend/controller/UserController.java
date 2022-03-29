@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import com.purduecircle.backend.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,9 +107,11 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
-    @RequestMapping(value="unfollow_topic", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> unfollowTopic(@RequestBody User argUser, String topicStr) throws URISyntaxException {
+    @Transactional
+    @RequestMapping(value="unfollow_topic/{userID}/{topicName}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> unfollowTopic(@PathVariable("userID") int argUser,
+                                                 @PathVariable("topicName") String topicStr) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         // Find actual user and topic in database
         User user = userRepository.findByUserID(argUser.getUserID());
@@ -119,6 +122,7 @@ public class UserController {
         topicFollowerRepository.deleteByFollowerAndTopic(user, topic);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
+
 
     @RequestMapping(value="follow_user/{userID}/{userToFollow}", method = RequestMethod.GET,
              produces = MediaType.APPLICATION_JSON_VALUE)
@@ -135,9 +139,11 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(userThatsFollowing.getUserID());
     }
 
-    @RequestMapping(value="unfollow_user", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> unfollowUser(@RequestBody User argUser, User argUserToUnfollow) throws URISyntaxException {
+    @Transactional
+    @RequestMapping(value="unfollow_user/{userID}/{userToUnfollow}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> unfollowUser(@PathVariable("userID") int argUser,
+                                                @PathVariable("userToUnfollow") int argUserToUnfollow) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         User userThatsFollowing = userRepository.findByUserID(argUser.getUserID());
         User userToUnfollow = userRepository.findByUserID(argUserToUnfollow.getUserID());
@@ -233,26 +239,28 @@ public class UserController {
     public ResponseEntity<List<SearchDTO>> getSearchResults(@PathVariable("type") int type, @PathVariable("search") String search) {
 
         List<String> results = new ArrayList<>();
-
+        List<SearchDTO> searchResults = new ArrayList<>();
         if (type == 0) {
             // search for users
             List<User> usersFound = userRepository.findAllByUsernameStartingWith(search.toLowerCase());
             for (User user : usersFound) {
-                results.add(user.getUsername());
+                searchResults.add(new SearchDTO(user.getUsername(), user.getUserID()));
             }
+
         }
 
         if (type == 1) {
             //search for topics
             List<Topic> topicsFound = topicRepository.findAllByTopicNameStartingWith(search.toLowerCase());
             for (Topic topic : topicsFound) {
-                results.add(topic.getTopicName());
+                searchResults.add(new SearchDTO(topic.getTopicName()));
             }
+//            for (String result : results) {
+//                searchResults.add(new SearchDTO(result));
+//            }
         }
-        List<SearchDTO> searchResults = new ArrayList<>();
-        for (String result : results) {
-            searchResults.add(new SearchDTO(result));
-        }
+
+
         return ResponseEntity.ok().headers(new HttpHeaders()).body(searchResults);
     }
     // all the users posts, chronologically
@@ -324,6 +332,38 @@ public class UserController {
 
         System.out.println("GET USER REQUEST FOUND: " + user.getUsername());
         return ResponseEntity.ok().headers(responseHeaders).body(new UserDTO(user));
+    }
+
+    @RequestMapping(value="get_user_following/{userID}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserDTO>> getUserFollowingList(@PathVariable int userID) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        System.out.println("\t\t\tUSER ID RECIEVED: " + userID);
+        User user = userRepository.getByUserID(userID);
+
+        System.out.println("GET USER FOLLOWING REQUEST FOUND: " + user.getUsername());
+        List<UserFollower> userFollowingList = userFollowerRepository.findAllByFollower(user); //MIGHT HAVE TO BE USER INSTEAD OF FOLLOWER
+        List<UserDTO> userFollowingListDTO = new ArrayList<>();
+        for (UserFollower userFollower : userFollowingList) {
+            userFollowingListDTO.add(new UserDTO(userFollower.getUser()));
+        }
+        return ResponseEntity.ok().headers(responseHeaders).body(userFollowingListDTO);
+    }
+
+    @RequestMapping(value="get_user_topic_following/{userID}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ContentDTO>> getUserTopicFollowingList(@PathVariable int userID) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        System.out.println("\t\t\tUSER ID RECIEVED: " + userID);
+        User user = userRepository.getByUserID(userID);
+
+        System.out.println("GET USER FOLLOWING REQUEST FOUND: " + user.getUsername());
+        List<TopicFollower> userTopicFollowingList = topicFollowerRepository.findAllByFollower(user); //MIGHT HAVE TO BE USER INSTEAD OF FOLLOWER
+        List<ContentDTO> userTopicFollowingListResults = new ArrayList<>();
+        for (TopicFollower topicFollower : userTopicFollowingList) {
+            userTopicFollowingListResults.add(new ContentDTO(topicFollower.getTopic().getTopicName()));
+        }
+        return ResponseEntity.ok().headers(responseHeaders).body(userTopicFollowingListResults);
     }
 
 }
