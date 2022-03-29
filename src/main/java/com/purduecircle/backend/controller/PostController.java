@@ -47,6 +47,9 @@ public class PostController {
         //DON'T TOUCH ABOVE
         System.out.println("\t\t\t CONTENT: \"" + postDTO.getContent() + "\"");
         System.out.println("\t\t\t USERID: " + postDTO.getUserID());
+        if (postDTO.getContent() == null || postDTO.getTopicName() == null) {
+            return ResponseEntity.badRequest().body(-1);
+        }
         User user = userRepository.getByUserID(postDTO.getUserID());
         String topicName = postDTO.getTopicName().toLowerCase();
         if (topicName.compareTo("") == 0) {
@@ -137,23 +140,31 @@ public class PostController {
 
     public ResponseEntity<String> uploadToLocalFileSystem(@RequestParam("file") MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        System.out.println("\t\t\t FILECONTENT TYPEEEEEEEE" +file.getContentType());
         String extension = "";
-        for (int i = fileName.length() - 1; i >= 0 ; i--) {
-            if (fileName.charAt(i) != '.') {
-                extension = fileName.charAt(i) + extension;
-            } else {
-                extension = '.' + extension;
-                break;
+//
+        int index = file.getContentType().lastIndexOf('/');
+        if (index != -1 ) {
+            extension = file.getContentType().substring(index + 1);
+        } else {
+            for (int i = fileName.length() - 1; i >= 0 ; i--) {
+                if (fileName.charAt(i) != '.') {
+                    extension = fileName.charAt(i) + extension;
+                } else {
+                    extension = '.' + extension;
+                    break;
+                }
             }
         }
+
         int count = -1;
         try {
-            count = new File("/home/ubuntu/userImages/").list().length;
+            count = new File("/home/ubuntu/server/userImages/").list().length;
         } catch (NullPointerException e) {
             System.out.println("\t\t\t\tDirectory check failed!!!!!!!!!");
         }
 
-        Path path = Paths.get("/home/ubuntu/userImages/" + count + extension);
+        Path path = Paths.get("/home/ubuntu/server/userImages/" + count + extension);
         try {
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {

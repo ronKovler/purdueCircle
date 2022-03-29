@@ -126,6 +126,8 @@ public class PostDTO {
         System.out.println(post.getUser().getUsername());
         this.topicName = post.getTopic().getTopicName();
         this.postID = post.getPostID();
+        this.link = post.getLink();
+        this.imagePath = post.getImagePath();
         this.anonymous = post.isAnonymous();
 
     }
