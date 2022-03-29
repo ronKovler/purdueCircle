@@ -40,6 +40,9 @@ export default function App() {
             User.isLoggedIn = true;
             User.username = items.username;
             User.userId = items.userId;
+            User.firstName = items.firstName;
+            User.lastName = items.lastName;
+            User.password = items.password;
         }, () => {
             User.isLoggedIn = false;
         })

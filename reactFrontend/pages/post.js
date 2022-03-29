@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text, View, Image} from "react-native";
+import {Pressable, StyleSheet, Text, View, Image, Linking} from "react-native";
 import React, {useEffect, useState} from "react";
 import User from "./user";
 import {useNavigation} from '@react-navigation/native';
@@ -17,6 +17,8 @@ export default function Post(props) {
     const postID = props.postID
     const [userID, setUserID] = useState(props.userID)
     const navigation = useNavigation();
+    const [link, setLink] = useState(props.link);
+    const [image, setImage] = useState(props.image);
 
     async function getPostInfo() {
         try {
@@ -36,6 +38,8 @@ export default function Post(props) {
                     setTopic(response.topic)
                     setContent(response.content)
                     setAnonymous(response.anonymous)
+                    setLink(response.link)
+                    setImage(require('../assets/full_heart.svg'))
                 }
             )
             await fetch(serverAddress + 'api/post/is_liked/' + 1 + "/" + postID, {
@@ -193,7 +197,19 @@ export default function Post(props) {
                 </View>
             </View>
             <View style={postStyles.box}>
-                <Text style={postStyles.text}>{content}</Text>
+                <View style={{flex: 3, padding: 5, flexDirection: 'row'}}>
+                    <View style={{flex: 2}}>
+                        <Text style={postStyles.text}>{content}</Text>
+                    </View>
+                    {image !== null ?
+                        <View style={{flex: 1}}>
+                            <Image source={image}
+                                style={postStyles.icon}/>
+                        </View>
+                        : null
+                    }
+                </View>
+                <Text style={{color: 'blue'}} onPress={() => Linking.openURL(link)}>{link}</Text>
                 <View style={{flexBasis: 1, padding: 5}}>
                     {User.isLoggedIn ?
                         <Pressable onPress={() => toggleLike()}>
