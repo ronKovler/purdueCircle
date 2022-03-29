@@ -4,15 +4,21 @@ import {HeaderLogo, styles} from './stylesheet';
 import Post from "./post";
 import Topic from "./topic";
 import User from "./user";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function SearchPage({navigation}) {
     const [search, setSearch] = useState('')
     const [queried, setQueried] = useState(false)
     const [searchData, setSearchData] = useState(null)
     const [selectedValue, setSelectedValue] = useState("topic")
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        //do nothing
+    }, [isFocused]);
 
     async function sendSearch() {
-        if (search.length != 0) {
+        if (search.length !== 0) {
             setQueried(true)
             let url = serverAddress + "/api/user/search"
             if (selectedValue === "user") {
