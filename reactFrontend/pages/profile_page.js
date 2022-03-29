@@ -10,6 +10,7 @@ export default function ProfilePage ({route, navigation}) {
         await User.logout()
         await navigation.navigate('Login');
     }
+
     const [userlineData, setUserlineData] = useState(null);
     const userID = route.params.id;
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
@@ -20,7 +21,7 @@ export default function ProfilePage ({route, navigation}) {
         const data = await getUserline();
         if (userID !== User.userID) {
             await fetch(serverAddress + '/api/user/get_user/' + userID, {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': serverAddress,

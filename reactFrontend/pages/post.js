@@ -190,7 +190,7 @@ export default function Post(props) {
                                     <Text style={postStyles.followButton}>Follow</Text> :
                                     <Text style={postStyles.followButton}>Unfollow</Text>}
                             </Pressable> : null}
-                        <Pressable>
+                        <Pressable onPress={() => navigation.navigate("Topic Page", topic)}>
                             <Text style={postStyles.topicStyle}>{topic}</Text>
                         </Pressable>
                     </View>
