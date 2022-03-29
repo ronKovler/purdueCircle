@@ -130,17 +130,14 @@ export default function Post(props) {
         } else {
             url += "unfollow_topic"
         }
+        url += "/" + userID + "/" + topic
         try {
             await fetch(url, {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': '*',
                 },
-                body: JSON.stringify({
-                    'userID': User.getuserID(),
-                    'topic_name': topic,
-                }),
             }).then(() => setFollowingTopic(!followingTopic))
         } catch (error) {
             console.error(error)

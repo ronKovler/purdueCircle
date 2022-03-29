@@ -16,6 +16,7 @@ export default function PostCreation({navigation}) {
 
     const SendPost = async () => {
         try {
+            console.log(link)
             const response = await fetch(serverAddress + "/api/post/create_post", {
                 method: "POST",
                 headers: {
@@ -26,7 +27,7 @@ export default function PostCreation({navigation}) {
                     'content': inputtedText,
                     'userID': User.userID,
                     'topicName': topic,
-                    'hyperLink': link,
+                    'link': link,
                     'image': image,
                     'anonymous': anonymous
                 })

@@ -16,9 +16,13 @@ export default function ProfilePage ({route, navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
     const [isLoading, setIsLoading] = useState(true);
     const [username, setUsername] = useState("");
+    const [followsData, setFollowsData] = useState(null)
+    const [topicsData, setTopicsData] = useState(null)
 
     useEffect(async () => {
         const data = await getUserline();
+        const followsData = await getFollowsData()
+        const topicData = await getTopicData()
         if (userID !== User.userID) {
             await fetch(serverAddress + '/api/user/get_user/' + userID, {
                 method: 'GET',
@@ -32,14 +36,32 @@ export default function ProfilePage ({route, navigation}) {
         } else {
             setUsername(User.username);
         }
+
         setUserlineData(data);
+        setFollowsData(followsData)
+        setTopicsData(topicData)
         setIsLoading(false);
     }, [])
 
     const renderPost = ({item}) => {
-        console.log(item)
         return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
                      userID={item.userID}/>
+    };
+
+    const renderTopic = ({item}) => {
+        return (
+            <Pressable onPress={() => navigation.navigate("Topic Page", item.content)}>
+                <Text style={styles.button}>{item.content}</Text>
+            </Pressable>
+        )
+    };
+
+    const renderUser = ({item}) => {
+        return (
+            <Pressable onPress={() => navigation.navigate("Profile Page", {id: item.userID})}>
+                <Text style={styles.button}>{item.username}</Text>
+            </Pressable>
+        )
     };
 
     async function getUserline() {
@@ -52,6 +74,30 @@ export default function ProfilePage ({route, navigation}) {
         })
         let json = await response.json()
         setIsLoading(false)
+        return json
+    }
+
+    async function getFollowsData() {
+        const response = await fetch(serverAddress + '/api/user/get_user_following/' + userID, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Access-Control-Allow-Origin': serverAddress,
+            },
+        })
+        let json = await response.json()
+        return json
+    }
+
+    async function getTopicData() {
+        const response = await fetch(serverAddress + '/api/user/get_user_topic_following/' + userID, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Access-Control-Allow-Origin': serverAddress,
+            },
+        })
+        let json = await response.json()
         return json
     }
 
@@ -93,12 +139,13 @@ export default function ProfilePage ({route, navigation}) {
                         </Text>
                     </View>
                     <View style={{flex: 10}}>
-                        <View style={{flex: 1, backgroundColor: 'dimgrey'}}/>
-                        <ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>
-                            <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
-                            <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
-                            <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
-                        </ScrollView>
+                        <View style={{flex:1, backgroundColor: 'dimgrey'}}/>
+                            <FlatList
+                                data={topicsData}
+                                renderItem={renderTopic}
+                                keyExtractor={item => item.content}
+                                showsVerticalScrollIndicator={false}
+                            />
                         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                     </View>
                 </View>
@@ -108,10 +155,6 @@ export default function ProfilePage ({route, navigation}) {
                 <View style={{flex: 7, backgroundColor: '737373'}}>
                     <Text style={styles.header}>{username}'s Posts</Text>
                 </View>
-                {/*<ScrollView style={{flex: 93, flexBasis: 100}} showsVerticalScrollIndicator={false}>
-            <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
-            <Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/><Post moves={true}/>
-          </ScrollView>*/}
                 <View style={{flexBasis: 1, flex: 100}}>
                     <FlatList data={userlineData} renderItem={renderPost} keyExtractor={item => item.postId}
                               extraData={isLoggedIn} style={{flexGrow: 0}} showsVerticalScrollIndicator={false}/>
@@ -125,16 +168,17 @@ export default function ProfilePage ({route, navigation}) {
                     <View style={{flex: 1}}/>
                     <View style={{flex: 1}}>
                         <Text style={styles.header}>
-                            {username}'s Followed Topics
+                            {username}'s Followed Users
                         </Text>
                     </View>
                     <View style={{flex: 10}}>
                         <View style={{flex: 1, backgroundColor: 'dimgrey'}}/>
-                        <ScrollView style={{flex: 100, flexBasis: 100}} showsVerticalScrollIndicator={false}>
-                            <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
-                            <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
-                            <Topic/><Topic/><Topic/><Topic/><Topic/><Topic/>
-                        </ScrollView>
+                            <FlatList
+                                data={followsData}
+                                renderItem={renderUser}
+                                keyExtractor={item => item.username}
+                                showsVerticalScrollIndicator={false}
+                            />
                         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                     </View>
                 </View>
