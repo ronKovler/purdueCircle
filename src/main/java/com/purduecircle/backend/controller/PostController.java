@@ -46,10 +46,13 @@ public class PostController {
         HttpHeaders responseHeaders = new HttpHeaders();
         //DON'T TOUCH ABOVE
         System.out.println("\t\t\t CONTENT: \"" + postDTO.getContent() + "\"");
-        System.out.println("\t\t\t USERID: " + postDTO.getUserId());
-        User user = userRepository.getByUserID(postDTO.getUserId());
+        System.out.println("\t\t\t USERID: " + postDTO.getUserID());
+        User user = userRepository.getByUserID(postDTO.getUserID());
         String topicName = postDTO.getTopicName().toLowerCase();
-        Topic topic = topicRepository.findByTopicName(postDTO.getTopicName());
+        if (topicName.compareTo("") == 0) {
+            topicName = "general";
+        }
+        Topic topic = topicRepository.findByTopicName(topicName);
 
         // If topic doesn't exist, create it
         if (topic == null) {

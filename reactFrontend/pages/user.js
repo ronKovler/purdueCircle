@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class UserAuth {
 	constructor() {
-		this.userId = -1;
+		this.userID = -1;
 		this.username = null;
 	}
 
@@ -17,10 +17,10 @@ class UserAuth {
 					'Access-Control-Allow-Origin': serverAddress,
 				},
 				body: JSON.stringify({
-					'userId': key
+					'userID': key
 				})
 			})
-			this.userId = key;
+			this.userID = key;
 			return Promise.resolve(await response.json())
 		}
 		return Promise.reject()
@@ -40,13 +40,13 @@ class UserAuth {
 		try {
 			await AsyncStorage.setItem('user', userID)
 			this.isLoggedIn = true;
-			this.userId = userID;
+			this.userID = userID;
 		} catch (error) {
 			console.error(error)
 		}
 	}
 
-	async getUserId() {
+	async getuserID() {
 		let no = await AsyncStorage.getItem('user')
 		return JSON.parse(no)
 	}

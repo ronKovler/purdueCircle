@@ -25,7 +25,7 @@ export default function EditProfileScreen({navigation}) {
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'userId': User.userId,
+                    'userID': User.userID,
                     'password': password,
                     'firstName': firstName,
                     'lastName': lastName,
@@ -41,7 +41,7 @@ export default function EditProfileScreen({navigation}) {
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'userId': User.userId,
+                    'userID': User.userID,
                     'password': password,
                     'firstName': firstName,
                     'lastName': lastName,
@@ -56,7 +56,7 @@ export default function EditProfileScreen({navigation}) {
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'userId': User.userId,
+                    'userID': User.userID,
                     'password': password,
                     'firstName': firstName,
                     'lastName': lastName,
@@ -71,7 +71,7 @@ export default function EditProfileScreen({navigation}) {
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'userId': User.userId,
+                    'userID': User.userID,
                     'password': password,
                     'firstName': firstName,
                     'lastName': lastName,

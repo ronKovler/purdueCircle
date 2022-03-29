@@ -25,7 +25,7 @@ export default function PostCreation({navigation}) {
                 },
                 body: JSON.stringify({
                     'content': inputtedText,
-                    'userId': User.userId,
+                    'userID': User.userID,
                     'topicName': topic,
                     'hyperLink': link,
                     'image': image,
@@ -35,7 +35,7 @@ export default function PostCreation({navigation}) {
             const postID = await response.json();
             console.log(postID)
 
-            if (User.userId < 0) console.log("Failed to Create Post!");
+            if (User.userID < 0) console.log("Failed to Create Post!");
             else navigation.navigate('Home');
 
         } catch (error) {

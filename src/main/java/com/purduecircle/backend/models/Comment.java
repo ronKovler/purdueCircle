@@ -23,6 +23,10 @@ public class Comment {
     @Column(name="username")
     private String username;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="userID")
+    private User user;
+
     /* Text, picture, or URL data in content */
     @Column(name="content", length=255)
     private String content;

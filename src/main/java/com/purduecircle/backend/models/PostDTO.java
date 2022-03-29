@@ -2,9 +2,9 @@ package com.purduecircle.backend.models;
 
 public class PostDTO {
     private String content;
-    private int userId;
+    private int userID;
     private String topicName;
-    private int postId;
+    private int postID;
     private boolean anonymous;
     private String imagePath;
     private String link;
@@ -29,12 +29,12 @@ public class PostDTO {
         this.content = content;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getTopicName() {
@@ -45,12 +45,12 @@ public class PostDTO {
         this.topicName = topicName;
     }
 
-    public int getPostId() {
-        return postId;
+    public int getPostID() {
+        return postID;
     }
 
-    public void setPostId(int postId) {
-        this.postId = postId;
+    public void setPostID(int postID) {
+        this.postID = postID;
     }
 
     public String getLink() {
@@ -77,9 +77,9 @@ public class PostDTO {
         this.anonymous = anonymous;
     }
 
-    public PostDTO(String content, int userId, String topicName, String email) {
+    public PostDTO(String content, int userID, String topicName, String email) {
         this.content = content;
-        this.userId = userId;
+        this.userID = userID;
         this.topicName = topicName;
         this.email = email;
 
@@ -87,23 +87,23 @@ public class PostDTO {
 
     public PostDTO(){}
 
-    public PostDTO(String content, int userId, String topicName) {
+    public PostDTO(String content, int userID, String topicName) {
         this.content = content;
-        this.userId = userId;
+        this.userID = userID;
         this.topicName = topicName;
     }
 
-    public PostDTO(String content, int userId, String topicName, String email, boolean anonymous) {
+    public PostDTO(String content, int userID, String topicName, String email, boolean anonymous) {
         this.content = content;
-        this.userId = userId;
+        this.userID = userID;
         this.topicName = topicName;
         this.email = email;
         this.anonymous = anonymous;
     }
 
-    public PostDTO(String content, int userId, String topicName, String email, boolean anonymous, String imagePath, String link) {
+    public PostDTO(String content, int userID, String topicName, String email, boolean anonymous, String imagePath, String link) {
         this.content = content;
-        this.userId = userId;
+        this.userID = userID;
         this.topicName = topicName;
         this.email = email;
         this.anonymous = anonymous;
@@ -121,16 +121,16 @@ public class PostDTO {
 
     public PostDTO(Post post) {
         this.content = post.getContent();
-        this.userId = post.getUser().getUserID();
+        this.userID = post.getUser().getUserID();
         this.username = post.getUser().getUsername();
         System.out.println(post.getUser().getUsername());
         this.topicName = post.getTopic().getTopicName();
-        this.postId = post.getPostID();
+        this.postID = post.getPostID();
         this.anonymous = post.isAnonymous();
 
     }
 
-    public PostDTO(int postId) {
-        this.postId = postId;
+    public PostDTO(int postID) {
+        this.postID = postID;
     }
 }

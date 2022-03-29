@@ -106,7 +106,7 @@ export default function Post(props) {
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'userID': await User.getUserId(),
+                    'userID': await User.getuserID(),
                     'postID': postID
                 }),
             }).then(() => {
@@ -135,7 +135,7 @@ export default function Post(props) {
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    'userID': User.getUserId(),
+                    'userID': User.getuserID(),
                     'topic_name': topic,
                 }),
             }).then(() => setFollowingTopic(!followingTopic))
@@ -169,7 +169,7 @@ export default function Post(props) {
                                     </Pressable> :
                                     <Text style={postStyles.username}>{user}</Text>
                                 }
-                                {(User.isLoggedIn && User.userId !== userID && !anonymous) ?
+                                {(User.isLoggedIn && User.userID !== userID && !anonymous) ?
                                     <Pressable
                                         onPress={() => toggleFollowUser()}>
                                         {!followingUser ?

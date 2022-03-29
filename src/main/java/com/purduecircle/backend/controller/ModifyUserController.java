@@ -31,7 +31,7 @@ public class ModifyUserController {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         if (argUser.getFirstName().equals("")) {
-            return ResponseEntity.ok().headers(responseHeaders).body(1);
+            return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
         User user = userRepository.findByEmailEquals(argUser.getEmail());
         user.setFirstName(argUser.getFirstName());
@@ -45,7 +45,7 @@ public class ModifyUserController {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         if (argUser.getLastName().equals("")) {
-            return ResponseEntity.ok().headers(responseHeaders).body(1);
+            return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
         User user = userRepository.findByEmailEquals(argUser.getEmail());
         user.setLastName(argUser.getLastName());
@@ -78,7 +78,7 @@ public class ModifyUserController {
     public ResponseEntity<Integer> createAccount(@RequestBody User argUser) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         if (argUser.getPassword().equals("")) {
-            return ResponseEntity.ok().headers(responseHeaders).body(1);
+            return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
         User user = userRepository.findByEmailEquals(argUser.getEmail());
         user.setPassword(argUser.getPassword());

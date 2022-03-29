@@ -57,7 +57,7 @@ export default function TopicPage({navigation, route}) {
     const renderPost = ({item}) => {
         console.log(item)
         return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
-                     userID={item.userId} anonymous={item.anonymous}/>
+                     userID={item.userID} anonymous={item.anonymous}/>
     };
 
     return (

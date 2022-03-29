@@ -120,9 +120,10 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
-    @RequestMapping(value="follow_user", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> followUser(@RequestBody User argUser, User argUserToFollow) throws URISyntaxException {
+    @RequestMapping(value="follow_user/{userID}/{userToFollow}", method = RequestMethod.GET,
+             produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> followUser(@PathVariable("userID") int argUserID,
+                                              @PathVariable("userToFollow") int argUserToFollowID) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         User userThatsFollowing = userRepository.findByUserID(argUser.getUserID());
         User userToFollow = userRepository.findByUserID(argUserToFollow.getUserID());
@@ -192,6 +193,8 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(topPostsDTO);
     }
 
+
+
     @RequestMapping(value="user_timeline", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostDTO>> showUserTimeline(@RequestBody User user) {
@@ -226,7 +229,7 @@ public class UserController {
     // 0 = search for username, 1 = search for topic
     @RequestMapping(value="search/{type}/{search}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<String>> getSearchResults(@PathVariable("type") int type, @PathVariable("search") String search) {
+    public ResponseEntity<List<SearchDTO>> getSearchResults(@PathVariable("type") int type, @PathVariable("search") String search) {
 
         List<String> results = new ArrayList<>();
 
@@ -245,8 +248,11 @@ public class UserController {
                 results.add(topic.getTopicName());
             }
         }
-
-        return ResponseEntity.ok().headers(new HttpHeaders()).body(results);
+        List<SearchDTO> searchResults = new ArrayList<>();
+        for (String result : results) {
+            searchResults.add(new SearchDTO(result));
+        }
+        return ResponseEntity.ok().headers(new HttpHeaders()).body(searchResults);
     }
     // all the users posts, chronologically
     @RequestMapping(value="get_userline/{userID}", method = RequestMethod.GET
@@ -290,8 +296,8 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> getUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        System.out.println("\t\t\tUSER ID RECIEVED: " + userDTO.getUserId());
-        User user = userRepository.getByUserID(userDTO.getUserId());
+        System.out.println("\t\t\tUSER ID RECIEVED: " + userDTO.getUserID());
+        User user = userRepository.getByUserID(userDTO.getUserID());
 
         System.out.println("GET USER REQUEST FOUND: " + user.getUsername());
         return ResponseEntity.ok().headers(responseHeaders).body(new UserDTO(user));
