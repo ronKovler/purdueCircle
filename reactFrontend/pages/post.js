@@ -27,7 +27,7 @@ export default function Post(props) {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': serverAddress,
                 },
 
             }).then(response => response.json()).then(
@@ -46,7 +46,7 @@ export default function Post(props) {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': serverAddress,
                 }//,
                 //body: {
                     //'postID': postID,
@@ -106,7 +106,7 @@ export default function Post(props) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': serverAddress,
                 },
                 body: JSON.stringify({
                     'userID': await User.getuserID(),
@@ -136,7 +136,7 @@ export default function Post(props) {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': serverAddress,
                 },
             }).then(() => setFollowingTopic(!followingTopic))
         } catch (error) {
@@ -207,7 +207,7 @@ export default function Post(props) {
                     }
                 </View>
                 {link !== null ?
-                    <Text style={{color: 'blue'}} onPress={() => Linking.openURL(link)}>{link}</Text>
+                    <Text style={{color: 'blue'}} onPress={() => window.open(link, '_blank')}>{link}</Text>
                     : null
                 }
                 <View style={{flexBasis: 1, padding: 5}}>
