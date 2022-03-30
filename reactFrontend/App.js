@@ -24,7 +24,8 @@ const linkConfig = {
         Login: 'login',
         'Create Account': 'create_account',
         'Create Post': 'create_post',
-        'Profile Page': '/user/:id'
+        'Profile Page': '/user/:id',
+        'Edit Profile': '/user/edit_profile'
     }
 }
 

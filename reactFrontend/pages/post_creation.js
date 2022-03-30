@@ -51,14 +51,15 @@ export default function PostCreation({navigation}) {
                 const response = await fetch(image);
                 const blob = await response.blob();
                 formData.append("file", blob)
-                imagePath = JSON.parse(await fetch(serverAddress + '/api/post/upload_image', {
+                let ret = await fetch(serverAddress + '/api/post/upload_image', {
                     method: "POST",
                     headers: {
-                        // 'Content-Type': '',
                         'Access-Control-Allow-Origin': serverAddress,
                     },
                     body: formData
-                }))
+                })
+                imagePath = await ret.json()
+                imagePath = serverAddress + '/images/'+ imagePath.content
             }
             const response = await fetch(serverAddress + "/api/post/create_post", {
                 method: "POST",

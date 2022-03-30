@@ -82,7 +82,7 @@ export default function Post(props) {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': serverAddress,
                 },
             }).then(() => setFollowingUser(!followingUser), () => console.log("Promise unfulfilled"))
         } catch (error) {
@@ -201,12 +201,12 @@ export default function Post(props) {
                     {image !== null ?
                         <View style={{flex: 1}}>
                             <Image source={{uri: image}}
-                                style={postStyles.icon}/>
+                                style={{height: 150, width: 150}}/>
                         </View>
                         : null
                     }
                 </View>
-                {link !== null ?
+                {link !== 'Link...' ?
                     <Text style={{color: 'blue'}} onPress={() => window.open(link, '_blank')}>{link}</Text>
                     : null
                 }
