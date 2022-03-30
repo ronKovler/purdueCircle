@@ -20,9 +20,11 @@ export default function HomeScreen({navigation}) {
     }
 
     useEffect(async () => {
-        const data = await getTimeline();
-        await checkLoggedIn();
-        setTimelineData(data);
+        if(isFocused === true) {
+            const data = await getTimeline();
+            await checkLoggedIn();
+            setTimelineData(data);
+        }
     }, [isFocused])
 
     const Login = async () => {
@@ -31,14 +33,28 @@ export default function HomeScreen({navigation}) {
     }
 
     async function getTimeline() {
-        const response = await fetch(serverAddress + '/api/user/hot_timeline', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json; charset=utf-8',
-                'Access-Control-Allow-Origin': '*',
-            },
-        })
-        let json = await response.json()
+        let json, response;
+        if(User.isLoggedIn){
+            response = await fetch(serverAddress + '/api/user/get_user_timeline/' + User.userID, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': serverAddress,
+                }
+            })
+            json = await response.json()
+        }
+        // if the user doesn't receive a timeline, get the hot timeline
+        if(json === undefined || json.length === 0){
+            response = await fetch(serverAddress + '/api/user/hot_timeline', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': serverAddress,
+                },
+            })
+            json = await response.json()
+        }
         setLoading(false)
         return json
     }
@@ -62,7 +78,7 @@ export default function HomeScreen({navigation}) {
 
     return (
         <View style={styled.container}>
-            {!loading ?
+            {!loading && isFocused ?
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                     <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
@@ -90,7 +106,7 @@ export default function HomeScreen({navigation}) {
                     </View>
                 </View> :
                 <Image style={[styles.image, {alignSelf: 'center'}]} source={require('../assets/choo.png')}/>}
-            {!loading ?
+            {!loading && isFocused ?
                 <View style={{
                     flex: 10,
                     flexDirection: 'row',
@@ -135,7 +151,7 @@ export default function HomeScreen({navigation}) {
                     <View style={{flex: 5, flexDirection: 'column'}}>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
                         <FlatList data={timelineData} renderItem={renderPost} keyExtractor={item => item.postID}
-                                  extraData={isLoggedIn} showsVerticalScrollIndicator={false}/>
+                                  extraData={timelineData} showsVerticalScrollIndicator={false}/>
                         <View style={{flex: 2, backgroundColor: '737373'}}/>
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
