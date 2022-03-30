@@ -1,10 +1,9 @@
-import {Text, TextInput, View, Button, Image, StyleSheet, Pressable, ScrollView, FlatList} from 'react-native';
+import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react'
 import {Choo, HeaderLogo, styles} from './stylesheet';
 import Post from "./post";
-import Topic from "./topic";
 import User from "./user";
-import {useIsFocused} from "@react-navigation/native";
+import {useIsFocused, useLinkTo} from "@react-navigation/native";
 
 export default function ProfilePage ({route, navigation}) {
     const LogOut = async () => {
@@ -13,27 +12,27 @@ export default function ProfilePage ({route, navigation}) {
     }
 
     const [userlineData, setUserlineData] = useState(null);
-    const userID = route.params.id;
-    const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
+    const [userID, setUserID] = useState(route.params.id);
     const [isLoading, setIsLoading] = useState(true);
     const [username, setUsername] = useState("");
     const [followsData, setFollowsData] = useState(null)
     const [topicsData, setTopicsData] = useState(null)
     const isFocused = useIsFocused()
+    const linkTo = useLinkTo();
 
     useEffect(async () => {
         const data = await getUserline();
         const followsData = await getFollowsData()
         const topicData = await getTopicData()
-        if (userID !== User.userID) {
+        if (userID !== User.userID.toString()) {
             await fetch(serverAddress + '/api/user/get_user/' + userID, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': serverAddress,
                 }
-            }).then((items) => {
-                 setUsername(items.username);
+            }).then(items => items.json()).then( items => {
+                setUsername(items.username);
             })
         } else {
             setUsername(User.username);
@@ -43,7 +42,7 @@ export default function ProfilePage ({route, navigation}) {
         setFollowsData(followsData)
         setTopicsData(topicData)
         setIsLoading(false);
-    }, [isFocused])
+    }, [isFocused, userID])
 
     const renderPost = ({item}) => {
         return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
@@ -60,7 +59,12 @@ export default function ProfilePage ({route, navigation}) {
 
     const renderUser = ({item}) => {
         return (
-            <Pressable onPress={() => navigation.navigate("Profile Page", {id: item.userID})}>
+            // <Pressable onPress={() => navigation.navigate("Profile Page", {id: item.userID})}>
+            <Pressable onPress={() => {
+                setUsername(item.username)
+                setUserID(item.userID)
+                linkTo('/user/' + item.userID)
+            }}>
                 <Text style={styles.button}>{item.username}</Text>
             </Pressable>
         )
@@ -74,9 +78,7 @@ export default function ProfilePage ({route, navigation}) {
                 'Access-Control-Allow-Origin': serverAddress,
             },
         })
-        let json = await response.json()
-        setIsLoading(false)
-        return json
+        return await response.json()
     }
 
     async function getFollowsData() {
@@ -87,8 +89,7 @@ export default function ProfilePage ({route, navigation}) {
                 'Access-Control-Allow-Origin': serverAddress,
             },
         })
-        let json = await response.json()
-        return json
+        return await response.json()
     }
 
     async function getTopicData() {
@@ -99,8 +100,7 @@ export default function ProfilePage ({route, navigation}) {
                 'Access-Control-Allow-Origin': serverAddress,
             },
         })
-        let json = await response.json()
-        return json
+        return await response.json()
     }
 
   return (
@@ -120,9 +120,10 @@ export default function ProfilePage ({route, navigation}) {
                     </Pressable>
                 </View>
                 <View style={{flex: 1}}>
+                    { userID === User.userID ?
                     <Pressable onPress={() => navigation.navigate('Edit Profile')}>
                         <Text style={styles.button}>Edit Profile</Text>
-                    </Pressable>
+                    </Pressable> : null}
                 </View>
             </View>
             <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
@@ -147,6 +148,7 @@ export default function ProfilePage ({route, navigation}) {
                                 renderItem={renderTopic}
                                 keyExtractor={item => item.content}
                                 showsVerticalScrollIndicator={false}
+                                extraData={userID}
                             />
                         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                     </View>
@@ -159,7 +161,7 @@ export default function ProfilePage ({route, navigation}) {
                 </View>
                 <View style={{flexBasis: 1, flex: 100}}>
                     <FlatList data={userlineData} renderItem={renderPost} keyExtractor={item => item.postId}
-                              extraData={isLoggedIn} style={{flexGrow: 0}} showsVerticalScrollIndicator={false}/>
+                              extraData={userID} style={{flexGrow: 0}} showsVerticalScrollIndicator={false}/>
                 </View>
                 <View style={{flex: 2, backgroundColor: '737373'}}/>
             </View>
@@ -180,6 +182,7 @@ export default function ProfilePage ({route, navigation}) {
                                 renderItem={renderUser}
                                 keyExtractor={item => item.username}
                                 showsVerticalScrollIndicator={false}
+                                extraData={userID}
                             />
                         <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                     </View>

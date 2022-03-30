@@ -1,9 +1,9 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Pressable, FlatList, Image} from 'react-native';
 import {styles, HeaderLogo, Choo, Logo} from './stylesheet';
 import Post from "./post";
 import User from "./user";
-import {useIsFocused} from "@react-navigation/native";
+import {useIsFocused, useLinkTo} from "@react-navigation/native";
 
 export default function TopicPage({route, navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
@@ -11,6 +11,7 @@ export default function TopicPage({route, navigation}) {
     const [timelineData, setTimelineData] = useState(null)
     const isFocused = useIsFocused()
     const [topic, setTopic] = useState(route.params)
+    const linkTo = useLinkTo()
 
     console.log("Topic: " + route.params)
     //TODO: Setup timer to get new posts
@@ -82,7 +83,7 @@ export default function TopicPage({route, navigation}) {
                                     style={styles.button}>Register</Text></Pressable>
                             </View> :
                             <View style={styles.buttonContainer}>
-                                <Pressable onPress={() => navigation.navigate('Profile Page')}><Text
+                                <Pressable onPress={() => linkTo('/user/' + User.userID)}><Text
                                     style={styles.button}>View Profile</Text></Pressable>
                             </View>}
                     </View>
