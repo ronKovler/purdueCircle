@@ -18,7 +18,7 @@ export default function Post(props) {
     const [userID, setUserID] = useState(props.userID)
     const navigation = useNavigation();
     const [link, setLink] = useState(props.link);
-    const [image, setImage] = useState(props.image);
+    const [image, setImage] = useState(props.imagePath);
 
     async function getPostInfo() {
         try {
@@ -200,7 +200,7 @@ export default function Post(props) {
                     </View>
                     {image !== null ?
                         <View style={{flex: 1}}>
-                            <Image source={image}
+                            <Image source={{uri: image}}
                                 style={postStyles.icon}/>
                         </View>
                         : null
