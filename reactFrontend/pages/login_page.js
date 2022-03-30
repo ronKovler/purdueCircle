@@ -108,12 +108,22 @@ return (
         <Text style={styles.header}>Login</Text>
         <TextInput style={styles.accountInputBox}
                    placeholder='Email'
-                   onChangeText={email => setEmail(email)}/>
+                   onChangeText={email => setEmail(email)}
+                   onSubmitEditing={(event)=>{
+                       if(event.nativeEvent.key === 'Enter')
+                           validateEmail()
+                   }}
+        />
         {emailError.length > 0 && <Text style={{color: 'red'}}>{emailError}</Text>}
         <TextInput style={styles.accountInputBox}
                    placeholder='Password'
                    secureTextEntry={true}
-                   onChangeText={password => setPassword(password)}/>
+                   onChangeText={password => setPassword(password)}
+                   onSubmitEditing={(event)=>{
+                       if(event.nativeEvent.key === 'Enter')
+                           validateEmail()
+                   }}
+        />
         {(!correct ? <Text style={{color: 'red'}}>Incorrect Password. Try again</Text> : null)}
         <View style={[styles.buttonContainer, {alignSelf: 'center'}]}>
           <Pressable onPress={() => validateEmail()}><Text style={[styles.button, {minWidth: 90}]}>Login</Text></Pressable>

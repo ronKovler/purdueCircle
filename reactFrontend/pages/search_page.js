@@ -75,9 +75,13 @@ export default function SearchPage({navigation}) {
                 <TextInput style={styles.accountInputBox}
                     placeholder='Search...'
                     onChangeText={search => setSearch(search)}
+                           onSubmitEditing={(event)=>{
+                               if(event.nativeEvent.key === 'Enter')
+                                   sendSearch().then()
+                           }}
                 />
                 <Text style={{textAlign: 'center', color: '#ffc000', fontWeight: 'bold', fontSize: 18, paddingTop: 17,padding: 10}}>
-                    Search by: 
+                    Search by:
                 </Text>
                 <Picker
                     selectedValue={selectedValue}
@@ -91,7 +95,7 @@ export default function SearchPage({navigation}) {
                 </Pressable>
             </View>
             {!queried && <View style={{flex: 15}}/>}
-            {queried && 
+            {queried &&
                 <View style={{flex: 15}}>
                     <FlatList
                         data={searchData}

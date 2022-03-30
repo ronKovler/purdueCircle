@@ -31,7 +31,8 @@ export default function CreateAccountScreen({navigation}) {
         password: password
       })
     })
-    await User.login(ID, username)
+    ID = ID.content
+    await User.login(ID)
   }
 
   const validateSubmission = () => {
