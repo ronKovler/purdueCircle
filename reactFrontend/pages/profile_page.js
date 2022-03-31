@@ -48,8 +48,8 @@ export default function ProfilePage({route, navigation}) {
     }, [isFocused, userID])
 
     const renderPost = ({item}) => {
-        return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
-                     userID={item.userID} imagePath={item.imagePath}/>
+            return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
+                         userID={item.userID} imagePath={item.imagePath}/>
     };
 
     const renderTopic = ({item}) => {
@@ -75,7 +75,7 @@ export default function ProfilePage({route, navigation}) {
     };
 
     async function getUserline() {
-        const response = await fetch(serverAddress + '/api/user/get_userline/' + userID, {
+        const response = await fetch(serverAddress + '/api/user/get_userline/' + userID + '/' + User.userID, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
