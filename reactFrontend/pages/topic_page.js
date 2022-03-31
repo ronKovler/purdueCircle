@@ -23,9 +23,15 @@ export default function TopicPage({route, navigation}) {
     }
 
     useEffect(async () => {
-        const data = await getTimeline();
-        await checkLoggedIn();
-        setTimelineData(data);
+        if(isFocused) {
+            setTopic(route.params)
+            const data = await getTimeline();
+            await checkLoggedIn();
+            setTimelineData(data);
+        } else{
+            setTimelineData("");
+            setTopic('')
+        }
     }, [isFocused])
 
     const Login = async () => {

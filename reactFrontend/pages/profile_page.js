@@ -21,6 +21,9 @@ export default function ProfilePage({route, navigation}) {
     const linkTo = useLinkTo();
 
     useEffect(async () => {
+        setIsLoading(true)
+        setUserlineData('');
+        setUserID(route.params.id);
         if (isFocused) {
             const data = await getUserline();
             const followsData = await getFollowsData()
@@ -40,9 +43,7 @@ export default function ProfilePage({route, navigation}) {
             }
             setUserlineData(data);
             setFollowsData(followsData)
-            setTopicsData(topicData)
-        } else{
-            setUserlineData('')
+            setTopicsData(topicData);
         }
         setIsLoading(false);
     }, [isFocused, userID])
