@@ -1,4 +1,4 @@
-import {Text, TextInput, View, Alert, Pressable} from 'react-native';
+import {Text, TextInput, View, Pressable} from 'react-native';
 import React, {useState} from 'react'
 import {styles, Logo} from './stylesheet';
 import User from "./user";
@@ -31,7 +31,12 @@ export default function CreateAccountScreen({navigation}) {
         password: password
       })
     })
-    ID = ID.content
+    ID = await ID.json()
+    setFirstName('');
+    setLastName('');
+    setUsername('')
+    setEmail('');
+    setPassword('');
     await User.login(ID)
   }
 
@@ -82,7 +87,7 @@ export default function CreateAccountScreen({navigation}) {
     }
 
     if (validFirstName && validLastName && validUsername && validEmail && validPassword) {
-      Register().then(navigation.navigate('Home'))
+      Register().then(() => navigation.navigate('Home'))
     }
   }
 

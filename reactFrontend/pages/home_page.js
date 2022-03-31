@@ -24,6 +24,8 @@ export default function HomeScreen({navigation}) {
             const data = await getTimeline();
             await checkLoggedIn();
             setTimelineData(data);
+        } else{
+            setTimelineData('');
         }
     }, [isFocused])
 
