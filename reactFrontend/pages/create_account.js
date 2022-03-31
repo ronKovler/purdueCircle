@@ -15,6 +15,7 @@ export default function CreateAccountScreen({navigation}) {
   const [usernameError, setUsernameError] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [error, setError] = useState(false)
 
   async function Register() {
     let ID = await fetch(serverAddress + '/api/user/create_account', {
@@ -32,6 +33,9 @@ export default function CreateAccountScreen({navigation}) {
       })
     })
     ID = await ID.json()
+    if(ID === -1){
+      return Promise.reject()
+    }
     setFirstName('');
     setLastName('');
     setUsername('')
@@ -87,7 +91,7 @@ export default function CreateAccountScreen({navigation}) {
     }
 
     if (validFirstName && validLastName && validUsername && validEmail && validPassword) {
-      Register().then(() => navigation.navigate('Home'))
+      Register().then(() => navigation.navigate('Home'), () => setError(true))
     }
   }
 
@@ -123,6 +127,7 @@ export default function CreateAccountScreen({navigation}) {
                    placeholder="Re-enter Password"
                    secureTextEntry={true} onChangeText={reenter => setReenter(reenter)}/>
         {password !== reenter ? <Text style={{color:'red'}}>Passwords do not match</Text> : null}
+        {error ? <Text style={{color:'red'}}>Username or Email already in use</Text>: null}
         <View style={[styles.buttonContainer, {alignSelf: 'center'}]}>
             <Pressable onPress={() => navigation.navigate("Login")}><Text style={[styles.button, {minWidth: 90}]}>Login</Text></Pressable>
             <Pressable onPress={() => validateSubmission()}><Text style={styles.button}>Register Account</Text></Pressable>
