@@ -85,7 +85,7 @@ export default function HomeScreen({navigation}) {
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                     <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
                         {isLoggedIn ?
-                            <View style={styles.buttonContainer}>
+                            <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
                                 <Pressable onPress={() => LogOut()}><Text
                                     style={styles.button}>Log Out</Text></Pressable>
                             </View> : <View style={{flex: 1}}/>}
@@ -93,13 +93,13 @@ export default function HomeScreen({navigation}) {
                             <HeaderLogo style={styles.headerIcon}/>
                         </View>
                         {!isLoggedIn ?
-                            <View style={styles.buttonContainer}>
+                            <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
                                 <Pressable onPress={() => Login()}><Text
                                     style={styles.button}>Login</Text></Pressable>
                                 <Pressable onPress={() => navigation.navigate('Create Account')}><Text
                                     style={styles.button}>Register</Text></Pressable>
                             </View> :
-                            <View style={styles.buttonContainer}>
+                            <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
                                 <Pressable onPress={() => navigation.navigate('Profile Page', {id: User.userID})}><Text
                                     style={styles.button}>View Profile</Text></Pressable>
                             </View>}

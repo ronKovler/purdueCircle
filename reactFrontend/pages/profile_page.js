@@ -114,7 +114,7 @@ export default function ProfilePage({route, navigation}) {
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                     <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
                         {User.isLoggedIn ?
-                            <View style={styles.buttonContainer}>
+                            <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
                                 <Pressable onPress={() => LogOut()}><Text
                                     style={styles.button}>Log Out</Text></Pressable>
                             </View> : <View style={{flex: 1}}/>}
@@ -123,7 +123,7 @@ export default function ProfilePage({route, navigation}) {
                                 <HeaderLogo style={styles.headerIcon}/>
                             </Pressable>
                         </View>
-                        <View style={{flex: 1}}>
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                             { // TODO: fix userID check
                                 userID === User.userID.toString() ?
                                 <Pressable onPress={() => navigation.navigate('Edit Profile')}>
