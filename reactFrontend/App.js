@@ -27,6 +27,7 @@ const linkConfig = {
         'Profile Page': 'user/:id',
         'Edit Profile': 'user/edit_profile',
         'Topic Page': 'topic',
+        'Search': 'search',
     }
 }
 
