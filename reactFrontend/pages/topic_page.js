@@ -67,12 +67,16 @@ export default function TopicPage({route, navigation}) {
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                     <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
                         {isLoggedIn ?
-                            <View style={styles.buttonContainer}>
+                            <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
                                 <Pressable onPress={() => LogOut()}><Text
                                     style={styles.button}>Log Out</Text></Pressable>
                             </View> : <View style={{flex: 1}}/>}
-                        <View style={{flexDirection: 'column', justifyContent: 'center', flex: 2}}>
-                            <HeaderLogo style={styles.headerIcon}/>
+                        <View style={{flexDirection: 'column', justifyContent: 'center', flex: 1}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
+                                <Pressable onPress={() => navigation.navigate('Home')}>
+                                    <HeaderLogo style={styles.headerIcon}/>
+                                </Pressable>
+                            </View>
                             <Text style={{alignItems: 'center', textAlign: 'center', fontSize: 16, fontWeight: 'bold',}}>{topic}</Text>
                         </View>
                         {!isLoggedIn ?
@@ -82,7 +86,7 @@ export default function TopicPage({route, navigation}) {
                                 <Pressable onPress={() => navigation.navigate('Create Account')}><Text
                                     style={styles.button}>Register</Text></Pressable>
                             </View> :
-                            <View style={styles.buttonContainer}>
+                            <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
                                 <Pressable onPress={() => linkTo('/user/' + User.userID)}><Text
                                     style={styles.button}>View Profile</Text></Pressable>
                             </View>}
@@ -135,9 +139,12 @@ export default function TopicPage({route, navigation}) {
                     </View>
                     <View style={{flex: 5, flexDirection: 'column'}}>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
-                        <FlatList data={timelineData} renderItem={renderPost} keyExtractor={item => item.postId}
-                                  extraData={isLoggedIn}/>
-                        <View style={{flex: 2, backgroundColor: '737373'}}/>
+                        <View style={{flexBasis: 1, flex: 100}}>
+                            <FlatList style={{flexGrow: 0}} data={timelineData}
+                                      renderItem={renderPost} keyExtractor={item => item.postId}
+                                      extraData={isLoggedIn} showsVerticalScrollIndicator={false}/>
+                        </View>
+                        <View style={{flex: 1, backgroundColor: '737373'}}/>
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                 </View>
