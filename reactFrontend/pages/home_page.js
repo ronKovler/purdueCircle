@@ -152,9 +152,11 @@ export default function HomeScreen({navigation}) {
                     </View>
                     <View style={{flex: 5, flexDirection: 'column'}}>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
-                        <FlatList data={timelineData} renderItem={renderPost} keyExtractor={item => item.postID}
-                                  extraData={timelineData} showsVerticalScrollIndicator={false}/>
-                        <View style={{flex: 2, backgroundColor: '737373'}}/>
+                        <View style={{flexBasis: 1, flex: 100}}>
+                            <FlatList style={{flexGrow: 0}} data={timelineData} renderItem={renderPost} keyExtractor={item => item.postID}
+                              extraData={timelineData} showsVerticalScrollIndicator={false}/>
+                        </View>
+                        <View style={{flex: 1, backgroundColor: '737373'}}/>
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                 </View>
