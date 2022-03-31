@@ -27,6 +27,7 @@ export default function PostCreation({navigation}) {
     const [imageModalVisible, setImageModalVisible] = useState(false)
     const [anonymous, setAnonymous] = useState(false)
     const isFocused = useIsFocused()
+    const [attemptedSubmit, setAttemptedSubmit] = useState(false)
 
     useEffect(() => {
         //do nothing
@@ -44,9 +45,13 @@ export default function PostCreation({navigation}) {
     }
 
     const SendPost = async () => {
+        if(inputtedText === '' || topic === '') {
+            setAttemptedSubmit(true)
+            return
+        }
         try {
             let imagePath;
-            if(image !== "Image..."){
+            if(image !== null){
                 let formData = new FormData();
                 const response = await fetch(image);
                 const blob = await response.blob();
@@ -168,7 +173,7 @@ export default function PostCreation({navigation}) {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <Pressable onPress={() => pickImage()}><Text>Pick Image</Text></Pressable>
-                            {image !== "Image..." ? <Image source={{uri : image}} style={{width: 200, height: 200}}/> : null}
+                            {image !== null ? <Image source={{uri : image}} style={{width: 200, height: 200}}/> : null}
                                 <Pressable
                                     style={styles.button}
                                     onPress={() => setImageModalVisible(!imageModalVisible)}>
@@ -214,6 +219,10 @@ export default function PostCreation({navigation}) {
                             onValueChange={setAnonymous}
                         />
                         <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}> Post as anonymous</Text>
+                    </View>
+                    <View>
+                        {attemptedSubmit && (inputtedText === '') ? <Text style={{color: '#ff0000', fontSize: 15}}>Text body cannot be empty</Text> : null}
+                        {attemptedSubmit && (topic === '') ? <Text style={{color: '#ff0000', fontSize: 15}}>Topic cannot be empty</Text> : null}
                     </View>
                     <Pressable onPress={() => SendPost()}><Text style={styles.button}>Create</Text></Pressable>
                 </View>
