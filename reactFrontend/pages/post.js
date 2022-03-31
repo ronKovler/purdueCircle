@@ -206,7 +206,7 @@ export default function Post(props) {
                         : null
                     }
                 </View>
-                {link !== 'Link...' ?
+                {link !== null ?
                     <Text style={{color: 'blue'}} onPress={() => window.open(link, '_blank')}>{link}</Text>
                     : null
                 }

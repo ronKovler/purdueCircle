@@ -108,7 +108,7 @@ export default function EditProfileScreen({navigation}) {
           <View style={{flex: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '737373'}}>
             <View style={{flex: 2, backgroundColor: 'dimgrey', justifyContent: 'center', alignItems: 'space-between'}}>
               <View style={{flex: 3}}>
-                <Image style={styles.image}  source={require('../assets/choo.png')}/>
+                <Choo/>
               </View>
               <View style={{flex: 6}}>
 

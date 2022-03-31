@@ -38,10 +38,11 @@ export default function ProfilePage({route, navigation}) {
             } else {
                 setUsername(User.username);
             }
-
             setUserlineData(data);
             setFollowsData(followsData)
             setTopicsData(topicData)
+        } else{
+            setUserlineData('')
         }
         setIsLoading(false);
     }, [isFocused, userID])
@@ -66,6 +67,7 @@ export default function ProfilePage({route, navigation}) {
                 setUsername(item.username)
                 setUserID(item.userID)
                 linkTo('/user/' + item.userID)
+                setUserlineData('')
             }}>
                 <Text style={styles.button}>{item.username}</Text>
             </Pressable>
@@ -123,7 +125,7 @@ export default function ProfilePage({route, navigation}) {
                         </View>
                         <View style={{flex: 1}}>
                             { // TODO: fix userID check
-                                userID === User.userID ?
+                                userID === User.userID.toString() ?
                                 <Pressable onPress={() => navigation.navigate('Edit Profile')}>
                                     <Text style={styles.button}>Edit Profile</Text>
                                 </Pressable> : null}
@@ -145,7 +147,7 @@ export default function ProfilePage({route, navigation}) {
                         alignItems: 'space-between'
                     }}>
                         <View style={{flex: 3}}>
-                            <Image style={styles.image} source={require('../assets/choo.png')}/>
+                            <Choo/>
                         </View>
                         <View style={{flex: 6}}>
                             <View style={{flex: 1}}/>

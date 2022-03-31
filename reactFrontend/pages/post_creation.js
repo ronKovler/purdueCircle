@@ -21,8 +21,8 @@ export default function PostCreation({navigation}) {
     const [inputtedText, setInputtedText] = useState('')
     const [topic, setTopic] = useState('')
     const [loading, setLoading] = useState(true)
-    const [link, setLink] = useState('Link...')
-    const [image, setImage] = useState('Image...')
+    const [link, setLink] = useState(null)
+    const [image, setImage] = useState(null)
     const [linkModalVisible, setLinkModalVisible] = useState(false)
     const [imageModalVisible, setImageModalVisible] = useState(false)
     const [anonymous, setAnonymous] = useState(false)
@@ -193,12 +193,12 @@ export default function PostCreation({navigation}) {
                     </View>
                     <View style={{flex: 1, flexDirection: 'row', paddingBottom: 20}}>
                         <View style={{flex: 1}}>
-                            {link !== 'Link...' && !linkModalVisible &&
+                            {link !== null && !linkModalVisible &&
                                 <Text style={styles.createPostText}>{link.length < 21 ? `${link}` : `${link.substring(0, 20)}...`}</Text>
                             }
                         </View>
                         <View style={{flex: 1}}>
-                            {image !== 'Image...' && !imageModalVisible &&
+                            {image !== null && !imageModalVisible &&
                                 <Text style={styles.createPostText}>Image Attached Successfully</Text>
                             }
                         </View>
