@@ -15,8 +15,11 @@ export default function ProfilePage({route, navigation}) {
     const [userID, setUserID] = useState(route.params.id);
     const [isLoading, setIsLoading] = useState(true);
     const [username, setUsername] = useState("");
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
     const [followsData, setFollowsData] = useState(null)
     const [topicsData, setTopicsData] = useState(null)
+    const [isPrivate, setPrivate] = useState(false)
     const isFocused = useIsFocused()
     const linkTo = useLinkTo();
 
@@ -36,10 +39,16 @@ export default function ProfilePage({route, navigation}) {
                         'Access-Control-Allow-Origin': serverAddress,
                     }
                 }).then(items => items.json()).then(items => {
-                    setUsername(items.username);
+                    setUsername(items.username)
+                    setFirstName(items.firstName)
+                    setLastName(items.lastName)
+                    setPrivate(items.isPrivate)
                 })
             } else {
-                setUsername(User.username);
+                setUsername(User.username)
+                setFirstName(User.firstName)
+                setLastName(User.lastName)
+                setPrivate(User.isPrivate)
             }
             setUserlineData(data);
             setFollowsData(followsData)
@@ -177,7 +186,8 @@ export default function ProfilePage({route, navigation}) {
                         <View style={{flex: 2, backgroundColor: '737373'}}/>
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
-                        <View style={{flex: 3}}>
+                        <View style={{flex: 3, alignItems: 'center'}}>
+                            {!isPrivate && <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>{firstName} {lastName}</Text>}
                         </View>
                         <View style={{flex: 6}}>
                             <View style={{flex: 1}}/>
