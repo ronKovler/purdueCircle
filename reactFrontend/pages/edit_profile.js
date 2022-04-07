@@ -4,10 +4,11 @@ import { styles, HeaderLogo, Choo, Logo } from './stylesheet';
 import User from "./user";
 
 export default function EditProfileScreen({navigation}) {
-    const [username, setUsername] = User.username;
-    const [firstName, setFirstName] = User.firstName;
-    const [lastName, setLastName] = User.lastName;
-    const [password, setPassword] = User.password;
+    const [username, setUsername] = useState(User.username);
+    const [firstName, setFirstName] = useState(User.firstName);
+    const [lastName, setLastName] = useState(User.lastName);
+    const [password, setPassword] = useState(User.password);
+    const [checkPassword, setCheckPassword] = useState(User.password)
     const [usernameError, setUsernameError] = useState("")
     const [privateName, setPrivateName] = useState(false)
 
@@ -15,10 +16,11 @@ export default function EditProfileScreen({navigation}) {
         await User.logout()
         navigation.navigate('Login');
     }
-    
+
     //helper functions
     const SendUpdates = async () => {
         try {
+            if(password.length > 32 || username.length > 24) return;
             const newPassword = await fetch (serverAddress + "/api/modify/modify_password", {
                 method: "POST",
                 headers: {
@@ -129,6 +131,7 @@ export default function EditProfileScreen({navigation}) {
                         style={styles.accountInputBox}
                         placeholder={User.username}
                         onChangeText={username => setUsername(username)}/>
+                    {username.length > 24 && <Text style={{color: 'red'}}>Username cannot be longer than 24 characters</Text>}
                     <TextInput
                         style={styles.accountInputBox}
                         placeholder={User.firstName}
@@ -140,7 +143,12 @@ export default function EditProfileScreen({navigation}) {
                     <TextInput
                         style={styles.accountInputBox}
                         placeholder={User.password}
+                        textContentType={"password"}
+                        secureTextEntry={true}
                         onChangeText={password => setPassword(password)}/>
+                    {password.length > 32 && <Text style={{color: 'red'}}>Password cannot be longer than 32 characters</Text>}
+                    <TextInput style={styles.accountInputBox} secureTextEntry={true} onChangeText={double => setCheckPassword(double)} placeholder={User.password}/>
+                    {password !== checkPassword && <Text style={{color: 'red'}}>Passwords do not match</Text>}
                     <View style={{flexDirection: "row"}}>
                         <CheckBox
                         value={privateName}
