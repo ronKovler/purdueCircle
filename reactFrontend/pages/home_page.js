@@ -1,7 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Pressable, FlatList, Image} from 'react-native';
 import {styles, HeaderLogo, Choo, Logo} from './stylesheet';
-import Post from "./post";
+import {renderPost} from "./post";
 import User from "./user";
 import {useIsFocused} from "@react-navigation/native";
 
@@ -69,15 +69,7 @@ export default function HomeScreen({navigation}) {
         Post.get
     }*/
 
-    const renderPost = ({item}) => {
-        let link = item.link
-        if(item.link !== null && !item.link.includes('https://') && !item.link.includes('http://')){
-            link = 'https://' + item.link;
-        }
-        return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
-                     userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath}
-                     reaction={item.reaction} topicFollowed={item.topicFollowed} userFollowed={item.userFollowed}/>
-    };
+
 
     return (
         <View style={styled.container}>
