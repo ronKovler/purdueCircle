@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Pressable, FlatList, Image} from 'react-native';
 import {styles, HeaderLogo, Choo, Logo} from './stylesheet';
-import Post from "./post";
+import {renderPost} from "./post";
 import User from "./user";
 import {useIsFocused, useLinkTo} from "@react-navigation/native";
 
@@ -59,12 +59,6 @@ export default function TopicPage({route, navigation}) {
     /*async function getPost(){
         Post.get
     }*/
-
-    const renderPost = ({item}) => {
-        console.log(item)
-        return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
-                     userID={item.userID} anonymous={item.anonymous} imagePath={item.imagePath}/>
-    };
 
     return (
         <View style={styled.container}>

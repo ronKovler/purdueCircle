@@ -1,7 +1,7 @@
 import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react'
 import {Choo, HeaderLogo, styles} from './stylesheet';
-import Post from "./post";
+import {renderPost} from "./post";
 import User from "./user";
 import {useIsFocused, useLinkTo} from "@react-navigation/native";
 
@@ -47,11 +47,6 @@ export default function ProfilePage({route, navigation}) {
         }
         setIsLoading(false);
     }, [isFocused, userID])
-
-    const renderPost = ({item}) => {
-            return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postId}
-                         userID={item.userID} imagePath={item.imagePath}/>
-    };
 
     const renderTopic = ({item}) => {
         return (
