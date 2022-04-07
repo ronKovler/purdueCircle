@@ -10,7 +10,8 @@ const renderPost = ({item}) => {
         link = 'https://' + item.link;
     }
     return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
-                 userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath} netReactions={item.reactions} reaction={item.reaction}/>
+                 userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath}
+                 netReactions={item.netReactions} reaction={item.reaction} userFollowed={item.userFollowed} topicFollowed={item.topicFollowed}/>
     // TODO: check item fields for reactions
 };
 
@@ -32,39 +33,6 @@ function Post(props) {
     const [netReactions, setNetReactions] = useState(200)
 
     //TODO: set liked/disliked props
-
-    async function getPostInfo() {
-        try {
-            console.log(postID)
-            await fetch(serverAddress + '/api/post/get_post/' + postID + '/' + User.userID, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': serverAddress,
-                },
-
-            }).then(response => response.json()).then(
-                response => {
-                    console.log(response)
-                    setUserID(response.userID)
-                    setUser(response.username)
-                    setTopic(response.topic)
-                    setContent(response.content)
-                    setAnonymous(response.anonymous)
-                    setLink(response.link)
-                    setImage(require('../assets/full_heart.svg'))
-                    setReaction(response.reaction)
-                    setUserFollowed(response.userFollowed)
-                    setTopicFollowed(response.topicFollowed)
-                }
-            )
-
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setIsLoading(false)
-        }
-    }
 
 
     //TODO: Force login if interacted while not logged in

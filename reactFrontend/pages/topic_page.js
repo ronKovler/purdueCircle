@@ -40,7 +40,7 @@ export default function TopicPage({route, navigation}) {
     }
 
     async function getTimeline() {
-        const response = await fetch(serverAddress + '/api/user/get_topic_page/' + topic, {
+        const response = await fetch(serverAddress + '/api/user/get_topic_page/' + topic + '/' + User.userID, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',

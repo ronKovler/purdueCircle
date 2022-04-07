@@ -48,7 +48,7 @@ export default function HomeScreen({navigation}) {
         }
         // if the user doesn't receive a timeline, get the hot timeline
         if(json === undefined || json.length === 0){
-            response = await fetch(serverAddress + '/api/user/hot_timeline', {
+            response = await fetch(serverAddress + '/api/user/hot_timeline' + '/' + User.userID, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
