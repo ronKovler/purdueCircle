@@ -71,7 +71,7 @@ function Post(props) {
             url += 'unlike_post'
         }
         try {
-            const newNum = await fetch(url, {
+            let newNum = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -81,12 +81,13 @@ function Post(props) {
                     'userID': await User.getuserID(),
                     'postID': postID
                 }),
-            }).then(() => {
-                let temp = 0
-                if (reaction === 0) temp = -1
-                setReaction(temp)
-                setNetReactions(newNum)
-            }, () => console.log("Promise unfulfilled"))
+            })
+            //TODO: catch invalid response
+            newNum = await newNum.json()
+            let temp = 0
+            if (reaction === 0) temp = -1
+            setReaction(temp)
+            setNetReactions(newNum)
         } catch (error) {
             console.error(error)
         }
@@ -104,7 +105,7 @@ function Post(props) {
             url += 'undislike_post'
         }
         try {
-            const newNum = await fetch(url, {
+            let newNum = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -114,12 +115,12 @@ function Post(props) {
                     'userID': await User.getuserID(),
                     'postID': postID
                 }),
-            }).then(() => {
-                let temp = 1
-                if (reaction === 1) temp = -1
-                setReaction(temp)
-                setNetReactions(newNum)
-            }, () => console.log("Promise unfulfilled"))
+            })
+            newNum = await newNum.json()
+            let temp = 1
+            if (reaction === 1) temp = -1
+            setReaction(temp)
+            setNetReactions(newNum)
         } catch (error) {
             console.error(error)
         }
@@ -232,7 +233,6 @@ function Post(props) {
                                     <Image source={require('../assets/thumbs-down-empty.svg')} style={postStyles.likeButton}/>}
                             </Pressable>
                             <View style={{flex: 16}}>
-
                             </View>
                         </View>
                         : null}
