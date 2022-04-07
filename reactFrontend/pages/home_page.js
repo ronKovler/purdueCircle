@@ -4,7 +4,6 @@ import {styles, HeaderLogo, Choo, Logo} from './stylesheet';
 import {renderPost} from "./post";
 import User from "./user";
 import {useIsFocused} from "@react-navigation/native";
-import {Header} from './components'
 
 export default function HomeScreen({navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn);
@@ -75,7 +74,32 @@ export default function HomeScreen({navigation}) {
     return (
         <View style={styled.container}>
             {!loading && isFocused ?
-                <Header navigation={navigation}/> :
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
+                    <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
+                        {isLoggedIn ?
+                            <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
+                                <Pressable onPress={() => LogOut()}><Text
+                                    style={styles.button}>Log Out</Text></Pressable>
+                            </View> : <View style={{flex: 1}}/>}
+                        <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
+                            <HeaderLogo style={styles.headerIcon}/>
+                        </View>
+                        {!isLoggedIn ?
+                            <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
+                                <Pressable onPress={() => Login()}><Text
+                                    style={styles.button}>Login</Text></Pressable>
+                                <Pressable onPress={() => navigation.navigate('Create Account')}><Text
+                                    style={styles.button}>Register</Text></Pressable>
+                            </View> :
+                            <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
+                                <Pressable onPress={() => navigation.navigate('Profile Page', {id: User.userID})}><Text
+                                    style={styles.button}>View Profile</Text></Pressable>
+                            </View>}
+                    </View>
+                    <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
+                    </View>
+                </View> :
                 <Image style={[styles.image, {alignSelf: 'center'}]} source={require('../assets/choo.png')}/>}
             {!loading && isFocused ?
                 <View style={{
