@@ -75,7 +75,8 @@ export default function HomeScreen({navigation}) {
             link = 'https://' + item.link;
         }
         return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
-                     userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath}/>
+                     userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath}
+                     reaction={item.reaction} topicFollowed={item.topicFollowed} userFollowed={item.userFollowed}/>
     };
 
     return (

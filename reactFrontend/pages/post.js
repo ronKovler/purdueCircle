@@ -10,9 +10,9 @@ export default function Post(props) {
     const [comments, setComments] = useState()
     const [content, setContent] = useState(props.content)
     const [isLoading, setIsLoading] = useState(true)
-    const [followingTopic, setFollowingTopic] = useState(false)
-    const [followingUser, setFollowingUser] = useState(false)
-    const [liked, setLiked] = useState(false)
+    const [topicFollowed, setTopicFollowed] = useState(props.topicFollowed)
+    const [userFollowed, setUserFollowed] = useState(props.userFollowed)
+    const [reaction, setReaction] = useState(props.reaction)
     const [anonymous, setAnonymous] = useState(props.anonymous)
     const postID = props.postID
     const [userID, setUserID] = useState(props.userID)
@@ -23,7 +23,7 @@ export default function Post(props) {
     async function getPostInfo() {
         try {
             console.log(postID)
-            await fetch(serverAddress + '/api/post/get_post/' + postID , {
+            await fetch(serverAddress + '/api/post/get_post/' + postID + '/' + User.userID, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -40,21 +40,9 @@ export default function Post(props) {
                     setAnonymous(response.anonymous)
                     setLink(response.link)
                     setImage(require('../assets/full_heart.svg'))
-                }
-            )
-            await fetch(serverAddress + 'api/post/is_liked/' + 1 + "/" + postID, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': serverAddress,
-                }//,
-                //body: {
-                    //'postID': postID,
-                    //'userID': 1
-                //}
-            }).then(response => response.json()).then(
-                response => {
-                    setLiked(response)
+                    setReaction(response.reaction)
+                    setUserFollowed(response.userFollowed)
+                    setTopicFollowed(response.topicFollowed)
                 }
             )
 
@@ -72,7 +60,7 @@ export default function Post(props) {
             return
         }
         let url = serverAddress + "/api/user/"
-        if (!followingUser) {
+        if (!userFollowed) {
             url += "follow_user/" + User.userID + "/" + userID
         } else {
             url += "unfollow_user/" + User.userID + "/" + userID
@@ -84,7 +72,7 @@ export default function Post(props) {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': serverAddress,
                 },
-            }).then(() => setFollowingUser(!followingUser), () => console.log("Promise unfulfilled"))
+            }).then(() => setUserFollowed(!userFollowed), () => console.log("Promise unfulfilled"))
         } catch (error) {
             console.error(error)
         }
@@ -96,7 +84,7 @@ export default function Post(props) {
             return
         }
         let url = serverAddress + '/api/user/'
-        if (!liked) {
+        if (reaction !== 0) {
             url += 'like_post'
         } else {
             url += 'unlike_post'
@@ -113,7 +101,37 @@ export default function Post(props) {
                     'postID': postID
                 }),
             }).then(() => {
-                setLiked(!liked)
+                setReaction(0)
+            }, () => console.log("Promise unfulfilled"))
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async function toggleDislike() {
+        if (!User.isLoggedIn) {
+            log.console("UHHHH")
+            return
+        }
+        let url = serverAddress + '/api/user/'
+        if (reaction !== 1) {
+            url += 'dislike_post'
+        } else {
+            url += 'undislike_post'
+        }
+        try {
+            await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': serverAddress,
+                },
+                body: JSON.stringify({
+                    'userID': await User.getuserID(),
+                    'postID': postID
+                }),
+            }).then(() => {
+                setReaction(1)
             }, () => console.log("Promise unfulfilled"))
         } catch (error) {
             console.error(error)
@@ -125,7 +143,7 @@ export default function Post(props) {
             return
         }
         let url = serverAddress + "/api/user/"
-        if (!followingTopic) { // add user to follow list if following
+        if (!topicFollowed) { // add user to follow list if following
             url += "follow_topic"
         } else {
             url += "unfollow_topic"
@@ -172,18 +190,17 @@ export default function Post(props) {
                                 {(User.isLoggedIn && User.userID !== userID && !anonymous) ?
                                     <Pressable
                                         onPress={() => toggleFollowUser()}>
-                                        {!followingUser ?
+                                        {!userFollowed ?
                                             <Text style={postStyles.followButton}>Follow</Text> :
                                             <Text style={postStyles.followButton}>Unfollow</Text>}
                                     </Pressable> : null}
-                            </View> : null
-                        }
+                            </View> : null}
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         {User.isLoggedIn ?
                             <Pressable style={{paddingRight: 10}}
                                        onPress={() => toggleFollowTopic()}>
-                                {!followingTopic ?
+                                {!topicFollowed ?
                                     <Text style={postStyles.followButton}>Follow</Text> :
                                     <Text style={postStyles.followButton}>Unfollow</Text>}
                             </Pressable> : null}
