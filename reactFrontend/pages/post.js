@@ -4,7 +4,17 @@ import User from "./user";
 import {useNavigation} from '@react-navigation/native';
 import {Link} from "@react-navigation/native";
 
-export default function Post(props) {
+const renderPost = ({item}) => {
+    let link = item.link
+    if(item.link !== null && !item.link.includes('https://') && !item.link.includes('http://')){
+        link = 'https://' + item.link;
+    }
+    return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
+                 userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath} netReactions={item.reactions} reaction={item.reaction}/>
+    // TODO: check item fields for reactions
+};
+
+function Post(props) {
     const [user, setUser] = useState(props.user)
     const [topic, setTopic] = useState(props.topic)
     const [comments, setComments] = useState()
@@ -12,18 +22,21 @@ export default function Post(props) {
     const [isLoading, setIsLoading] = useState(true)
     const [followingTopic, setFollowingTopic] = useState(false)
     const [followingUser, setFollowingUser] = useState(false)
-    const [liked, setLiked] = useState(false)
     const [anonymous, setAnonymous] = useState(props.anonymous)
     const postID = props.postID
     const [userID, setUserID] = useState(props.userID)
     const navigation = useNavigation();
     const [link, setLink] = useState(props.link);
     const [image, setImage] = useState(props.imagePath);
+    const [reaction, setReaction] = useState(props.reaction)
+    const [netReactions, setNetReactions] = useState(200)
+
+    //TODO: set liked/disliked props
 
     async function getPostInfo() {
         try {
             console.log(postID)
-            await fetch(serverAddress + '/api/post/get_post/' + postID , {
+            await fetch(serverAddress + '/api/post/get_post/' + postID, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -49,8 +62,8 @@ export default function Post(props) {
                     'Access-Control-Allow-Origin': serverAddress,
                 }//,
                 //body: {
-                    //'postID': postID,
-                    //'userID': 1
+                //'postID': postID,
+                //'userID': 1
                 //}
             }).then(response => response.json()).then(
                 response => {
@@ -162,13 +175,13 @@ export default function Post(props) {
                                     <Image style={postStyles.icon}
                                            source={{uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farchive.org%2Fdownload%2Ftwitter-default-pfp%2Fe.png&f=1&nofb=1'}}/>
                                 </Pressable>
-                                { anonymous ?
+                                {anonymous ?
                                     <Pressable style={{paddingLeft: 10}}
                                                onClick={() => console.log("printed?")}>
                                         <Text style={postStyles.username}>Anonymous</Text>
                                     </Pressable> :
                                     <Link style={postStyles.username} to={'/user/' + userID}>{user}</Link>
-                                    }
+                                }
                                 {(User.isLoggedIn && User.userID !== userID && !anonymous) ?
                                     <Pressable
                                         onPress={() => toggleFollowUser()}>
@@ -201,7 +214,7 @@ export default function Post(props) {
                     {image !== null ?
                         <View style={{flex: 1}}>
                             <Image source={{uri: image}}
-                                style={{height: 150, width: 150}}/>
+                                   style={{height: 150, width: 150}}/>
                         </View>
                         : null
                     }
@@ -212,12 +225,26 @@ export default function Post(props) {
                 }
                 <View style={{flexBasis: 1, padding: 5}}>
                     {User.isLoggedIn ?
-                        <Pressable onPress={() => toggleLike()}>
-                            {liked ?
-                                <Image source={require('../assets/full_heart.svg')}
-                                       style={[postStyles.likeButton, {tintColor: 'red'}]}/> :
-                                <Image source={require('../assets/heart.svg')} style={postStyles.likeButton}/>}
-                        </Pressable> : null}
+                        <View style={{flexDirection:"row"}}>
+                            <Pressable onPress={() => toggleLike()} style={{flex: 1}}>
+                                {reaction === 0 ?
+                                    <Image source={require('../assets/thumbs-up-full.svg')}
+                                           style={[postStyles.likeButton, {tintColor: 'red'}]}/> :
+                                    <Image source={require('../assets/thumbs-up-empty.svg')}
+                                           style={postStyles.likeButton}/>}
+                            </Pressable>
+                            <Text style={[postStyles.text, {paddingTop: 1}]}>{netReactions}</Text>
+                            <Pressable style={{flex: 1}}>
+                                {reaction === 1 ?
+                                    <Image source={require('../assets/thumbs-down-full.svg')} style={[{tintColor: 'blue'}]}/> :
+                                    <Image source={require('../assets/thumbs-down-empty.svg')} style={postStyles.likeButton}/>}
+                            </Pressable>
+                            <View style={{flex: 16}}>
+
+                            </View>
+                        </View>
+                        : null}
+
                 </View>
             </View>
         </View>
@@ -242,7 +269,7 @@ const postStyles = StyleSheet.create({
     text: {
         borderTopColor: '#737373',
         color: 'white',
-        flex: 2
+        flex: 1
     },
     box: {
         borderTopWidth: 4,
@@ -288,3 +315,5 @@ const postStyles = StyleSheet.create({
         marginLeft: 10,
     }
 })
+
+export {Post, renderPost}
