@@ -228,7 +228,7 @@ function Post(props) {
                             <Text style={[postStyles.text, {paddingTop: 1}]}>{netReactions}</Text>
                             <Pressable onPress={() => toggleDislike()} style={{flex: 1}}>
                                 {reaction === 1 ?
-                                    <Image source={require('../assets/thumbs-down-full.svg')} style={[{tintColor: 'blue'}]}/> :
+                                    <Image source={require('../assets/thumbs-down-full.svg')} style={[postStyles.likeButton, {tintColor: 'blue'}]}/> :
                                     <Image source={require('../assets/thumbs-down-empty.svg')} style={postStyles.likeButton}/>}
                             </Pressable>
                             <View style={{flex: 16}}>
