@@ -9,7 +9,7 @@ export default function EditProfileScreen({navigation}) {
     const [lastName, setLastName] = User.lastName;
     const [password, setPassword] = User.password;
     const [usernameError, setUsernameError] = useState("")
-    const [privateName, setPrivateName] = useState(false)
+    const [isPrivate, setIsPrivate] = useState(false)
 
     const LogOut = async () => {
         await User.logout()
@@ -32,7 +32,7 @@ export default function EditProfileScreen({navigation}) {
                     'lastName': lastName,
                     'username': username,
                     'email': User.email,
-                    'privateName': privateName
+                    'isPrivate': isPrivate
                 })
             })
             console.log(newPassword)
@@ -49,7 +49,7 @@ export default function EditProfileScreen({navigation}) {
                     'lastName': lastName,
                     'username': username,
                     'email': User.email,
-                    'privateName': privateName
+                    'isPrivate': isPrivate
                 })
             })
             await fetch (serverAddress + "/api/modify/modify_last_name", {
@@ -65,7 +65,23 @@ export default function EditProfileScreen({navigation}) {
                     'lastName': lastName,
                     'username': username,
                     'email': User.email,
-                    'privateName': privateName
+                    'isPrivate': isPrivate
+                })
+            })
+            await fetch (serverAddress + "/api/modify/modify_private", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify({
+                    'userID': User.userID,
+                    'password': password,
+                    'firstName': firstName,
+                    'lastName': lastName,
+                    'username': username,
+                    'email': User.email,
+                    'isPrivate': isPrivate
                 })
             })
             const update = await fetch (serverAddress + "/api/modify/modify_username", {
@@ -81,7 +97,7 @@ export default function EditProfileScreen({navigation}) {
                     'lastName': lastName,
                     'username': username,
                     'email': User.email,
-                    'privateName': privateName
+                    'isPrivate': isPrivate
                 })
             })
             if (!update) setUsernameError("Username already taken!");
@@ -143,8 +159,8 @@ export default function EditProfileScreen({navigation}) {
                         onChangeText={password => setPassword(password)}/>
                     <View style={{flexDirection: "row"}}>
                         <CheckBox
-                        value={privateName}
-                        onValueChange={setPrivateName}
+                        value={isPrivate}
+                        onValueChange={setIsPrivate}
                         />
                         <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}> Set name private</Text>
                     </View>
