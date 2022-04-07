@@ -121,7 +121,7 @@ export default function ProfilePage({route, navigation}) {
                         </View>
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                             { // TODO: fix userID check
-                                userID === User.userID.toString() ?
+                                userID === User.userID.toString() || userID === User.userID ?
                                 <Pressable onPress={() => navigation.navigate('Edit Profile')}>
                                     <Text style={styles.button}>Edit Profile</Text>
                                 </Pressable> : null}
