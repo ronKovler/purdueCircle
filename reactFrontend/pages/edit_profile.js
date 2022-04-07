@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, Text, TextInput, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TextInput, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacity, CheckBox} from 'react-native';
 import { styles, HeaderLogo, Choo, Logo } from './stylesheet';
 import User from "./user";
 
@@ -9,6 +9,7 @@ export default function EditProfileScreen({navigation}) {
     const [lastName, setLastName] = User.lastName;
     const [password, setPassword] = User.password;
     const [usernameError, setUsernameError] = useState("")
+    const [privateName, setPrivateName] = useState(false)
 
     const LogOut = async () => {
         await User.logout()
@@ -30,7 +31,8 @@ export default function EditProfileScreen({navigation}) {
                     'firstName': firstName,
                     'lastName': lastName,
                     'username': username,
-                    'email': User.email
+                    'email': User.email,
+                    'privateName': privateName
                 })
             })
             console.log(newPassword)
@@ -46,7 +48,8 @@ export default function EditProfileScreen({navigation}) {
                     'firstName': firstName,
                     'lastName': lastName,
                     'username': username,
-                    'email': User.email
+                    'email': User.email,
+                    'privateName': privateName
                 })
             })
             await fetch (serverAddress + "/api/modify/modify_last_name", {
@@ -61,7 +64,8 @@ export default function EditProfileScreen({navigation}) {
                     'firstName': firstName,
                     'lastName': lastName,
                     'username': username,
-                    'email': User.email
+                    'email': User.email,
+                    'privateName': privateName
                 })
             })
             const update = await fetch (serverAddress + "/api/modify/modify_username", {
@@ -76,7 +80,8 @@ export default function EditProfileScreen({navigation}) {
                     'firstName': firstName,
                     'lastName': lastName,
                     'username': username,
-                    'email': User.email
+                    'email': User.email,
+                    'privateName': privateName
                 })
             })
             if (!update) setUsernameError("Username already taken!");
@@ -136,6 +141,13 @@ export default function EditProfileScreen({navigation}) {
                         style={styles.accountInputBox}
                         placeholder={User.password}
                         onChangeText={password => setPassword(password)}/>
+                    <View style={{flexDirection: "row"}}>
+                        <CheckBox
+                        value={privateName}
+                        onValueChange={setPrivateName}
+                        />
+                        <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}> Set name private</Text>
+                    </View>
                     <Pressable onPress={() => SendUpdates()}><Text style={styles.button}>Save Changes</Text></Pressable>
                 </View>
               </View>
@@ -145,41 +157,6 @@ export default function EditProfileScreen({navigation}) {
           </View>
         </View>
     )
-
-    /*
-    return (
-        <View style={styled.container}>
-            <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                        <Image style={styles.image} source={require('../assets/logo.svg')} />
-                    </TouchableOpacity>
-            </View>
-            <View style={styles.loginBox}>
-                <Text style={styles.header}>User's Profile Information</Text>
-                <TextInput
-                    style={styles.accountInputBox}
-                    placeholder={username}
-                    onChangeText={username => setUsername(username)}/>
-                <TextInput
-                    style={styles.accountInputBox}
-                    placeholder={firstName}
-                    onChangeText={firstName => setFirstName(firstName)}/>
-                <TextInput
-                    style={styles.accountInputBox}
-                    placeholder={lastName}
-                    onChangeText={lastName => setLastName(lastName)}/>
-                <TextInput
-                    style={styles.accountInputBox}
-                    placeholder={password}
-                    onChangeText={password => setPassword(password)}/>
-                <Pressable onPress={() => SendUpdates()}><Text style={styles.button}>Save Changes</Text></Pressable>
-            </View>
-            <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
-                <Text style={styles.header}>Messages</Text>
-            </View>
-        </View>
-    )
-    */
 }
 
 const styled = StyleSheet.create({

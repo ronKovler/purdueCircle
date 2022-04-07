@@ -45,9 +45,13 @@ export default function PostCreation({navigation}) {
     }
 
     const SendPost = async () => {
-        if(inputtedText === '' || topic === '') {
+        if(inputtedText === '') {
             setAttemptedSubmit(true)
             return
+        }
+
+        if (topic === '') {
+            setTopic("general")
         }
         try {
             let imagePath;
