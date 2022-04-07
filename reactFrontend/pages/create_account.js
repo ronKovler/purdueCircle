@@ -18,6 +18,7 @@ export default function CreateAccountScreen({navigation}) {
   const [error, setError] = useState(false)
 
   async function Register() {
+    if(username.length > 32 || password.length > 32) return;
     let ID = await fetch(serverAddress + '/api/user/create_account', {
       method: "POST",
       headers: {
@@ -114,6 +115,7 @@ export default function CreateAccountScreen({navigation}) {
                    placeholder="Username"
                    onChangeText={username => setUsername(username)}/>
         {usernameError.length > 0 && <Text style={{color: 'red'}}>{usernameError}</Text>}
+        {username.length > 24 && <Text style={{color: 'red'}}>Username cannot be longer than 24 characters</Text>}
         <TextInput style={styles.accountInputBox}
                    placeholder='Email'
                    onChangeText={email => setEmail(email)}/>
@@ -123,6 +125,7 @@ export default function CreateAccountScreen({navigation}) {
                    secureTextEntry={true}
                    onChangeText={password => setPassword(password)}/>
         {passwordError.length > 0 && <Text style={{color: 'red'}}>{passwordError}</Text>}
+        {password.length > 32 && <Text style={{color: 'red'}}>Password cannot be longer than 32 characters</Text>}
         <TextInput style={styles.accountInputBox}
                    placeholder="Re-enter Password"
                    secureTextEntry={true} onChangeText={reenter => setReenter(reenter)}/>
