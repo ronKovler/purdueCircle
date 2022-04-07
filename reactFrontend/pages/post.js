@@ -30,7 +30,7 @@ function Post(props) {
     const navigation = useNavigation();
     const [link, setLink] = useState(props.link);
     const [image, setImage] = useState(props.imagePath);
-    const [netReactions, setNetReactions] = useState(200)
+    const [netReactions, setNetReactions] = useState(props.netReactions)
 
     //TODO: set liked/disliked props
 
@@ -71,7 +71,7 @@ function Post(props) {
             url += 'unlike_post'
         }
         try {
-            await fetch(url, {
+            const newNum = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -82,7 +82,43 @@ function Post(props) {
                     'postID': postID
                 }),
             }).then(() => {
-                setReaction(0)
+                let temp = 0
+                if (reaction === 0) temp = -1
+                setReaction(temp)
+                setNetReactions(newNum)
+            }, () => console.log("Promise unfulfilled"))
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async function toggleDislike() {
+        if (!User.isLoggedIn) {
+            log.console("UHHHH")
+            return
+        }
+        let url = serverAddress + '/api/user/'
+        if (reaction !== 1) {
+            url += 'dislike_post'
+        } else {
+            url += 'undislike_post'
+        }
+        try {
+            const newNum = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': serverAddress,
+                },
+                body: JSON.stringify({
+                    'userID': await User.getuserID(),
+                    'postID': postID
+                }),
+            }).then(() => {
+                let temp = 1
+                if (reaction === 1) temp = -1
+                setReaction(temp)
+                setNetReactions(newNum)
             }, () => console.log("Promise unfulfilled"))
         } catch (error) {
             console.error(error)
@@ -190,7 +226,7 @@ function Post(props) {
                                            style={postStyles.likeButton}/>}
                             </Pressable>
                             <Text style={[postStyles.text, {paddingTop: 1}]}>{netReactions}</Text>
-                            <Pressable style={{flex: 1}}>
+                            <Pressable onPress={() => toggleDislike()} style={{flex: 1}}>
                                 {reaction === 1 ?
                                     <Image source={require('../assets/thumbs-down-full.svg')} style={[{tintColor: 'blue'}]}/> :
                                     <Image source={require('../assets/thumbs-down-empty.svg')} style={postStyles.likeButton}/>}
