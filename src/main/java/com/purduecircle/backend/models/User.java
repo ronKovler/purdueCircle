@@ -1,5 +1,7 @@
 package com.purduecircle.backend.models;
 
+import com.purduecircle.backend.AdditionalResources.StringAttributeConverter;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +36,7 @@ public class User {
     private String lastName;
 
     /* Unique, cannot change */
+    //@Convert(converter = StringAttributeConverter.class)
     @Column(name="email", length=64, unique=true)
     private String email;
 
@@ -41,9 +44,11 @@ public class User {
     @Column(name="username", length=64, unique=true)
     private String username;
 
+    @Convert(converter = StringAttributeConverter.class)
     @Column(name="password", length=64, unique=true)
     private String password;
 
+    //@Convert(converter = StringAttributeConverter.class)
     @Column(name="phone_number")
     private String phoneNumber;
 
@@ -64,6 +69,9 @@ public class User {
     @OneToMany(mappedBy="follower")
     private Set<TopicFollower> followedTopics = new HashSet<>();
 
+    @Column(name="private")
+    private boolean isPrivate;
+
     public User(String firstName, String lastName, String email, String username, String password, String phone_number) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -71,6 +79,17 @@ public class User {
         this.username = username;
         this.password = password;
         this.phoneNumber = phone_number;
+        this.isPrivate = false;
+    }
+
+    public User(String firstName, String lastName, String email, String username, String password, int userID, boolean isPrivate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.userID = userID;
+        this.isPrivate = isPrivate;
     }
 
     public User(String firstName, String lastName, String email, String username, String password) {
@@ -79,10 +98,17 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.isPrivate = false;
     }
 
     public User(String email, String password) {
         this.email = email;
+        this.password = password;
+    }
+
+    public User(String email, String username, String password) {
+        this.email = email;
+        this.username = username;
         this.password = password;
     }
 
@@ -115,6 +141,7 @@ public class User {
     }
 
     public User() {}
+
 
     /* add topic to list of topics this user is following */
     public void addFollowedTopic(TopicFollower newTopicFollower) {
@@ -197,6 +224,20 @@ public class User {
     public void setPhoneNumber(String phone_number) {
         this.phoneNumber = phone_number;
     }
-    
 
+    public Set<Post> getSavedPosts() {
+        return savedPosts;
+    }
+
+    public void setSavedPosts(Set<Post> savedPosts) {
+        this.savedPosts = savedPosts;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
 }

@@ -43,7 +43,7 @@ public class AuthController {
             UserDTO existsDTO = new UserDTO(checkExists);
             return ResponseEntity.ok().headers(responseHeaders).body(existsDTO);
         }
-        UserDTO failed = new UserDTO("Failed", -1);
+        UserDTO failed = new UserDTO(-1, "Invalid", "Invalid", "Invalid", "Invalid", "Invalid", false);
 
         return ResponseEntity.ok().headers(responseHeaders).body(failed);
     }

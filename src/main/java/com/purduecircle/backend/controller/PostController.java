@@ -1,9 +1,10 @@
 package com.purduecircle.backend.controller;
 
-import com.purduecircle.backend.repository.PostRepository;
-import com.purduecircle.backend.repository.ReactionRepository;
-import com.purduecircle.backend.repository.TopicRepository;
-import com.purduecircle.backend.repository.UserRepository;
+import com.purduecircle.backend.repository.*;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +17,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.*;
+
+
 
 @RestController
 @RequestMapping("/api/post/")
 //@CrossOrigin("www.purduecircle.me")
 @CrossOrigin
 public class PostController {
+    Object lock = new Object();
 
     /* Autowired annotation automatically injects an instance */
     @Autowired
@@ -38,7 +44,40 @@ public class PostController {
     private TopicRepository topicRepository;
 
     @Autowired
+    private TopicFollowerRepository topicFollowerRepository;
+
+    @Autowired
     private ReactionRepository reactionRepository;
+
+    @Autowired
+    private UserFollowerRepository userFollowerRepository;
+
+
+    public PostDTO createPostDTO(int postID, int userID) {
+        Post getPost = postRepository.findByPostID(postID);
+        User getUser = userRepository.findByUserID(userID);
+        Reaction reaction = reactionRepository.getReactionByPostAndUser(getPost, getUser);
+        int reactionType;
+        if (reaction != null) {
+            reactionType = reaction.getReactionType();
+        } else {
+            reactionType = -1;
+        }
+        boolean topicFollowed = false;
+        TopicFollower topicFollower = topicFollowerRepository.findByFollowerAndTopic(getUser, getPost.getTopic());
+        if (topicFollower != null) {
+            topicFollowed = true;
+        }
+
+        boolean userFollowed = false;
+        UserFollower userFollower = userFollowerRepository.findByUserAndFollower(getPost.getUser(), getUser);
+        if (userFollower != null && !userFollower.isBlocked()) {
+            userFollowed = true;
+        }
+        PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed);
+        return postDTO;
+    }
+
 
     @RequestMapping(value="create_post", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -77,14 +116,16 @@ public class PostController {
         return ResponseEntity.ok().headers(responseHeaders).body(post.getPostID());
     }
 
-    @RequestMapping(value="get_post/{postID}", method = RequestMethod.GET,
+    @RequestMapping(value="get_post/{postID}/{userID}", method = RequestMethod.GET,
              produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Post> getPost(@PathVariable("postID") int postID) throws URISyntaxException {
+    public ResponseEntity<PostDTO> getPost(@PathVariable("postID") int postID,
+                                           @PathVariable("userID") int userID) throws URISyntaxException {
+
         HttpHeaders responseHeaders = new HttpHeaders();
         //DON'T TOUCH ABOVE
-        Post getPost = postRepository.findByPostID(postID);
 
-        return ResponseEntity.ok().headers(responseHeaders).body(getPost);
+
+        return ResponseEntity.ok().headers(responseHeaders).body(createPostDTO(postID, userID));
     }
 
     @RequestMapping(value="is_liked/{userID}/{postID}", method = RequestMethod.GET,
@@ -121,31 +162,35 @@ public class PostController {
         return ResponseEntity.ok().headers(responseHeaders).body(topicListString);
     }
 
-    @RequestMapping(value="get_topicline", method = RequestMethod.GET,
-            /*consumes = MediaType.APPLICATION_JSON_VALUE,*/ produces = MediaType.APPLICATION_JSON_VALUE)
-
-    public ResponseEntity<List<PostDTO>> getTopicline (@RequestBody String topicName) {
-        Topic topic = topicRepository.findByTopicName(topicName);
-        List<Post> topicPosts = postRepository.findAllByTopic(topic);
-        Collections.sort(topicPosts);
-        List<PostDTO> topicPostDTOs = new ArrayList<>();
-        for (Post post : topicPosts) {
-            topicPostDTOs.add(new PostDTO(post));
-        }
-        return ResponseEntity.ok().headers(new HttpHeaders()).body(topicPostDTOs);
-    }
-
-
-    @PostMapping("/upload_image")
-
-    public ResponseEntity<String> uploadToLocalFileSystem(@RequestParam("file") MultipartFile file) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        System.out.println("\t\t\t FILECONTENT TYPEEEEEEEE" +file.getContentType());
-        String extension = "";
+//    @RequestMapping(value="get_topicline", method = RequestMethod.GET,
+//            /*consumes = MediaType.APPLICATION_JSON_VALUE,*/ produces = MediaType.APPLICATION_JSON_VALUE)
 //
+//    public ResponseEntity<List<PostDTO>> getTopicline (@RequestBody String topicName) {
+//        Topic topic = topicRepository.findByTopicName(topicName);
+//        List<Post> topicPosts = postRepository.findAllByTopic(topic);
+//        Collections.sort(topicPosts);
+//        List<PostDTO> topicPostDTOs = new ArrayList<>();
+//        for (Post post : topicPosts) {
+//            topicPostDTOs.add(new PostDTO(post));
+//        }
+//        return ResponseEntity.ok().headers(new HttpHeaders()).body(topicPostDTOs);
+//    }
+
+
+
+    @RequestMapping(value="upload_image", method = RequestMethod.POST,
+             produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ContentDTO> uploadToLocalFileSystem(@RequestParam("file") MultipartFile file) throws NullPointerException{
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        System.out.println("\t\t\t FILECONTENT TYPEEEEEEEE " +file.getContentType());
+        System.out.println("\t\t\t FILE NAMEEEEEEEEEEEEEE " +fileName);
+        String extension = "";
+
+
         int index = file.getContentType().lastIndexOf('/');
         if (index != -1 ) {
-            extension = file.getContentType().substring(index + 1);
+            extension = "." + file.getContentType().substring(index + 1);
+
         } else {
             for (int i = fileName.length() - 1; i >= 0 ; i--) {
                 if (fileName.charAt(i) != '.') {
@@ -156,28 +201,50 @@ public class PostController {
                 }
             }
         }
-
-        int count = -1;
-        try {
-            count = new File("/home/ubuntu/server/userImages/").list().length;
-        } catch (NullPointerException e) {
-            System.out.println("\t\t\t\tDirectory check failed!!!!!!!!!");
+        //generate random filename
+        String picker = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder name = new StringBuilder();
+        for (int i = 0; i < 30; i++) {
+            index = (int) (Math.random() * (62) + 0);
+            name.append(picker.charAt(index));
         }
 
-        Path path = Paths.get("/home/ubuntu/server/userImages/" + count + extension);
-        try {
-            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        /*
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/files/download/")
-                .path(fileName)
-                .toUriString();
+        fileName = name.toString();
+        Path path;
+        File test;
+        String fullName;
+        synchronized (lock) {
 
-         */
-        return ResponseEntity.ok(path.toString());
+            int count = 0;
+            do {
+
+                if (count != 0) {
+                    path = Paths.get("/home/ubuntu/server/userImages/" + fileName + count + extension);
+                    fullName = fileName + count + extension;
+                    test = new File("/home/ubuntu/server/userImages/" + fileName + count + extension);
+                } else {
+                    fullName = fileName + extension;
+                    path = Paths.get("/home/ubuntu/server/userImages/" + fileName + extension);
+                    test = new File("/home/ubuntu/server/userImages/" + fileName + extension);
+                }
+
+                count++;
+                if (!test.exists()) {
+                    break;
+                }
+            } while (test.exists());
+
+
+
+            try {
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return ResponseEntity.ok(new ContentDTO(fullName));
     }
 
 

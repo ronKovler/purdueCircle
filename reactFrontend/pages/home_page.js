@@ -95,12 +95,15 @@ export default function HomeScreen({navigation}) {
                             <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
                                 <Pressable onPress={() => navigation.navigate('Profile Page', {id: User.userID})}><Text
                                     style={styles.button}>View Profile</Text></Pressable>
-                            </View>}
+                            </View>
+                        }
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
                     </View>
                 </View> :
-                <Image style={[styles.image, {alignSelf: 'center'}]} source={require('../assets/choo.png')}/>}
+                <Image style={[styles.image, {alignSelf: 'center'}]} source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
+            }
+
             {!loading && isFocused ?
                 <View style={{
                     flex: 10,
@@ -115,7 +118,7 @@ export default function HomeScreen({navigation}) {
                         alignItems: 'space-between'
                     }}>
                         <View style={{flex: 3}}>
-                            <Image style={styles.image} source={require('../assets/choo.png')}/>
+                            <Image style={styles.image} source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
                         </View>
                         {isLoggedIn ?
                             <View style={{flex: 6, justifyContent: 'center'}}>
@@ -153,7 +156,8 @@ export default function HomeScreen({navigation}) {
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
                 </View>
-                : null}
+                : null
+            }
         </View>
     )
 }

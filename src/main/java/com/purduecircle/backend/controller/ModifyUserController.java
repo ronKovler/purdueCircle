@@ -19,6 +19,14 @@ public class ModifyUserController {
     @Autowired  //Autowired annotation automatically injects an instance
     private UserRepository userRepository;
 
+    public static final String ANSI_RESET = "\u001B[0m";
+
+    public static final String ANSI_YELLOW = "\u001B[33m";
+
+    public String pColor(String text) {
+        return ANSI_YELLOW + text + ANSI_RESET;
+    }
+
     /**
     /* Returns -1 if username is already taken, otherwise saves information
     /* to database and returns true
@@ -96,4 +104,33 @@ public class ModifyUserController {
         user.setPhoneNumber(newUser.getPhoneNumber());
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
+
+    @RequestMapping(value="modify_private", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> modifyPrivate(@RequestBody UserDTO argUser) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.getByUserID(argUser.getUserID());
+
+        user.setPrivate(argUser.isPrivate());
+        System.out.println(pColor("Changing Private to " + argUser.isPrivate()) +"\n\n");
+        userRepository.save(user);
+        System.out.println(pColor("Firstname \t: " + argUser.getFirstName() +
+                "\nLastname \t: " + argUser.getLastName() +
+                "\nisPrivate \t: " + argUser.isPrivate() +
+                "\nUserID \t: " + argUser.getUserID() +
+                "\nPassword \t: " + argUser.getPassword()));
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+    }
+
+    @RequestMapping(value="delete_account", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> deleteAccount(@RequestBody User argUser) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.getByUserID(argUser.getUserID());
+
+        user.setPhoneNumber(argUser.getPhoneNumber());
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+    }
+
+
 }

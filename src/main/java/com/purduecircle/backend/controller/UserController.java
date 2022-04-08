@@ -44,6 +44,33 @@ public class UserController {
     public String pColor(String text) {
         return ANSI_YELLOW + text + ANSI_RESET;
     }
+
+    public PostDTO createPostDTO(int postID, int userID) {
+        Post getPost = postRepository.findByPostID(postID);
+        User getUser = userRepository.findByUserID(userID);
+        Reaction reaction = reactionRepository.getReactionByPostAndUser(getPost, getUser);
+        int reactionType;
+        if (reaction != null) {
+            reactionType = reaction.getReactionType();
+        } else {
+            reactionType = -1;
+        }
+        boolean topicFollowed = false;
+        TopicFollower topicFollower = topicFollowerRepository.findByFollowerAndTopic(getUser, getPost.getTopic());
+        if (topicFollower != null) {
+            topicFollowed = true;
+        }
+
+        boolean userFollowed = false;
+        UserFollower userFollower = userFollowerRepository.findByUserAndFollower(getPost.getUser(), getUser);
+        if (userFollower != null && !userFollower.isBlocked()) {
+            userFollowed = true;
+        }
+        PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed);
+        //System.out.println("\t\t\tPOST reactiontype: "  );
+        return postDTO;
+    }
+
     //purduecircle.me:8443/api/user/search?{num}
     @RequestMapping(path="{id}")
     public void home(@PathVariable("id") int ID) {
@@ -186,14 +213,14 @@ public class UserController {
 
     @RequestMapping(value="hot_timeline", method = RequestMethod.GET,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PostDTO>> showHotTimeline() throws URISyntaxException {
+    public ResponseEntity<List<PostDTO>> showHotTimeline(@PathVariable("userID") int userID) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         Timestamp yesterday = Timestamp.from(Instant.now().minus(24, ChronoUnit.HOURS));
 
         List<Post> topPosts = postRepository.findByTimePostedGreaterThanEqualOrderByTimePostedDesc(yesterday);
         List<PostDTO> topPostsDTO = new ArrayList<PostDTO>();
         for (Post post : topPosts) {
-            PostDTO temp = new PostDTO(post);
+            PostDTO temp = createPostDTO(post.getPostID(), userID);
             topPostsDTO.add(temp);
         }
         return ResponseEntity.ok().headers(responseHeaders).body(topPostsDTO);
@@ -208,26 +235,34 @@ public class UserController {
         User getTimelineUser = userRepository.getByUserID(userID);
         List<TopicFollower> tpfList = topicFollowerRepository.findAllByFollower(getTimelineUser);
 
+
         //adds all posts from topics following
         List<Topic> topicList = new ArrayList<>();
         List<Post> tempPosts = new ArrayList<>();
+        Set<Post> tempPostsCheckDuplicates = new HashSet<>();
         for (TopicFollower tf : tpfList) {
             topicList.add(tf.getTopic());
             List<Post> topicPosts = postRepository.findAllByTopic(tf.getTopic());
-            tempPosts.addAll(topicPosts);
+            //tempPosts.addAll(topicPosts);
+            tempPostsCheckDuplicates.addAll(topicPosts);
         }
 
         //adds all posts from people user is following
         List<UserFollower> ufList = userFollowerRepository.findAllByFollower(getTimelineUser);
         for (UserFollower uf : ufList) {
             List<Post> followingUsersPosts = postRepository.findAllByUser(uf.getUser());
-            tempPosts.addAll(followingUsersPosts);
+            //tempPosts.addAll(followingUsersPosts);
+            tempPostsCheckDuplicates.addAll(followingUsersPosts);
         }
+        //tempPosts.addAll(postRepository.findAllByUser(getTimelineUser));
+        tempPostsCheckDuplicates.addAll(postRepository.findAllByUser(getTimelineUser));
 
+        tempPosts.addAll(tempPostsCheckDuplicates);
         Collections.sort(tempPosts);
+        Collections.reverse(tempPosts);
         List<PostDTO> userTimelinePosts = new ArrayList<>();
         for (Post post : tempPosts) {
-            userTimelinePosts.add(new PostDTO(post));
+            userTimelinePosts.add(createPostDTO(post.getPostID(), userID));
         }
 
         return ResponseEntity.ok().headers(new HttpHeaders()).body(userTimelinePosts);
@@ -264,9 +299,10 @@ public class UserController {
         return ResponseEntity.ok().headers(new HttpHeaders()).body(searchResults);
     }
     // all the users posts, chronologically
-    @RequestMapping(value="get_userline/{userID}", method = RequestMethod.GET
+    @RequestMapping(value="get_userline/{userID}/{viewingUserID}", method = RequestMethod.GET
             , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PostDTO>> getUserline(@PathVariable("userID") int userID) {
+    public ResponseEntity<List<PostDTO>> getUserline(@PathVariable("userID") int userID,
+                                                     @PathVariable("viewingUserID") int viewingUserID) {
         User user = userRepository.findByUserID(userID);
         if (user == null) {
             return ResponseEntity.badRequest().body(null);
@@ -278,16 +314,20 @@ public class UserController {
 
         List<PostDTO> usersPostDTOs = new ArrayList<>();
         for (Post post : usersPosts) {
-            usersPostDTOs.add(new PostDTO(post));
+            if (!post.isAnonymous() || (userID == viewingUserID)) {
+                usersPostDTOs.add(createPostDTO(post.getPostID(), viewingUserID));
+            }
+
         }
 
         return ResponseEntity.ok().body(usersPostDTOs);
     }
 
     // Get all posts under topic
-    @RequestMapping(value="get_topic_page/{topicName}", method = RequestMethod.GET,
+    @RequestMapping(value="get_topic_page/{topicName}/{userID}", method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PostDTO>> getTopicPage(@PathVariable("topicName") String topicName) throws URISyntaxException {
+    public ResponseEntity<List<PostDTO>> getTopicPage(@PathVariable("topicName") String topicName,
+                                                      @PathVariable("userID") int userID) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
 
         Topic topic = topicRepository.findByTopicName(topicName);
@@ -295,7 +335,7 @@ public class UserController {
 
         List<PostDTO> topicPostsDTOs = new ArrayList<>();
         for (Post post : topicPosts) {
-            topicPostsDTOs.add(new PostDTO(post));
+            topicPostsDTOs.add(createPostDTO(post.getPostID(), userID));
         }
 
         return ResponseEntity.ok().headers(responseHeaders).body(topicPostsDTOs);
@@ -317,7 +357,7 @@ public class UserController {
         
         List<PostDTO> savedPostsDTOs = new ArrayList<>();
         for (Post post : savePostPostObjs) {
-            savedPostsDTOs.add(new PostDTO(post));
+            savedPostsDTOs.add(createPostDTO(post.getPostID(), userID));
         }
 
         return ResponseEntity.ok().headers(responseHeaders).body(savedPostsDTOs);

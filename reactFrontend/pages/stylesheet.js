@@ -3,20 +3,20 @@ import React from "react";
 
 const Logo = ({navigation}, props) => {
   return (
-      <Image style={styles.image} source={require('../assets/logo.svg')}/>
+      <Image style={styles.image} source={{uri: 'https://purduecircle.me:8443/UI_images/logo.svg'}}/>
   )
 }
 
 export const Choo = ({navigation}, props) => {
   return (
-      <Image style={styles.image} source={require('../assets/choo.png')}/>
+      <Image style={styles.image} source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
   )
 }
 
 const HeaderLogo = (props, {navigation}) => {
   return (
     <View style={{flexDirection: 'row'}}>
-        <Image style={props.style} source={require('../assets/logo.svg')}/>
+        <Image style={props.style} source={{uri: 'https://purduecircle.me:8443/UI_images/logo.svg'}}/>
         <Text style={styles.header}>PurdueCircle</Text>
     </View>
   )
@@ -25,7 +25,7 @@ const HeaderLogo = (props, {navigation}) => {
 const CPLogo = (props, {navigation}) => {
   return (
     <View style={{flexDirection: 'row'}}>
-        <Image style={props.style} source={require('../assets/logo.svg')}/>
+        <Image style={props.style} source={{uri: 'https://purduecircle.me:8443/UI_images/logo.svg'}}/>
         <Text style={styles.header}>Create Post</Text>
     </View>
   )
