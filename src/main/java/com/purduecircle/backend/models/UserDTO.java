@@ -26,6 +26,10 @@ public class UserDTO {
 
     private String email;
 
+    public UserDTO(User user, User follower, boolean blocked) {
+
+    }
+
     public UserDTO(User user) {
         this.username = user.getUsername();
         this.userID = user.getUserID();

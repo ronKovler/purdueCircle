@@ -1,6 +1,8 @@
 package com.purduecircle.backend.controller;
 
+import com.purduecircle.backend.repository.PostRepository;
 import com.purduecircle.backend.repository.UserRepository;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import com.purduecircle.backend.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @RestController
 //@CrossOrigin("www.purduecircle.me")
@@ -18,6 +23,9 @@ public class ModifyUserController {
 
     @Autowired  //Autowired annotation automatically injects an instance
     private UserRepository userRepository;
+
+    @Autowired
+    private PostRepository postRepository;
 
     public static final String ANSI_RESET = "\u001B[0m";
 
@@ -122,15 +130,50 @@ public class ModifyUserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
-    @RequestMapping(value="delete_account", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> deleteAccount(@RequestBody User argUser) throws URISyntaxException {
+    @RequestMapping(value="delete_account", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> deleteAccount(@RequestBody User argUser) throws URISyntaxException, IOException {
         HttpHeaders responseHeaders = new HttpHeaders();
         User user = userRepository.getByUserID(argUser.getUserID());
 
-        user.setPhoneNumber(argUser.getPhoneNumber());
+        List<Post> postsWithImages = postRepository.findAllByUserAndImagePathNotNull(user);
+        for (Post post : postsWithImages) {
+            String path = "userImages/" + post.getImagePath().substring(post.getImagePath().lastIndexOf('/') + 1);
+            File toDelete = new File(path);
+            if (toDelete.exists()) {
+                System.out.println(pColor("FILE EXISTS: " + toDelete.getName()));
+                //FileUtils.forceDelete(toDelete);
+            }
+            if (toDelete.delete()) {
+                System.out.println(pColor("FILE DELETED: " + toDelete.getName()));
+            } else {
+                System.out.println(pColor("ERROR COULD NOT DELETE: " + toDelete.getName()));
+            }
+        }
+        userRepository.delete(user);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

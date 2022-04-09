@@ -56,25 +56,32 @@ public class PostController {
     public PostDTO createPostDTO(int postID, int userID) {
         Post getPost = postRepository.findByPostID(postID);
         User getUser = userRepository.findByUserID(userID);
-        Reaction reaction = reactionRepository.getReactionByPostAndUser(getPost, getUser);
-        int reactionType;
-        if (reaction != null) {
-            reactionType = reaction.getReactionType();
-        } else {
-            reactionType = -1;
-        }
+
+        int reactionType = -1;
         boolean topicFollowed = false;
-        TopicFollower topicFollower = topicFollowerRepository.findByFollowerAndTopic(getUser, getPost.getTopic());
-        if (topicFollower != null) {
-            topicFollowed = true;
+        boolean userFollowed = false;
+
+        if (getUser != null) {
+            Reaction reaction = reactionRepository.getReactionByPostAndUser(getPost, getUser);
+            if (reaction != null) {
+                reactionType = reaction.getReactionType();
+            }
+
+            TopicFollower topicFollower = topicFollowerRepository.findByFollowerAndTopic(getUser, getPost.getTopic());
+            if (topicFollower != null) {
+                topicFollowed = true;
+            }
+
+
+            UserFollower userFollower = userFollowerRepository.findByUserAndFollower(getPost.getUser(), getUser);
+            if (userFollower != null) {
+                userFollowed = true;
+            }
         }
 
-        boolean userFollowed = false;
-        UserFollower userFollower = userFollowerRepository.findByUserAndFollower(getPost.getUser(), getUser);
-        if (userFollower != null && !userFollower.isBlocked()) {
-            userFollowed = true;
-        }
+
         PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed);
+        //System.out.println("\t\t\tPOST reactiontype: "  );
         return postDTO;
     }
 

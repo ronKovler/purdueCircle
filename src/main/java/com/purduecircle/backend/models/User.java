@@ -69,8 +69,13 @@ public class User {
     @OneToMany(mappedBy="follower")
     private Set<TopicFollower> followedTopics = new HashSet<>();
 
+    @OneToMany(mappedBy="user")
+    private Set<UserBlocked> blocked = new HashSet<>();
+
     @Column(name="private")
     private boolean isPrivate;
+
+
 
     public User(String firstName, String lastName, String email, String username, String password, String phone_number) {
         this.firstName = firstName;
@@ -142,6 +147,13 @@ public class User {
 
     public User() {}
 
+    public Set<UserBlocked> getBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(Set<UserBlocked> blocked) {
+        this.blocked = blocked;
+    }
 
     /* add topic to list of topics this user is following */
     public void addFollowedTopic(TopicFollower newTopicFollower) {

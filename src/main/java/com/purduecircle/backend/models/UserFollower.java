@@ -20,12 +20,6 @@ public class UserFollower {
     public UserFollower(User user, User follower) {
         this.user = user;
         this.follower = follower;
-        this.blocked = false;
-    }
-    public UserFollower(User user, User follower, boolean blocked) {
-        this.user = user;
-        this.follower = follower;
-        this.blocked = blocked;
     }
 
     @Id
@@ -41,8 +35,6 @@ public class UserFollower {
     @JoinColumn(name = "userID")
     private User user;
 
-    @Column(name="blocked")
-    private boolean blocked;
 
     public int getUserFollowerID() {
         return userFollowerID;
@@ -68,11 +60,4 @@ public class UserFollower {
         this.user = user;
     }
 
-    public boolean isBlocked() {
-        return blocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        this.blocked = blocked;
-    }
 }

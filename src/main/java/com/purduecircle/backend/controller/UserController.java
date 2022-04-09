@@ -48,24 +48,30 @@ public class UserController {
     public PostDTO createPostDTO(int postID, int userID) {
         Post getPost = postRepository.findByPostID(postID);
         User getUser = userRepository.findByUserID(userID);
-        Reaction reaction = reactionRepository.getReactionByPostAndUser(getPost, getUser);
-        int reactionType;
-        if (reaction != null) {
-            reactionType = reaction.getReactionType();
-        } else {
-            reactionType = -1;
-        }
+
+        int reactionType = -1;
         boolean topicFollowed = false;
-        TopicFollower topicFollower = topicFollowerRepository.findByFollowerAndTopic(getUser, getPost.getTopic());
-        if (topicFollower != null) {
-            topicFollowed = true;
+        boolean userFollowed = false;
+
+        if (getUser != null) {
+            Reaction reaction = reactionRepository.getReactionByPostAndUser(getPost, getUser);
+            if (reaction != null) {
+                reactionType = reaction.getReactionType();
+            }
+
+            TopicFollower topicFollower = topicFollowerRepository.findByFollowerAndTopic(getUser, getPost.getTopic());
+            if (topicFollower != null) {
+                topicFollowed = true;
+            }
+
+
+            UserFollower userFollower = userFollowerRepository.findByUserAndFollower(getPost.getUser(), getUser);
+            if (userFollower != null) {
+                userFollowed = true;
+            }
         }
 
-        boolean userFollowed = false;
-        UserFollower userFollower = userFollowerRepository.findByUserAndFollower(getPost.getUser(), getUser);
-        if (userFollower != null && !userFollower.isBlocked()) {
-            userFollowed = true;
-        }
+
         PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed);
         //System.out.println("\t\t\tPOST reactiontype: "  );
         return postDTO;
@@ -132,6 +138,7 @@ public class UserController {
         topicFollowerRepository.save(newTopicFollower);
         user.addFollowedTopic(newTopicFollower);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+       // return ResponseEntity.ok().headers(responseHeaders.).body(user.getUserID());
     }
 
     @Transactional
@@ -233,31 +240,35 @@ public class UserController {
              produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostDTO>> showUserTimeline(@PathVariable int userID) {
         User getTimelineUser = userRepository.getByUserID(userID);
-        List<TopicFollower> tpfList = topicFollowerRepository.findAllByFollower(getTimelineUser);
-
-
-        //adds all posts from topics following
-        List<Topic> topicList = new ArrayList<>();
         List<Post> tempPosts = new ArrayList<>();
-        Set<Post> tempPostsCheckDuplicates = new HashSet<>();
-        for (TopicFollower tf : tpfList) {
-            topicList.add(tf.getTopic());
-            List<Post> topicPosts = postRepository.findAllByTopic(tf.getTopic());
-            //tempPosts.addAll(topicPosts);
-            tempPostsCheckDuplicates.addAll(topicPosts);
-        }
-
-        //adds all posts from people user is following
-        List<UserFollower> ufList = userFollowerRepository.findAllByFollower(getTimelineUser);
-        for (UserFollower uf : ufList) {
-            List<Post> followingUsersPosts = postRepository.findAllByUser(uf.getUser());
-            //tempPosts.addAll(followingUsersPosts);
-            tempPostsCheckDuplicates.addAll(followingUsersPosts);
-        }
-        //tempPosts.addAll(postRepository.findAllByUser(getTimelineUser));
-        tempPostsCheckDuplicates.addAll(postRepository.findAllByUser(getTimelineUser));
-
-        tempPosts.addAll(tempPostsCheckDuplicates);
+//----------------------------------------Old Way of generating suer timeline ------------------------------------
+//        List<TopicFollower> tpfList = topicFollowerRepository.findAllByFollower(getTimelineUser);
+//
+//        //adds all posts from topics following
+//        List<Topic> topicList = new ArrayList<>();
+//
+//        Set<Post> tempPostsCheckDuplicates = new HashSet<>();
+//        for (TopicFollower tf : tpfList) {
+//            topicList.add(tf.getTopic());
+//            List<Post> topicPosts = postRepository.findAllByTopic(tf.getTopic());
+//            //tempPosts.addAll(topicPosts);
+//            tempPostsCheckDuplicates.addAll(topicPosts);
+//        }
+//
+//        //adds all posts from people user is following
+//        List<UserFollower> ufList = userFollowerRepository.findAllByFollower(getTimelineUser);
+//        for (UserFollower uf : ufList) {
+//            List<Post> followingUsersPosts = postRepository.findAllByUser(uf.getUser());
+//            //tempPosts.addAll(followingUsersPosts);
+//            tempPostsCheckDuplicates.addAll(followingUsersPosts);
+//        }
+//        //tempPosts.addAll(postRepository.findAllByUser(getTimelineUser));
+//        tempPostsCheckDuplicates.addAll(postRepository.findAllByUser(getTimelineUser));
+//
+//        tempPosts.addAll(tempPostsCheckDuplicates);
+//-------------------------------------------------------------------------------------------------------------------
+        /**New way of generating user time line with blocked incorporated*/
+        tempPosts = postRepository.findAllUserTimelinePosts(getTimelineUser);
         Collections.sort(tempPosts);
         Collections.reverse(tempPosts);
         List<PostDTO> userTimelinePosts = new ArrayList<>();
@@ -304,20 +315,26 @@ public class UserController {
     public ResponseEntity<List<PostDTO>> getUserline(@PathVariable("userID") int userID,
                                                      @PathVariable("viewingUserID") int viewingUserID) {
         User user = userRepository.findByUserID(userID);
-        if (user == null) {
+        User viewingUser = userRepository.findByUserID(viewingUserID);
+        if (user == null || viewingUser == null) {
             return ResponseEntity.badRequest().body(null);
         }
 
-        List<Post> usersPosts = postRepository.findAllByUser(user);
-        Collections.sort(usersPosts);
-        Collections.reverse(usersPosts);
-
+        List<Post> usersPosts;
         List<PostDTO> usersPostDTOs = new ArrayList<>();
-        for (Post post : usersPosts) {
-            if (!post.isAnonymous() || (userID == viewingUserID)) {
-                usersPostDTOs.add(createPostDTO(post.getPostID(), viewingUserID));
-            }
+        UserBlocked userBlocked = userBlockedRepository.findByUserAndBlockedUser(user, viewingUser);
+        if (userBlocked == null) {
+            //user is not blocked, show posts.
+            usersPosts = postRepository.findAllByUser(user);
+            Collections.sort(usersPosts);
+            Collections.reverse(usersPosts);
 
+            for (Post post : usersPosts) {
+                if (!post.isAnonymous() || (userID == viewingUserID)) {
+                    usersPostDTOs.add(createPostDTO(post.getPostID(), viewingUserID));
+                }
+
+            }
         }
 
         return ResponseEntity.ok().body(usersPostDTOs);
@@ -328,13 +345,18 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostDTO>> getTopicPage(@PathVariable("topicName") String topicName,
                                                       @PathVariable("userID") int userID) throws URISyntaxException {
+
         HttpHeaders responseHeaders = new HttpHeaders();
 
         Topic topic = topicRepository.findByTopicName(topicName);
         List<Post> topicPosts = postRepository.findAllByTopic(topic);
 
+        User user = userRepository.findByUserID(userID);
+        //List<Integer> blockedUsers = userFollowerRepository.findBlockedUserIDs(user);
+        List<Post> topicPostsWithoutBlocked = postRepository.findAllTopicPostsWithoutBlocked(topic, user);
+
         List<PostDTO> topicPostsDTOs = new ArrayList<>();
-        for (Post post : topicPosts) {
+        for (Post post : topicPostsWithoutBlocked) {
             topicPostsDTOs.add(createPostDTO(post.getPostID(), userID));
         }
 
