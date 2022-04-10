@@ -18,6 +18,11 @@ import java.util.*;
 
 import java.net.URISyntaxException;
 
+/**
+ * A spring MVC for most user based operations for purduecircle
+ * @Author Ron Kovler, Jesse Lastname
+ */
+
 @RestController
 @RequestMapping("/api/user/")
 //@CrossOrigin("www.purduecircle.me")
