@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import User from "./user";
 import {useNavigation} from '@react-navigation/native';
 import {Link} from "@react-navigation/native";
+import { styles } from "./stylesheet";
 
 const renderPost = ({item}) => {
     let link = item.link
@@ -12,7 +13,7 @@ const renderPost = ({item}) => {
     return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
                  userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath}
                  netReactions={item.netReactions} reaction={item.reaction} userFollowed={item.userFollowed}
-                 topicFollowed={item.topicFollowed} postSaved={item.postSaved}/>
+                 topicFollowed={item.topicFollowed} isSaved={item.isSaved}/>
     // TODO: check item fields for reactions
 };
 
@@ -32,7 +33,7 @@ function Post(props) {
     const [link, setLink] = useState(props.link);
     const [image, setImage] = useState(props.imagePath);
     const [netReactions, setNetReactions] = useState(props.netReactions)
-    const [postSaved, setPostSaved] = useState(props.postSaved)
+    const [isSaved, setIsSaved] = useState(props.isSaved)
 
     //TODO: set liked/disliked props
 
@@ -133,7 +134,7 @@ function Post(props) {
             return
         }
         let url = serverAddress + "/api/user/"
-        if (!postSaved) {
+        if (!isSaved) {
             url += "save_post"
         } else {
             url += "unsave_post"
@@ -150,7 +151,7 @@ function Post(props) {
                     'userID': await User.getuserID(),
                     'postID': postID
                 })
-            }).then(() => setPostSaved(!postSaved))
+            }).then(() => setIsSaved(!isSaved))
         } catch (error) {
             console.log(error)
         }
@@ -263,7 +264,7 @@ function Post(props) {
                                     <Image source={require('../assets/thumbs-down-empty.svg')} style={postStyles.likeButton}/>}
                             </Pressable>
                             <Pressable onPress={() => toggleSavePost()} style={{flex: 3}}>
-                                {!postSaved ?
+                                {!isSaved ?
                                     <Text style={postStyles.followButton}>Save</Text> :
                                     <Text style={postStyles.followButton}>Unsave</Text>}
                             </Pressable>
