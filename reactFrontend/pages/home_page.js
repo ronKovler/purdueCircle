@@ -9,12 +9,9 @@ export default function HomeScreen({navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn);
     const [loading, setLoading] = useState(true)
     const [timelineData, setTimelineData] = useState(null)
-    // let timelineData = null;
     const isFocused = useIsFocused()
     const [currentPage, setCurrentPage] = useState(null) //3 states: hotTimeline, userTimeline, savedPosts
     const [isDown, setIsDown] = useState(false)
-    // let currentPage = null;
-    // let isDown = false;
 
     //TODO: Setup timer to get new posts
 
@@ -30,7 +27,6 @@ export default function HomeScreen({navigation}) {
             await getTimeline();
         } else {
             setTimelineData(null);
-            // timelineData = null;
         }
     }, [isFocused])
 
@@ -86,11 +82,6 @@ export default function HomeScreen({navigation}) {
         setIsLoggedIn(User.isLoggedIn)
     }
 
-    /*async function getPost(){
-        Post.get
-    }*/
-
-
     return (
         <View style={styled.container}>
             {!loading && isFocused ?
@@ -122,8 +113,7 @@ export default function HomeScreen({navigation}) {
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
                     </View>
                 </View> :
-                <Image style={[styles.image, {alignSelf: 'center'}]}
-                       source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
+                <Image style={[styles.image, {alignSelf: 'center'}]} source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
             }
 
             {!loading && isFocused ?
@@ -140,8 +130,7 @@ export default function HomeScreen({navigation}) {
                         alignItems: 'space-between'
                     }}>
                         <View style={{flex: 3}}>
-                            <Image style={styles.image}
-                                   source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
+                            <Image style={styles.image} source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
                         </View>
                         {isLoggedIn ?
                             <View style={{flex: 6, justifyContent: 'center'}}>
@@ -180,9 +169,8 @@ export default function HomeScreen({navigation}) {
                     <View style={{flex: 5, flexDirection: 'column'}}>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
                         <View style={{flexBasis: 1, flex: 100}}>
-                            <FlatList style={{flexGrow: 0}} data={timelineData} renderItem={renderPost}
-                                      keyExtractor={item => item.postID}
-                                      extraData={timelineData} showsVerticalScrollIndicator={false}/>
+                            <FlatList style={{flexGrow: 0}} data={timelineData} renderItem={renderPost} keyExtractor={item => item.postID}
+                              extraData={timelineData} showsVerticalScrollIndicator={false}/>
                         </View>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
                     </View>
