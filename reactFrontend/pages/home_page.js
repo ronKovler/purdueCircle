@@ -65,12 +65,6 @@ export default function HomeScreen({navigation}) {
         setIsLoggedIn(User.isLoggedIn)
     }
 
-    /*async function getPost(){
-        Post.get
-    }*/
-
-
-
     return (
         <View style={styled.container}>
             {!loading && isFocused ?
