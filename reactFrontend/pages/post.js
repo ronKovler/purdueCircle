@@ -11,7 +11,8 @@ const renderPost = ({item}) => {
     }
     return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
                  userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath}
-                 netReactions={item.netReactions} reaction={item.reaction} userFollowed={item.userFollowed} topicFollowed={item.topicFollowed}/>
+                 netReactions={item.netReactions} reaction={item.reaction} userFollowed={item.userFollowed}
+                 topicFollowed={item.topicFollowed} postSaved={item.postSaved}/>
     // TODO: check item fields for reactions
 };
 
@@ -31,6 +32,7 @@ function Post(props) {
     const [link, setLink] = useState(props.link);
     const [image, setImage] = useState(props.imagePath);
     const [netReactions, setNetReactions] = useState(props.netReactions)
+    const [postSaved, setPostSaved] = useState(props.postSaved)
 
     //TODO: set liked/disliked props
 
@@ -126,6 +128,34 @@ function Post(props) {
         }
     }
 
+    async function toggleSavePost() {
+        if (!User.isLoggedIn) {
+            return
+        }
+        let url = serverAddress + "/api/user/"
+        if (!postSaved) {
+            url += "save_post"
+        } else {
+            url += "unsave_post"
+        }
+        
+        try {
+            await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': serverAddress,
+                },
+                body: JSON.stringify({
+                    'userID': await User.getuserID(),
+                    'postID': postID
+                })
+            }).then(() => setPostSaved(!postSaved))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     async function toggleFollowTopic() {
         if (!User.isLoggedIn) {
             return
@@ -216,10 +246,10 @@ function Post(props) {
                     <Text style={{color: 'blue'}} onPress={() => window.open(link, '_blank')}>{link}</Text>
                     : null
                 }
-                <View style={{flexBasis: 1, padding: 5}}>
+                <View style={{flexBasis: 1, padding: 7}}>
                     {User.isLoggedIn ?
                         <View style={{flexDirection:"row"}}>
-                            <Pressable onPress={() => toggleLike()} style={{flex: 1}}>
+                            <Pressable onPress={() => toggleLike()} style={{flex: 2}}>
                                 {reaction === 0 ?
                                     <Image source={require('../assets/thumbs-up-full.svg')}
                                            style={[postStyles.likeButton, {tintColor: 'red'}]}/> :
@@ -227,10 +257,15 @@ function Post(props) {
                                            style={postStyles.likeButton}/>}
                             </Pressable>
                             <Text style={[postStyles.text, {paddingTop: 1}]}>{netReactions}</Text>
-                            <Pressable onPress={() => toggleDislike()} style={{flex: 1}}>
+                            <Pressable onPress={() => toggleDislike()} style={{flex: 2}}>
                                 {reaction === 1 ?
                                     <Image source={require('../assets/thumbs-down-full.svg')} style={[postStyles.likeButton, {tintColor: 'blue'}]}/> :
                                     <Image source={require('../assets/thumbs-down-empty.svg')} style={postStyles.likeButton}/>}
+                            </Pressable>
+                            <Pressable onPress={() => toggleSavePost()} style={{flex: 3}}>
+                                {!postSaved ?
+                                    <Text style={postStyles.followButton}>Save</Text> :
+                                    <Text style={postStyles.followButton}>Unsave</Text>}
                             </Pressable>
                             <View style={{flex: 16}}>
                             </View>
