@@ -20,7 +20,7 @@ import java.net.URISyntaxException;
 
 /**
  * A spring MVC for most user based operations for purduecircle
- * @Author Ron Kovler, Jesse Lastname
+ * @author Ron Kovler, Jesse Majors, Nicholas Fang, Nick Gorki, Ryan Lechner
  */
 
 @RestController

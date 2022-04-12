@@ -38,7 +38,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "OR (p.user NOT IN (SELECT b.blockedUser FROM UserBlocked b WHERE b.user = :user) AND p.topic IN (SELECT t FROM TopicFollower t WHERE t.follower = :user) )")
     List<Post>findAllUserTimelinePosts(@Param("user") User user);
 
-
+    @Query("")
+    List<Post> getHotTimeline(@Param("user") User user);
 
     List<Post> findByTimePostedGreaterThanEqualOrderByTimePostedDesc(Timestamp yesterday);
 }
