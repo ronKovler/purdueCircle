@@ -224,9 +224,10 @@ function Post(props) {
                                     <Text style={postStyles.followButton}>Follow</Text> :
                                     <Text style={postStyles.followButton}>Unfollow</Text>}
                             </Pressable> : null}
-                        <Pressable onPress={() => navigation.navigate("Topic Page", topic)}>
-                            <Text style={postStyles.topicStyle}>{topic}</Text>
-                        </Pressable>
+                        {/*<Pressable onPress={() => navigation.navigate("Topic Page", topic)}>*/}
+                        {/*    <Text style={postStyles.topicStyle}>{topic}</Text>*/}
+                        {/*</Pressable>*/}
+                        <Link style={postStyles.topicStyle} to={'/topic/' + topic}>{topic}</Link>
                     </View>
                 </View>
             </View>

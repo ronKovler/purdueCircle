@@ -10,10 +10,10 @@ export default function TopicPage({route, navigation}) {
     const [loading, setLoading] = useState(true)
     const [timelineData, setTimelineData] = useState(null)
     const isFocused = useIsFocused()
-    const [topic, setTopic] = useState(route.params)
+    const [topic, setTopic] = useState(route.params.topic)
     const linkTo = useLinkTo()
 
-    console.log("Topic: " + route.params)
+    console.log("Topic: " + route.params.topic)
     //TODO: Setup timer to get new posts
 
     const LogOut = async () => {
@@ -24,7 +24,7 @@ export default function TopicPage({route, navigation}) {
 
     useEffect(async () => {
         if(isFocused) {
-            setTopic(route.params)
+            await setTopic(route.params.topic)
             const data = await getTimeline();
             await checkLoggedIn();
             setTimelineData(data);
