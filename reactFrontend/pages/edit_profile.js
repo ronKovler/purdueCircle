@@ -17,6 +17,22 @@ export default function EditProfileScreen({navigation}) {
         navigation.navigate('Login');
     }
 
+    const DeleteAccount = async () => {
+        const response = await fetch(serverAddress + '/api/modify/delete_account', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Access-Control-Allow-Origin': serverAddress,
+            },
+            body: JSON.stringify({
+                'userID': await User.getuserID()
+            }),
+        })
+        await response.json()
+        await User.logout()
+        navigation.navigate('Login');
+    }
+
     //helper functions
     const SendUpdates = async () => {
         try {
@@ -115,16 +131,20 @@ export default function EditProfileScreen({navigation}) {
             <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
             <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
               {User.isLoggedIn ?
-              <View style={styles.buttonContainer}>
-                  <TouchableOpacity onPress={() => LogOut()}><Text
-                    style={styles.button}>Log Out</Text></TouchableOpacity>
-              </View> : <View style={{flex: 1}}/>}
+                  <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
+                      <TouchableOpacity onPress={() => LogOut()}><Text
+                        style={styles.button}>Log Out</Text></TouchableOpacity>
+                  </View> : <View style={{flex: 1}}/>}
               <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
                 <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                     <HeaderLogo style={styles.headerIcon}/>
                 </TouchableOpacity>
               </View>
-              <View style={{flex: 1}}/>
+              {User.isLoggedIn ?
+                  <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
+                      <TouchableOpacity onPress={() => DeleteAccount()}><Text
+                          style={styles.button}>Delete Account</Text></TouchableOpacity>
+                  </View> : <View style={{flex: 1}}/>}
             </View>
             <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
           </View>

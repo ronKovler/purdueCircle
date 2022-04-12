@@ -42,9 +42,9 @@ function Post(props) {
         }
         let url = serverAddress + "/api/user/"
         if (!userFollowed) {
-            url += "follow_user/" + User.userID + "/" + userID
+            url += "follow_user/" + User.userID + "/" + User.userID
         } else {
-            url += "unfollow_user/" + User.userID + "/" + userID
+            url += "unfollow_user/" + User.userID + "/" + User.userID
         }
         try {
             await fetch(url, {
@@ -136,7 +136,7 @@ function Post(props) {
         } else {
             url += "unfollow_topic"
         }
-        url += "/" + userID + "/" + topic
+        url += "/" + User.userID + "/" + topic
         try {
             await fetch(url, {
                 method: 'GET',

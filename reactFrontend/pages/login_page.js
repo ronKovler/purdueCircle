@@ -82,11 +82,8 @@ const GetLogin = async () => {
 }
 
 const validateEmail = () => {
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (email.length === 0) {
-        setEmailError("Email is required")
-    } else if (reg.test(email) === false) {
-        setEmailError("Enter a valid email address")
+        setEmailError("Email/Username is required")
     } else {
         setEmailError("")
         //GetLogin()
@@ -107,7 +104,7 @@ return (
         </TouchableOpacity>
         <Text style={styles.header}>Login</Text>
         <TextInput style={styles.accountInputBox}
-                   placeholder='Email'
+                   placeholder='Email/Username'
                    onChangeText={email => setEmail(email)}
                    onSubmitEditing={(event)=>{
                        if(event.nativeEvent.key === 'Enter')
