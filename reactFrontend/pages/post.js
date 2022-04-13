@@ -44,9 +44,9 @@ function Post(props) {
         }
         let url = serverAddress + "/api/user/"
         if (!userFollowed) {
-            url += "follow_user/" + User.userID + "/" + User.userID
+            url += "follow_user/" + User.userID + "/" + userID
         } else {
-            url += "unfollow_user/" + User.userID + "/" + User.userID
+            url += "unfollow_user/" + User.userID + "/" + userID
         }
         try {
             await fetch(url, {
@@ -174,7 +174,7 @@ function Post(props) {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': serverAddress,
                 },
-            }).then(() => setFollowingTopic(!followingTopic))
+            }).then(() => setTopicFollowed(!topicFollowed))
         } catch (error) {
             console.error(error)
         }
@@ -248,7 +248,7 @@ function Post(props) {
                 }
                 <View style={{flexBasis: 1, padding: 7}}>
                     {User.isLoggedIn ?
-                        <View style={{flexDirection:"row"}}>
+                        <View style={{flexDirection:"row", justifyContent: 'space-between'}}>
                             <Pressable onPress={() => toggleLike()} style={{flex: 2}}>
                                 {reaction === 0 ?
                                     <Image source={require('../assets/thumbs-up-full.svg')}
@@ -330,7 +330,7 @@ const postStyles = StyleSheet.create({
         padding: 10
     },
     followButton: {
-        color: 'blue',
+        color: '#ffde59',
         textAlign: 'center',
         textAlignVertical: 'center',
     },
