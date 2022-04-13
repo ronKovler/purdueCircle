@@ -102,6 +102,7 @@ export default function EditProfileScreen({navigation}) {
                     'isPrivate': isPrivate
                 })
             })
+            
             const update = await fetch (serverAddress + "/api/modify/modify_username", {
                 method: "POST",
                 headers: {
@@ -190,7 +191,7 @@ export default function EditProfileScreen({navigation}) {
                         value={isPrivate}
                         onValueChange={setIsPrivate}
                         />
-                        <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}> Set name private</Text>
+                        <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}> Set private account</Text>
                     </View>
                     <Pressable onPress={() => SendUpdates()}><Text style={styles.button}>Save Changes</Text></Pressable>
                 </View>

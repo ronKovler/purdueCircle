@@ -10,6 +10,8 @@ export default function HomeScreen({navigation}) {
     const [loading, setLoading] = useState(true)
     const [timelineData, setTimelineData] = useState(null)
     const isFocused = useIsFocused()
+    const [currentPage, setCurrentPage] = useState(null) //3 states: hotTimeline, userTimeline, savedPosts
+    const [isDown, setIsDown] = useState(false)
 
     //TODO: Setup timer to get new posts
 
@@ -20,14 +22,48 @@ export default function HomeScreen({navigation}) {
     }
 
     useEffect(async () => {
-        if(isFocused === true) {
-            const data = await getTimeline();
+        if (isFocused === true) {
             await checkLoggedIn();
-            setTimelineData(data);
+            await getTimeline();
         } else {
-            setTimelineData('');
+            setTimelineData(null);
         }
     }, [isFocused])
+
+    const UserTimeline = async () => {
+        await GetLine('/api/user/get_user_timeline/' + User.userID, 'userTimeline');
+    }
+
+    const SavedPosts = async () => {
+        await GetLine('/api/user/get_saved_posts_line/' + User.userID, 'savedPosts');
+    }
+
+    const HotPosts = async () => {
+        await GetLine('/api/user/hot_timeline/' + User.userID, 'hotTimeline');
+    }
+
+    const GetLine = async (apiURL, page) => {
+        setLoading(true);
+        await setTimelineData(null)
+        // timelineData = null
+        await fetch(serverAddress + apiURL, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Access-Control-Allow-Origin': serverAddress,
+            }
+        }).then(response => response.json()).then((json) => {
+            setTimelineData(json);
+            // timelineData = json
+            setCurrentPage(page);
+            // currentPage = page;
+            setLoading(false);
+        }).catch(() => {
+            console.error("Cannot connect to server")
+            setIsDown(true);
+            // isDown = true;
+        })
+    }
 
     const Login = async () => {
         await navigation.navigate('Login')
@@ -35,30 +71,11 @@ export default function HomeScreen({navigation}) {
     }
 
     async function getTimeline() {
-        let json, response;
-        if(User.isLoggedIn){
-            response = await fetch(serverAddress + '/api/user/get_user_timeline/' + User.userID, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': serverAddress,
-                }
-            })
-            json = await response.json()
+        if (User.isLoggedIn) {
+            await UserTimeline();
+        } else {
+            await HotPosts();
         }
-        // if the user doesn't receive a timeline, get the hot timeline
-        if(json === undefined || json.length === 0){
-            response = await fetch(serverAddress + '/api/user/hot_timeline' + '/' + User.userID, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': serverAddress,
-                },
-            })
-            json = await response.json()
-        }
-        setLoading(false)
-        return json
     }
 
     async function checkLoggedIn() {
@@ -87,7 +104,8 @@ export default function HomeScreen({navigation}) {
                                     style={styles.button}>Register</Text></Pressable>
                             </View> :
                             <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
-                                <Pressable onPress={() => navigation.navigate('Profile Page', {id: User.userID})}><Text
+                                <Pressable
+                                    onPress={() => navigation.navigate('Profile Page', {id: User.userID})}><Text
                                     style={styles.button}>View Profile</Text></Pressable>
                             </View>
                         }
@@ -122,16 +140,24 @@ export default function HomeScreen({navigation}) {
                                         <Text style={styles.button}>Search</Text>
                                     </Pressable>
                                 </View>
-                                <View style={{flex: 1}}>
-                                    <Pressable>
-                                        <Text style={styles.button}>Hot Posts</Text>
-                                    </Pressable>
-                                </View>
-                                <View style={{flex: 1}}>
-                                    <Pressable>
-                                        <Text style={styles.button}>Saved Posts</Text>
-                                    </Pressable>
-                                </View>
+                                {currentPage !== 'userTimeline' ?
+                                    <View style={{flex: 1}}>
+                                        <Pressable onPress={() => getTimeline()}>
+                                            <Text style={styles.button}>Following Posts</Text>
+                                        </Pressable>
+                                    </View> : null}
+                                {currentPage !== 'hotTimeline' ?
+                                    <View style={{flex: 1}}>
+                                        <Pressable onPress={async () => await HotPosts()}>
+                                            <Text style={styles.button}>Hot Posts</Text>
+                                        </Pressable>
+                                    </View> : null}
+                                {currentPage !== 'savedPosts' ?
+                                    <View style={{flex: 1}}>
+                                        <Pressable onPress={async () => await SavedPosts()}>
+                                            <Text style={styles.button}>Saved Posts</Text>
+                                        </Pressable>
+                                    </View> : null}
                                 <View style={{flex: 1}}>
                                     <Pressable onPress={() => navigation.navigate('Create Post')}>
                                         <Text style={styles.button}>Create Post</Text>

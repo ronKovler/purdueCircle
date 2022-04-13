@@ -9,7 +9,7 @@ const Logo = ({navigation}, props) => {
 
 export const Choo = ({navigation}, props) => {
   return (
-      <Image style={styles.image} source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
+      <Image style={[styles.image, {alignSelf: 'center'}]} source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
   )
 }
 
