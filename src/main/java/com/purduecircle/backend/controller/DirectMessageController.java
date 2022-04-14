@@ -51,6 +51,8 @@ public class DirectMessageController {
             return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
 
+        // TODO: check if restricted and then if they are following
+
         DirectMessage newDM = new DirectMessage(fromUser, toUser, directMessageDTO.getContent());
         directMessageRepository.save(newDM);
 

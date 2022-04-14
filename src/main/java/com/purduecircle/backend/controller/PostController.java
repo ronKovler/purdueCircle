@@ -149,6 +149,20 @@ public class PostController {
         return ResponseEntity.ok().headers(responseHeaders).body(createPostDTO(postID, userID));
     }
 
+    @RequestMapping(value="create_comment", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> savePost(@RequestBody CommentDTO commentDTO) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+
+        User user = userRepository.findByUserID(commentDTO.getUserID());
+        Post post = postRepository.findByPostID(commentDTO.getPostID());
+        Comment newComment = new Comment(user.getUsername(), user, commentDTO.getContent(), post);
+        commentRepository.save(newComment);
+        post.addComment(newComment);
+
+        return ResponseEntity.ok().headers(responseHeaders).body(post.getPostID());
+    }
+
     @RequestMapping(value="is_liked/{userID}/{postID}", method = RequestMethod.GET,
              produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> checkUserPostLiked(@PathVariable("userID") int userID, @PathVariable("postID") int postID) throws URISyntaxException {

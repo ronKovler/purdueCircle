@@ -75,7 +75,8 @@ public class User {
     @Column(name="private")
     private boolean isPrivate;
 
-
+    @Column(name="restricted_messaging")
+    private boolean isRestricted;
 
     public User(String firstName, String lastName, String email, String username, String password, String phone_number) {
         this.firstName = firstName;
@@ -257,5 +258,13 @@ public class User {
 
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
+    }
+
+    public boolean isRestricted() {
+        return isRestricted;
+    }
+
+    public void setRestricted(boolean aRestricted) {
+        isPrivate = aRestricted;
     }
 }

@@ -139,6 +139,24 @@ public class ModifyUserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
+    // TODO: modify restricted
+    @RequestMapping(value="modify_message_restriction", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> modifyRestriction(@RequestBody UserDTO argUser) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.getByUserID(argUser.getUserID());
+
+        user.setPrivate(argUser.isPrivate());
+        System.out.println(pColor("Changing Private to " + argUser.isPrivate()) +"\n\n");
+        userRepository.save(user);
+        System.out.println(pColor("Firstname \t: " + argUser.getFirstName() +
+                "\nLastname \t: " + argUser.getLastName() +
+                "\nisPrivate \t: " + argUser.isPrivate() +
+                "\nUserID \t: " + argUser.getUserID() +
+                "\nPassword \t: " + argUser.getPassword()));
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+    }
+
     @RequestMapping(value="delete_account", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> deleteAccount(@RequestBody User argUser) throws URISyntaxException, IOException {

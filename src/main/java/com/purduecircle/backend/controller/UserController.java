@@ -403,20 +403,6 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
-    @RequestMapping(value="create_comment", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> savePost(@RequestBody CommentDTO commentDTO) throws URISyntaxException {
-        HttpHeaders responseHeaders = new HttpHeaders();
-
-        User user = userRepository.findByUserID(commentDTO.getUserID());
-        Post post = postRepository.findByPostID(commentDTO.getPostID());
-        Comment newComment = new Comment(user.getUsername(), user, commentDTO.getContent(), post);
-        commentRepository.save(newComment);
-        post.addComment(newComment);
-
-        return ResponseEntity.ok().headers(responseHeaders).body(post.getPostID());
-    }
-
     // Posts made in the past 24 hrs
     @RequestMapping(value="hot_timeline/{userID}", method = RequestMethod.GET,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
