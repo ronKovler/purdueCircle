@@ -16,6 +16,9 @@ public class UserDTO {
     @JsonProperty("isPrivate")
     private boolean isPrivate;
 
+    @JsonProperty("isRestricted")
+    private boolean isRestricted;
+
     public String getEmail() {
         return email;
     }
@@ -41,6 +44,7 @@ public class UserDTO {
         this.isPrivate = user.isPrivate();
     }
 
+    // TODO: delete this and user constructor below and update wherever needed
     public UserDTO(int userID, String password, String firstName, String lastName, String username, String email, boolean isPrivate) {
         this.userID = userID;
         this.password = password;
@@ -51,6 +55,16 @@ public class UserDTO {
         this.isPrivate = isPrivate;
     }
 
+    public UserDTO(int userID, String password, String firstName, String lastName, String username, String email, boolean isPrivate, boolean isRestricted) {
+        this.userID = userID;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.email = email;
+        this.isPrivate = isPrivate;
+        this.isRestricted = isRestricted;
+    }
 
 
 //    public UserDTO(String password, String username, String firstName, String lastName, int userID) {
@@ -81,6 +95,16 @@ public class UserDTO {
     @JsonProperty("isPrivate")
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
+    }
+
+    @JsonProperty("isRestricted")
+    public boolean isRestricted() {
+        return isRestricted;
+    }
+
+    @JsonProperty("isRestricted")
+    public void isRestricted(boolean aRestricted) {
+        isRestricted = aRestricted;
     }
 
     public String getFirstName() {

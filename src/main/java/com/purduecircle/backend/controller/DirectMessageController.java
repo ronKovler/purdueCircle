@@ -1,11 +1,9 @@
 package com.purduecircle.backend.controller;
 
-import com.purduecircle.backend.models.User;
-import com.purduecircle.backend.models.DirectMessage;
-import com.purduecircle.backend.models.DirectMessageDTO;
-import com.purduecircle.backend.models.UserBlocked;
+import com.purduecircle.backend.models.*;
 import com.purduecircle.backend.repository.DirectMessageRepository;
 import com.purduecircle.backend.repository.UserBlockedRepository;
+import com.purduecircle.backend.repository.UserFollowerRepository;
 import com.purduecircle.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -25,11 +23,13 @@ import java.net.URISyntaxException;
 public class DirectMessageController {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    DirectMessageRepository directMessageRepository;
+    private DirectMessageRepository directMessageRepository;
     @Autowired
-    UserBlockedRepository userBlockedRepository;
+    private UserBlockedRepository userBlockedRepository;
+    @Autowired
+    private UserFollowerRepository userFollowerRepository;
 
     @RequestMapping(value="send_msg", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -51,7 +51,14 @@ public class DirectMessageController {
             return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
 
-        // TODO: check if restricted and then if they are following
+        if (toUser.isRestricted()) {
+            // Only accepts messages from those receiver is following
+            UserFollower foundUserFollower = userFollowerRepository.findByUserAndFollower(toUser, fromUser);
+            if (foundUserFollower == null) {
+                // Receiver not following sender, don't send message
+                return ResponseEntity.ok().headers(responseHeaders).body(-1);
+            }
+        }
 
         DirectMessage newDM = new DirectMessage(fromUser, toUser, directMessageDTO.getContent());
         directMessageRepository.save(newDM);
