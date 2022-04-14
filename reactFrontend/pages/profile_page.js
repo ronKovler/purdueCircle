@@ -4,6 +4,7 @@ import {Choo, HeaderLogo, styles} from './stylesheet';
 import {renderPost} from "./post";
 import User from "./user";
 import {Link, useIsFocused, useLinkTo} from "@react-navigation/native";
+import user from "./user";
 
 export default function ProfilePage({route, navigation}) {
     const LogOut = async () => {
@@ -15,13 +16,19 @@ export default function ProfilePage({route, navigation}) {
     const [userID, setUserID] = useState(route.params.id);
     const [isLoading, setIsLoading] = useState(true);
     const [username, setUsername] = useState("");
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [followsData, setFollowsData] = useState(null)
-    const [topicsData, setTopicsData] = useState(null)
-    const [isPrivate, setPrivate] = useState(false)
-    const isFocused = useIsFocused()
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [followsData, setFollowsData] = useState(null);
+    const [topicsData, setTopicsData] = useState(null);
+    const [reactedData, setReactedData] = useState(null);
+    const [isPrivate, setPrivate] = useState(false);
+    const isFocused = useIsFocused();
     const linkTo = useLinkTo();
+    const [onReactedTo, setOnReactedTo] = useState(false);
+    const onFocusColor = "rgba(255,222,89,0.5)";
+    const offFocusColor = "#ffde59";
+    const [postColor, setPostColor] = useState(onFocusColor);
+    const [reactedColor, setReactedColor] = useState(offFocusColor);
 
     useEffect(async () => {
         setIsLoading(true)
@@ -57,13 +64,14 @@ export default function ProfilePage({route, navigation}) {
         setIsLoading(false);
     }, [isFocused, userID])
 
+
     const renderTopic = ({item}) => {
         return (
             // <Pressable onPress={() => navigation.navigate("Topic Page", item.content)}>
             //     <Text style={styles.button}>{item.content}</Text>
             // </Pressable>
             <Link style={styles.button} to={'/topic/' + item.content}>{item.content}</Link>
-    )
+        )
     };
 
     const renderUser = ({item}) => {
@@ -79,6 +87,34 @@ export default function ProfilePage({route, navigation}) {
             </Pressable>
         )
     };
+
+    async function getReactedTo() {
+        const response = fetch(serverAddress + '/api/user/get_reacted_to_posts/' + userID, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Access-Control-Allow-Origin': serverAddress,
+            }
+        }).then(response => response.json()).then(json => {
+            if(reactedData === null)
+                setReactedData(json)
+        })
+    }
+
+    async function renderReacted() {
+        if(!onReactedTo){
+            await getReactedTo()
+            setUserlineData(null)
+            setPostColor(offFocusColor)
+            setReactedColor(onFocusColor)
+        } else {
+            setUserlineData(await getUserline())
+            setReactedData(null);
+            setPostColor(onFocusColor);
+            setReactedColor(offFocusColor);
+        }
+        setOnReactedTo(!onReactedTo);
+    }
 
     async function getUserline() {
         const response = await fetch(serverAddress + '/api/user/get_userline/' + userID + '/' + User.userID, {
@@ -132,9 +168,9 @@ export default function ProfilePage({route, navigation}) {
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                             { // TODO: fix userID check
                                 userID === User.userID.toString() || userID === User.userID ?
-                                <Pressable onPress={() => navigation.navigate('Edit Profile')}>
-                                    <Text style={styles.button}>Edit Profile</Text>
-                                </Pressable> : null}
+                                    <Pressable onPress={() => navigation.navigate('Edit Profile')}>
+                                        <Text style={styles.button}>Edit Profile</Text>
+                                    </Pressable> : null}
                         </View>
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
@@ -177,18 +213,46 @@ export default function ProfilePage({route, navigation}) {
                     </View>
                     <View style={{flex: 5, flexDirection: 'column'}}>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
-                        <View style={{flex: 7, backgroundColor: '737373'}}>
-                            <Text style={styles.header}>{username}'s Posts</Text>
+                        <View style={{flex: 6, backgroundColor: '737373'}}>
+                            {!onReactedTo ?
+                                <View style={{flexDirection: "row"}}>
+                                    <View style={[styles.button, {backgroundColor: postColor}]}>
+                                        <Text style={{fontWeight: 'bold'}}>{username}'s Posts</Text>
+                                    </View>
+                                    <Pressable style={[styles.button, {backgroundColor: reactedColor}]} onPress={() => renderReacted()}>
+                                        <Text style={{fontWeight: 'bold'}}>{username}'s Reacted To</Text>
+                                    </Pressable>
+                                </View>
+                                :
+                                <View style={{flexDirection: "row"}}>
+                                    <Pressable style={[styles.button, {backgroundColor: postColor}]} onPress={() => renderReacted()}>
+                                        <Text style={{fontWeight: 'bold'}}>{username}'s Posts</Text>
+                                    </Pressable>
+                                    <View style={[styles.button, {backgroundColor: reactedColor}]}>
+                                        <Text style={{fontWeight: 'bold'}}>{username}'s Reacted To</Text>
+                                    </View>
+                                </View>
+                            }
                         </View>
                         <View style={{flexBasis: 1, flex: 100}}>
-                            <FlatList data={userlineData} renderItem={renderPost} keyExtractor={item => item.postId}
-                                      extraData={userID} style={{flexGrow: 0}} showsVerticalScrollIndicator={false}/>
+                            {!onReactedTo ?
+                                <FlatList data={userlineData} renderItem={renderPost} keyExtractor={item => item.postId}
+                                          extraData={userID} style={{flexGrow: 0}}
+                                          showsVerticalScrollIndicator={false}/>
+                                :
+                                <FlatList data={reactedData} renderItem={renderPost} keyExtractor={item => item.postId}
+                                          extraData={userID} style={{flexGrow: 0}}
+                                          showsVerticalScrollIndicator={false}/>}
                         </View>
                         <View style={{flex: 2, backgroundColor: '737373'}}/>
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
                         <View style={{flex: 3, alignItems: 'center'}}>
-                            {!isPrivate && <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>{firstName} {lastName}</Text>}
+                            {!isPrivate && <Text style={{
+                                color: 'black',
+                                fontWeight: 'bold',
+                                fontSize: 15
+                            }}>{firstName} {lastName}</Text>}
                         </View>
                         <View style={{flex: 6}}>
                             <View style={{flex: 1}}/>
