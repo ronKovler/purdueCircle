@@ -1,5 +1,9 @@
 package com.purduecircle.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+
 public class PostDTO {
     private String content;
     private int userID;
@@ -11,7 +15,10 @@ public class PostDTO {
     private int reaction;
     private boolean topicFollowed;
     private boolean userFollowed;
+    @JsonProperty("isSaved")
+    private boolean isSaved;
     private int netReactions;
+    private List<CommentDTO> comments;
 
     /*Possibly remove these fields in place of getByUserID*/
     private String email;
@@ -79,6 +86,22 @@ public class PostDTO {
 
     public void setAnonymous(boolean anonymous) {
         this.anonymous = anonymous;
+    }
+
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+    public void setSaved(boolean saved) {
+        isSaved = saved;
+    }
+
+    public List<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDTO> comments) {
+        this.comments = comments;
     }
 
     public PostDTO(String content, int userID, String topicName, String email) {
@@ -168,7 +191,7 @@ public class PostDTO {
 
     }
 
-    public PostDTO(Post post, int reaction, boolean topicFollowed, boolean userFollowed) {
+    public PostDTO(Post post, int reaction, boolean topicFollowed, boolean userFollowed, boolean isSaved, List<CommentDTO> comments) {
         this.content = post.getContent();
         this.userID = post.getUser().getUserID();
         this.username = post.getUser().getUsername();
@@ -181,7 +204,9 @@ public class PostDTO {
         this.reaction = reaction;
         this.topicFollowed = topicFollowed;
         this.userFollowed = userFollowed;
+        this.isSaved = isSaved;
         this.netReactions = post.getNetReactions();
+        this.comments = comments;
     }
 
     public PostDTO(int postID) {

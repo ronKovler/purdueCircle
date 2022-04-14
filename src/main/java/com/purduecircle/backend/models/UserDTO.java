@@ -35,8 +35,8 @@ public class UserDTO {
         this.userID = user.getUserID();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
-        int length = user.getPassword().length();
-        this.password = "*".repeat(length);
+        //int length = user.getPassword().length();
+        this.password = "";
         this.email = user.getEmail();
         this.isPrivate = user.isPrivate();
     }

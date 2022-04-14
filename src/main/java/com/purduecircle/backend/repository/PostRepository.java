@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.List;
-@Repository
 
+@Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
     List<Post> findAllByUser(User user);
@@ -25,7 +25,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 //    List<Post> findAllTopicPostsWithoutBlocked(@Param("topic") Topic topic, @Param("blocked") List<Integer> blocked);
 
     @Query ("SELECT u FROM Post u WHERE u.topic = :topic AND u.user NOT IN " +
-            "(SELECT v.blockedUser FROM UserBlocked v WHERE v.user = :user)")
+            "(SELECT v.blockedUser FROM UserBlocked v WHERE v.user = :user) ORDER BY u.timePosted DESC")
     List<Post> findAllTopicPostsWithoutBlocked(@Param("topic") Topic topic, @Param("user") User user);
 
 //    @Query("SELECT u FROM Post u WHERE u.user = :user AND u.user ")
@@ -35,11 +35,12 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findAllByUserAndImagePathNotNull(User user);
 
     @Query("SELECT p FROM Post p WHERE (p.user IN (SELECT u.user FROM UserFollower u WHERE u.follower = :user) OR p.user = :user) " +
-            "OR (p.user NOT IN (SELECT b.blockedUser FROM UserBlocked b WHERE b.user = :user) AND p.topic IN (SELECT t FROM TopicFollower t WHERE t.follower = :user) )")
+            "OR (p.user NOT IN (SELECT b.blockedUser FROM UserBlocked b WHERE b.user = :user) AND p.topic IN (SELECT t.topic FROM TopicFollower t WHERE t.follower = :user) )")
     List<Post>findAllUserTimelinePosts(@Param("user") User user);
 
-    @Query("")
-    List<Post> getHotTimeline(@Param("user") User user);
+    @Query("SELECT p FROM Post p WHERE p.timePosted >= :yesterday AND p.user NOT IN " +
+            "(SELECT b.blockedUser FROM UserBlocked b WHERE b.user = :user) ORDER BY p.timePosted DESC")
+    List<Post> getHotTimeline(@Param("user") User user, Timestamp yesterday);
 
     List<Post> findByTimePostedGreaterThanEqualOrderByTimePostedDesc(Timestamp yesterday);
 }

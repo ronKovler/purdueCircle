@@ -1,7 +1,6 @@
 package com.purduecircle.backend.controller;
 
 import com.purduecircle.backend.repository.*;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -57,6 +55,8 @@ public class UserController {
         int reactionType = -1;
         boolean topicFollowed = false;
         boolean userFollowed = false;
+        boolean isSaved = false;
+        List<CommentDTO> comments;
 
         if (getUser != null) {
             Reaction reaction = reactionRepository.getReactionByPostAndUser(getPost, getUser);
@@ -74,6 +74,16 @@ public class UserController {
             if (userFollower != null) {
                 userFollowed = true;
             }
+
+            SavedPost savedPost = savedPostRepository.findByUserAndSavedPost(getUser, getPost);
+            if (savedPost != null) {
+                isSaved = true;
+            }
+
+            comments = commentRepository.getAllPostCommentsWithoutBlocked(getPost, getUser);
+
+        } else {
+            comments = commentRepository.getAllPostComments(getPost);
         }
 
 
@@ -229,7 +239,14 @@ public class UserController {
         HttpHeaders responseHeaders = new HttpHeaders();
         Timestamp yesterday = Timestamp.from(Instant.now().minus(24, ChronoUnit.HOURS));
 
-        List<Post> topPosts = postRepository.findByTimePostedGreaterThanEqualOrderByTimePostedDesc(yesterday);
+        User user = userRepository.findByUserID(userID);
+        List<Post> topPosts;
+        if (user != null) {
+            topPosts = postRepository.getHotTimeline(user, yesterday);
+        } else {
+            topPosts = postRepository.findByTimePostedGreaterThanEqualOrderByTimePostedDesc(yesterday);
+        }
+
         List<PostDTO> topPostsDTO = new ArrayList<PostDTO>();
         for (Post post : topPosts) {
             PostDTO temp = createPostDTO(post.getPostID(), userID);
@@ -375,11 +392,11 @@ public class UserController {
         HttpHeaders responseHeaders = new HttpHeaders();
 
         User user = userRepository.getByUserID(userID);
-        List<SavedPost> savePostObjs = savedPostsRepository.findAllByUser(user);
+        List<SavedPost> savePostObjs = savedPostRepository.findAllByUser(user);
 
         List<Post> savePostPostObjs = new ArrayList<>();
-        for (SavedPost post : savePostObjs) {
-            savePostPostObjs.add(postRepository.findByPostID(post.getSavedPostID()));
+        for (SavedPost savedPost : savePostObjs) {
+            savePostPostObjs.add(savedPost.getSavedPost());
         }
         
         List<PostDTO> savedPostsDTOs = new ArrayList<>();
