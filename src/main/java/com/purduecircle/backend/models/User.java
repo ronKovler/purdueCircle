@@ -265,6 +265,6 @@ public class User {
     }
 
     public void setRestricted(boolean aRestricted) {
-        isPrivate = aRestricted;
+        isRestricted = aRestricted;
     }
 }

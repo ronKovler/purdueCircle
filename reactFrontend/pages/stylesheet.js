@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
   },
   button: {
     textAlign: "center",
-    // textAlignVertical: "center",
     fontSize: 16,
     fontWeight: 'bold',
     padding: 10,

@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text, View, Image, Linking} from "react-native";
+import {Pressable, StyleSheet, Text, View, Image, Linking, TextInput, FlatList} from "react-native";
 import React, {useEffect, useState} from "react";
 import User from "./user";
 import {useNavigation} from '@react-navigation/native';
@@ -13,14 +13,15 @@ const renderPost = ({item}) => {
     return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
                  userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath}
                  netReactions={item.netReactions} reaction={item.reaction} userFollowed={item.userFollowed}
-                 topicFollowed={item.topicFollowed} isSaved={item.isSaved}/>
+                 topicFollowed={item.topicFollowed} isSaved={item.isSaved} comments={item.comments}/>
     // TODO: check item fields for reactions
 };
 
 function Post(props) {
     const [user, setUser] = useState(props.user)
     const [topic, setTopic] = useState(props.topic)
-    const [comments, setComments] = useState()
+    const [comments, setComments] = useState(props.comments)
+    const [newComment, setNewComment] = useState("")
     const [content, setContent] = useState(props.content)
     const [isLoading, setIsLoading] = useState(true)
     const [topicFollowed, setTopicFollowed] = useState(props.topicFollowed)
@@ -35,9 +36,14 @@ function Post(props) {
     const [netReactions, setNetReactions] = useState(props.netReactions)
     const [isSaved, setIsSaved] = useState(props.isSaved)
 
-    //TODO: set liked/disliked props
-
-
+    const renderComment = ({item}) => {
+        return (
+            <View style={{flex: 3, flexDirection: 'row', justifyContent: 'space-around'}}>
+                <Text style={postStyles.commentUsername}>{item.username}</Text>
+                <Text style={postStyles.commentContent}>{item.content}</Text>
+            </View>
+        )
+    }
     //TODO: Force login if interacted while not logged in
     async function toggleFollowUser() {
         if (!User.isLoggedIn) {
@@ -177,7 +183,31 @@ function Post(props) {
                 },
             }).then(() => setTopicFollowed(!topicFollowed))
         } catch (error) {
-            console.error(error)
+            console.log(error)
+        }
+    }
+
+    async function postComment() {
+        if (!User.isLoggedIn) {
+            return
+        }
+        let url = serverAddress + "/api/post/create_comment"
+        try {
+            await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': serverAddress,
+                },
+                body: JSON.stringify({
+                    'userID': await User.getuserID(),
+                    'postID': postID,
+                    'content': newComment,
+                    'username': User.username
+                })
+            }).then(() => setNewComment(""))
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -224,9 +254,6 @@ function Post(props) {
                                     <Text style={postStyles.followButton}>Follow</Text> :
                                     <Text style={postStyles.followButton}>Unfollow</Text>}
                             </Pressable> : null}
-                        {/*<Pressable onPress={() => navigation.navigate("Topic Page", topic)}>*/}
-                        {/*    <Text style={postStyles.topicStyle}>{topic}</Text>*/}
-                        {/*</Pressable>*/}
                         <Link style={postStyles.topicStyle} to={'/topic/' + topic}>{topic}</Link>
                     </View>
                 </View>
@@ -250,6 +277,7 @@ function Post(props) {
                 }
                 <View style={{flexBasis: 1, padding: 7}}>
                     {User.isLoggedIn ?
+                    <>
                         <View style={{flexDirection:"row", justifyContent: 'space-between'}}>
                             <Pressable onPress={() => toggleLike()} style={{flex: 2}}>
                                 {reaction === 0 ?
@@ -272,6 +300,24 @@ function Post(props) {
                             <View style={{flex: 16}}>
                             </View>
                         </View>
+                        <View style={{flexDirection:"column", justifyContent: 'space-between'}}>
+                            <View>
+                                <FlatList style={{flexGrow: 0}} data={comments} renderItem={renderComment} keyExtractor={item => item.userID}
+                                    extraData={comments} showsVerticalScrollIndicator={false}/>
+                            </View>
+                            <View style={{flexDirection:"row"}}>
+                                <TextInput
+                                  style={postStyles.commentInputBox}
+                                  onChangeText={setNewComment}
+                                  value={newComment}
+                                  placeholder="Write a comment..."
+                                />
+                                <Pressable onPress={() => postComment()}>
+                                    <Text style={postStyles.button}>Post</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                        </>
                         : null}
 
                 </View>
@@ -304,12 +350,18 @@ const postStyles = StyleSheet.create({
         borderTopWidth: 4,
         borderTopColor: '#737373',
         padding: 12.5,
-        paddingBottom: 25,
+        paddingBottom: 110,
         flex: 2
     },
     button: {
-        flex: 1,
-        backgroundColor: "#969696",
+        textAlign: "center",
+        fontSize: 16,
+        fontWeight: 'bold',
+        padding: 10,
+        margin: 5,
+        backgroundColor: "#ffde59",
+        resizeMode: 'contain',
+        borderRadius: 5
     },
     username: {
         flex: 1,
@@ -342,6 +394,24 @@ const postStyles = StyleSheet.create({
         resizeMode: 'contain',
         flex: 1,
         marginLeft: 10,
+    },
+    commentInputBox: {
+        backgroundColor: '#d9d9d9',
+        textDecorationColor: '#a6a6a6',
+        alignSelf: 'stretch',
+        padding: 7.5,
+        margin: 5,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 15,
+    },
+    commentUsername: {
+        color: '#ffde59',
+        fontWeight: 'bold',
+    },
+    commentContent: {
+        color: '#ffde59',
+        fontWeight: 'bold',
     }
 })
 
