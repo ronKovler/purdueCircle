@@ -1,9 +1,9 @@
-import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react'
 import {Choo, HeaderLogo, styles} from './stylesheet';
 import {renderPost} from "./post";
 import User from "./user";
-import {useIsFocused, useLinkTo} from "@react-navigation/native";
+import {Link, useIsFocused, useLinkTo} from "@react-navigation/native";
 
 export default function ProfilePage({route, navigation}) {
     const LogOut = async () => {
@@ -59,10 +59,11 @@ export default function ProfilePage({route, navigation}) {
 
     const renderTopic = ({item}) => {
         return (
-            <Pressable onPress={() => navigation.navigate("Topic Page", item.content)}>
-                <Text style={styles.button}>{item.content}</Text>
-            </Pressable>
-        )
+            // <Pressable onPress={() => navigation.navigate("Topic Page", item.content)}>
+            //     <Text style={styles.button}>{item.content}</Text>
+            // </Pressable>
+            <Link style={styles.button} to={'/topic/' + item.content}>{item.content}</Link>
+    )
     };
 
     const renderUser = ({item}) => {

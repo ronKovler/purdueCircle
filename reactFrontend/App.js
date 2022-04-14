@@ -26,7 +26,7 @@ const linkConfig = {
         'Create Post': 'create_post',
         'Profile Page': 'user/:id',
         'Edit Profile': 'user/edit_profile',
-        'Topic Page': 'topic',
+        'Topic Page': 'topic/:topic',
         'Search': 'search',
     }
 }

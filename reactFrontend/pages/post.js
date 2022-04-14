@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import User from "./user";
 import {useNavigation} from '@react-navigation/native';
 import {Link} from "@react-navigation/native";
+import { styles } from "./stylesheet";
 
 const renderPost = ({item}) => {
     let link = item.link
@@ -11,7 +12,8 @@ const renderPost = ({item}) => {
     }
     return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
                  userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath}
-                 netReactions={item.netReactions} reaction={item.reaction} userFollowed={item.userFollowed} topicFollowed={item.topicFollowed}/>
+                 netReactions={item.netReactions} reaction={item.reaction} userFollowed={item.userFollowed}
+                 topicFollowed={item.topicFollowed} isSaved={item.isSaved}/>
     // TODO: check item fields for reactions
 };
 
@@ -31,6 +33,7 @@ function Post(props) {
     const [link, setLink] = useState(props.link);
     const [image, setImage] = useState(props.imagePath);
     const [netReactions, setNetReactions] = useState(props.netReactions)
+    const [isSaved, setIsSaved] = useState(props.isSaved)
 
     //TODO: set liked/disliked props
 
@@ -126,6 +129,34 @@ function Post(props) {
         }
     }
 
+    async function toggleSavePost() {
+        if (!User.isLoggedIn) {
+            return
+        }
+        let url = serverAddress + "/api/user/"
+        if (!isSaved) {
+            url += "save_post"
+        } else {
+            url += "unsave_post"
+        }
+        
+        try {
+            await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': serverAddress,
+                },
+                body: JSON.stringify({
+                    'userID': await User.getuserID(),
+                    'postID': postID
+                })
+            }).then(() => setIsSaved(!isSaved))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     async function toggleFollowTopic() {
         if (!User.isLoggedIn) {
             return
@@ -136,7 +167,7 @@ function Post(props) {
         } else {
             url += "unfollow_topic"
         }
-        url += "/" + userID + "/" + topic
+        url += "/" + User.userID + "/" + topic
         try {
             await fetch(url, {
                 method: 'GET',
@@ -144,7 +175,7 @@ function Post(props) {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': serverAddress,
                 },
-            }).then(() => setFollowingTopic(!followingTopic))
+            }).then(() => setTopicFollowed(!topicFollowed))
         } catch (error) {
             console.error(error)
         }
@@ -193,9 +224,10 @@ function Post(props) {
                                     <Text style={postStyles.followButton}>Follow</Text> :
                                     <Text style={postStyles.followButton}>Unfollow</Text>}
                             </Pressable> : null}
-                        <Pressable onPress={() => navigation.navigate("Topic Page", topic)}>
-                            <Text style={postStyles.topicStyle}>{topic}</Text>
-                        </Pressable>
+                        {/*<Pressable onPress={() => navigation.navigate("Topic Page", topic)}>*/}
+                        {/*    <Text style={postStyles.topicStyle}>{topic}</Text>*/}
+                        {/*</Pressable>*/}
+                        <Link style={postStyles.topicStyle} to={'/topic/' + topic}>{topic}</Link>
                     </View>
                 </View>
             </View>
@@ -216,10 +248,10 @@ function Post(props) {
                     <Text style={{color: 'blue'}} onPress={() => window.open(link, '_blank')}>{link}</Text>
                     : null
                 }
-                <View style={{flexBasis: 1, padding: 5}}>
+                <View style={{flexBasis: 1, padding: 7}}>
                     {User.isLoggedIn ?
-                        <View style={{flexDirection:"row"}}>
-                            <Pressable onPress={() => toggleLike()} style={{flex: 1}}>
+                        <View style={{flexDirection:"row", justifyContent: 'space-between'}}>
+                            <Pressable onPress={() => toggleLike()} style={{flex: 2}}>
                                 {reaction === 0 ?
                                     <Image source={require('../assets/thumbs-up-full.svg')}
                                            style={[postStyles.likeButton, {tintColor: 'red'}]}/> :
@@ -227,10 +259,15 @@ function Post(props) {
                                            style={postStyles.likeButton}/>}
                             </Pressable>
                             <Text style={[postStyles.text, {paddingTop: 1}]}>{netReactions}</Text>
-                            <Pressable onPress={() => toggleDislike()} style={{flex: 1}}>
+                            <Pressable onPress={() => toggleDislike()} style={{flex: 2}}>
                                 {reaction === 1 ?
                                     <Image source={require('../assets/thumbs-down-full.svg')} style={[postStyles.likeButton, {tintColor: 'blue'}]}/> :
                                     <Image source={require('../assets/thumbs-down-empty.svg')} style={postStyles.likeButton}/>}
+                            </Pressable>
+                            <Pressable onPress={() => toggleSavePost()} style={{flex: 3}}>
+                                {!isSaved ?
+                                    <Text style={postStyles.followButton}>Save</Text> :
+                                    <Text style={postStyles.followButton}>Unsave</Text>}
                             </Pressable>
                             <View style={{flex: 16}}>
                             </View>
@@ -295,7 +332,7 @@ const postStyles = StyleSheet.create({
         padding: 10
     },
     followButton: {
-        color: 'blue',
+        color: '#ffde59',
         textAlign: 'center',
         textAlignVertical: 'center',
     },
