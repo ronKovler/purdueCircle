@@ -85,6 +85,9 @@ public class Post implements Comparable<Post>{
         reactions.remove(reaction);
     }
 
+    /* remove topic to list of topics this user is following */
+    public void addComment(Comment comment) { comments.add(comment); }
+
     /*
     Getters and Setters
      */
@@ -118,10 +121,6 @@ public class Post implements Comparable<Post>{
         this.imagePath = imagePath;
     }
 
-//    public void saveImage() {
-//        setImagePath("todo");
-//    }
-
     public String getLink() {
         return link;
     }
@@ -148,6 +147,19 @@ public class Post implements Comparable<Post>{
 
     public Set<Reaction> getReactions() {
         return reactions;
+    }
+
+    public int getNetReactions() {
+        int net = 0;
+        for (Reaction current : reactions) {
+            if (current.getReactionType() == 0) {
+                net++;
+            }
+            if (current.getReactionType() == 1) {
+                net--;
+            }
+        }
+        return net;
     }
 
     public int compareTo(Post post) {

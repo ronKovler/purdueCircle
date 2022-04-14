@@ -21,6 +21,28 @@ import java.net.URISyntaxException;
  * @author Ron Kovler, Jesse Majors, Nicholas Fang, Nick Gorki, Ryan Lechner
  */
 
+/*
+PAGES
+hot_timeline: posts made in the past 24 hrs
+user_timeline: all topics and users that the user follows (homepage)
+get_userline/{userID}: all the users posts, chronologically
+get_saved_posts_line: posts saved by user
+reacted_to_line: TODO posts the user has reacted to
+get_topic_page: posts under designated topic
+
+HELPERS
+search/{type}: search for username (0), search by topic (1)
+get_user: return user object based on userID
+create_account: receives information and creates account if valid
+follow_topic: received user follows received topic
+unfollow_topic: received user unfollows received topic
+follow_user: received user follows other received user
+unfollow_user: received user unfollows other received user
+like_post: received user follows received post
+unlike_post: received user unfollows received post
+TODO save and unsave post functions
+ */
+
 @RestController
 @RequestMapping("/api/user/")
 //@CrossOrigin("www.purduecircle.me")
@@ -39,6 +61,12 @@ public class UserController {
     private UserFollowerRepository userFollowerRepository;
     @Autowired
     private ReactionRepository reactionRepository;
+    @Autowired
+    private SavedPostRepository savedPostRepository;
+    @Autowired
+    private UserBlockedRepository userBlockedRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
     public static final String ANSI_RESET = "\u001B[0m";
 
@@ -69,7 +97,6 @@ public class UserController {
                 topicFollowed = true;
             }
 
-
             UserFollower userFollower = userFollowerRepository.findByUserAndFollower(getPost.getUser(), getUser);
             if (userFollower != null) {
                 userFollowed = true;
@@ -86,8 +113,7 @@ public class UserController {
             comments = commentRepository.getAllPostComments(getPost);
         }
 
-
-        PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed);
+        PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed, isSaved, comments);
         //System.out.println("\t\t\tPOST reactiontype: "  );
         return postDTO;
     }
@@ -138,13 +164,21 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(newUser.getUserID());
     }
 
-    @RequestMapping(value="follow_topic", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> followTopic(@RequestBody User argUser, String topicStr) throws URISyntaxException {
+    @RequestMapping(value="follow_topic/{userID}/{topicName}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> followTopic(@PathVariable("userID") int argUser,
+                                               @PathVariable("topicName") String topicStr) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         // Find actual user and topic in database
-        User user = userRepository.getByUserID(argUser.getUserID());
+        User user = userRepository.getByUserID(argUser);
         Topic topic = topicRepository.findByTopicName(topicStr);
+
+        TopicFollower foundTopicFollower = topicFollowerRepository.findByFollowerAndTopic(user, topic);
+        if (foundTopicFollower != null) {
+            // Already following topic
+            return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+        }
+
         if (topic == null) {
             // Adds topic to database
             topic = new Topic(topicStr.toLowerCase());
@@ -153,7 +187,6 @@ public class UserController {
         topicFollowerRepository.save(newTopicFollower);
         user.addFollowedTopic(newTopicFollower);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
-       // return ResponseEntity.ok().headers(responseHeaders.).body(user.getUserID());
     }
 
     @Transactional
@@ -163,8 +196,15 @@ public class UserController {
                                                  @PathVariable("topicName") String topicStr) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
         // Find actual user and topic in database
-        User user = userRepository.findByUserID(argUser.getUserID());
+        User user = userRepository.findByUserID(argUser);
         Topic topic = topicRepository.findByTopicName(topicStr);
+
+        TopicFollower foundTopicFollower = topicFollowerRepository.findByFollowerAndTopic(user, topic);
+        if (foundTopicFollower == null) {
+            // Already not following topic
+            return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+        }
+
         // Remove from user list to be safe for now
         user.removeFollowedTopic(topicFollowerRepository.findByFollowerAndTopic(user, topic));
         // Remove from table
@@ -172,14 +212,19 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
-
     @RequestMapping(value="follow_user/{userID}/{userToFollow}", method = RequestMethod.GET,
              produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> followUser(@PathVariable("userID") int argUserID,
                                               @PathVariable("userToFollow") int argUserToFollowID) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User userThatsFollowing = userRepository.findByUserID(argUser.getUserID());
-        User userToFollow = userRepository.findByUserID(argUserToFollow.getUserID());
+        User userThatsFollowing = userRepository.findByUserID(argUserID);
+        User userToFollow = userRepository.findByUserID(argUserToFollowID);
+
+        UserFollower foundUserFollower = userFollowerRepository.findByUserAndFollower(userThatsFollowing, userToFollow);
+        if (foundUserFollower != null) {
+            // Already following
+            return ResponseEntity.ok().headers(responseHeaders).body(userThatsFollowing.getUserID());
+        }
 
         UserFollower userFollower = new UserFollower(userToFollow, userThatsFollowing);
         userFollowerRepository.save(userFollower);
@@ -194,8 +239,14 @@ public class UserController {
     public ResponseEntity<Integer> unfollowUser(@PathVariable("userID") int argUser,
                                                 @PathVariable("userToUnfollow") int argUserToUnfollow) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User userThatsFollowing = userRepository.findByUserID(argUser.getUserID());
-        User userToUnfollow = userRepository.findByUserID(argUserToUnfollow.getUserID());
+        User userThatsFollowing = userRepository.findByUserID(argUser);
+        User userToUnfollow = userRepository.findByUserID(argUserToUnfollow);
+
+        UserFollower foundUserFollower = userFollowerRepository.findByUserAndFollower(userThatsFollowing, userToUnfollow);
+        if (foundUserFollower != null) {
+            // Already not following
+            return ResponseEntity.ok().headers(responseHeaders).body(userThatsFollowing.getUserID());
+        }
 
         UserFollower userFollower = userFollowerRepository.findByUserAndFollower(userToUnfollow, userThatsFollowing);
         // remove from following
@@ -213,11 +264,24 @@ public class UserController {
         HttpHeaders responseHeaders = new HttpHeaders();
         User user = userRepository.getByUserID(reactionDTO.getUserID());
         Post post = postRepository.findByPostID(reactionDTO.getPostID());
-        Reaction newReaction = new Reaction(0, user, post);
-        post.addReaction(newReaction);
-        reactionRepository.save(newReaction);
-        int numReactions = post.getReactions().size();
-        return ResponseEntity.ok().headers(responseHeaders).body(numReactions);
+
+        // Check if reaction exists
+        Reaction foundReaction = reactionRepository.getReactionByPostAndUser(post, user);
+        if (foundReaction != null) {
+            if (foundReaction.getReactionType() == 0) {
+                // already liked
+                return ResponseEntity.ok().headers(responseHeaders).body(post.getNetReactions());
+            }
+            // Already disliked, undislike first
+            foundReaction.setTimeReacted(new Timestamp(System.currentTimeMillis()));
+            foundReaction.setReactionType(0);
+            reactionRepository.save(foundReaction);
+        } else {
+            Reaction newReaction = new Reaction(0, user, post);
+            post.addReaction(newReaction);
+            reactionRepository.save(newReaction);
+        }
+        return ResponseEntity.ok().headers(responseHeaders).body(post.getNetReactions());
     }
 
     @RequestMapping(value="unlike_post", method = RequestMethod.POST,
@@ -226,14 +290,115 @@ public class UserController {
         HttpHeaders responseHeaders = new HttpHeaders();
         User user = userRepository.getByUserID(reactionDTO.getUserID());
         Post post = postRepository.findByPostID(reactionDTO.getPostID());
-        Reaction reaction = reactionRepository.getReactionByPostAndUser(post, user);
-        post.removeReaction(reaction);
-        reactionRepository.delete(reaction);
-        int numReactions = post.getReactions().size();
-        return ResponseEntity.ok().headers(responseHeaders).body(numReactions);
+
+        Reaction foundReaction = reactionRepository.getReactionByPostAndUser(post, user);
+        if (foundReaction == null) {
+            // Already unliked
+            return ResponseEntity.ok().headers(responseHeaders).body(post.getNetReactions());
+        }
+        post.removeReaction(foundReaction);
+        reactionRepository.delete(foundReaction);
+        return ResponseEntity.ok().headers(responseHeaders).body(post.getNetReactions());
     }
 
-    @RequestMapping(value="hot_timeline", method = RequestMethod.GET,
+    @RequestMapping(value="dislike_post", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> dislikePost(@RequestBody ReactionDTO reactionDTO) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.getByUserID(reactionDTO.getUserID());
+        Post post = postRepository.findByPostID(reactionDTO.getPostID());
+
+        // Check if reaction exists
+        Reaction foundReaction = reactionRepository.getReactionByPostAndUser(post, user);
+        if (foundReaction != null) {
+            if (foundReaction.getReactionType() == 1) {
+                // already disliked
+                return ResponseEntity.ok().headers(responseHeaders).body(post.getNetReactions());
+            }
+            // Already liked, unlike first
+            foundReaction.setTimeReacted(new Timestamp(System.currentTimeMillis()));
+            foundReaction.setReactionType(1);
+            reactionRepository.save(foundReaction);
+        } else {
+            Reaction newReaction = new Reaction(1, user, post);
+            post.addReaction(newReaction);
+            reactionRepository.save(newReaction);
+        }
+        return ResponseEntity.ok().headers(responseHeaders).body(post.getNetReactions());
+    }
+
+    @RequestMapping(value="undislike_post", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> undislikePost(@RequestBody ReactionDTO reactionDTO) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.getByUserID(reactionDTO.getUserID());
+        Post post = postRepository.findByPostID(reactionDTO.getPostID());
+
+        Reaction foundReaction = reactionRepository.getReactionByPostAndUser(post, user);
+        if (foundReaction == null) {
+            // Already undisliked
+            return ResponseEntity.ok().headers(responseHeaders).body(post.getNetReactions());
+        }
+        post.removeReaction(foundReaction);
+        reactionRepository.delete(foundReaction);
+        return ResponseEntity.ok().headers(responseHeaders).body(post.getNetReactions());
+    }
+
+    // TODO: block user
+
+    // TODO: unblock user
+
+    @RequestMapping(value="save_post", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> savePost(@RequestBody SavedPostDTO savedPostDTO) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.getByUserID(savedPostDTO.getUserID());
+        Post post = postRepository.findByPostID(savedPostDTO.getPostID());
+        SavedPost foundSavedPost = savedPostRepository.findByUserAndSavedPost(user, post);
+        if (foundSavedPost != null) {
+            // already saved
+            return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+        }
+
+        SavedPost newSavedPost = new SavedPost(user, post);
+        savedPostRepository.save(newSavedPost);
+
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+    }
+
+    @RequestMapping(value="unsave_post", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> unsavePost(@RequestBody SavedPostDTO savedPostDTO) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.getByUserID(savedPostDTO.getUserID());
+        Post post = postRepository.findByPostID(savedPostDTO.getPostID());
+
+        SavedPost foundSavedPost = savedPostRepository.findByUserAndSavedPost(user, post);
+        if (foundSavedPost == null) {
+            // post already not saved
+            return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+        }
+        savedPostRepository.delete(foundSavedPost);
+
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+    }
+
+    @RequestMapping(value="create_comment", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> savePost(@RequestBody CommentDTO commentDTO) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+
+        User user = userRepository.findByUserID(commentDTO.getUserID());
+        Post post = postRepository.findByPostID(commentDTO.getPostID());
+        Comment newComment = new Comment(user.getUsername(), user, commentDTO.getContent(), post);
+        commentRepository.save(newComment);
+        post.addComment(newComment);
+
+        return ResponseEntity.ok().headers(responseHeaders).body(post.getPostID());
+    }
+
+    // Posts made in the past 24 hrs
+    @RequestMapping(value="hot_timeline/{userID}", method = RequestMethod.GET,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostDTO>> showHotTimeline(@PathVariable("userID") int userID) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -255,7 +420,28 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(topPostsDTO);
     }
 
+    // Posts that have been liked/dislike
+    @RequestMapping(value="get_reacted_to_posts/{userID}", method = RequestMethod.GET,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PostDTO>> showReactedToPosts(@PathVariable int userID) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
 
+        User user = userRepository.getByUserID(userID);
+        // Find all reactions from user
+        List<Reaction> userReactions = reactionRepository.getReactionsByUser(user);
+        // Find all posts with reactions from user
+        List<Post> reactionPosts = new ArrayList<>();
+        for (Reaction currReaction : userReactions) {
+            reactionPosts.add(currReaction.getPost());
+        }
+
+        List<PostDTO> reactionPostsDTO = new ArrayList<PostDTO>();
+        for (Post post : reactionPosts) {
+            PostDTO temp = createPostDTO(post.getPostID(), userID);
+            reactionPostsDTO.add(temp);
+        }
+        return ResponseEntity.ok().headers(responseHeaders).body(reactionPostsDTO);
+    }
 
     // Homepage, all the topics and users a user follows
     @RequestMapping(value="get_user_timeline/{userID}", method = RequestMethod.GET,
@@ -314,7 +500,6 @@ public class UserController {
             for (User user : usersFound) {
                 searchResults.add(new SearchDTO(user.getUsername(), user.getUserID()));
             }
-
         }
 
         if (type == 1) {
@@ -323,9 +508,6 @@ public class UserController {
             for (Topic topic : topicsFound) {
                 searchResults.add(new SearchDTO(topic.getTopicName()));
             }
-//            for (String result : results) {
-//                searchResults.add(new SearchDTO(result));
-//            }
         }
 
 
@@ -374,7 +556,6 @@ public class UserController {
         List<Post> topicPosts = postRepository.findAllByTopic(topic);
 
         User user = userRepository.findByUserID(userID);
-        //List<Integer> blockedUsers = userFollowerRepository.findBlockedUserIDs(user);
         List<Post> topicPostsWithoutBlocked = postRepository.findAllTopicPostsWithoutBlocked(topic, user);
 
         List<PostDTO> topicPostsDTOs = new ArrayList<>();

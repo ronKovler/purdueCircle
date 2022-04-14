@@ -52,6 +52,12 @@ public class PostController {
     @Autowired
     private UserFollowerRepository userFollowerRepository;
 
+    @Autowired
+    private SavedPostRepository savedPostRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
 
     public PostDTO createPostDTO(int postID, int userID) {
         Post getPost = postRepository.findByPostID(postID);
@@ -60,6 +66,8 @@ public class PostController {
         int reactionType = -1;
         boolean topicFollowed = false;
         boolean userFollowed = false;
+        boolean isSaved = false;
+        List<CommentDTO> comments;
 
         if (getUser != null) {
             Reaction reaction = reactionRepository.getReactionByPostAndUser(getPost, getUser);
@@ -72,15 +80,23 @@ public class PostController {
                 topicFollowed = true;
             }
 
-
             UserFollower userFollower = userFollowerRepository.findByUserAndFollower(getPost.getUser(), getUser);
             if (userFollower != null) {
                 userFollowed = true;
             }
+
+            SavedPost savedPost = savedPostRepository.findByUserAndSavedPost(getUser, getPost);
+            if (savedPost != null) {
+                isSaved = true;
+            }
+
+            comments = commentRepository.getAllPostCommentsWithoutBlocked(getPost, getUser);
+
+        } else {
+            comments = commentRepository.getAllPostComments(getPost);
         }
 
-
-        PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed);
+        PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed, isSaved, comments);
         //System.out.println("\t\t\tPOST reactiontype: "  );
         return postDTO;
     }
@@ -129,8 +145,6 @@ public class PostController {
                                            @PathVariable("userID") int userID) throws URISyntaxException {
 
         HttpHeaders responseHeaders = new HttpHeaders();
-        //DON'T TOUCH ABOVE
-
 
         return ResponseEntity.ok().headers(responseHeaders).body(createPostDTO(postID, userID));
     }

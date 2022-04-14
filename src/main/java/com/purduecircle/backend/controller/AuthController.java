@@ -28,14 +28,11 @@ public class AuthController {
         HttpHeaders responseHeaders = new HttpHeaders();
         //DON'T TOUCH ABOVE
 
-        System.out.println("RECEIVED USER " + newUser.getEmail()); //Test for server
-
         User checkExists = userRepository.findByEmailEqualsAndPasswordEquals(newUser.getEmail(),
                 newUser.getPassword());
-
         if (checkExists == null) {
-            checkExists = userRepository.findByUsernameEqualsAndPasswordEquals(newUser.getUsername(),
-                    newUser.getPassword());
+            // Sent username as email
+            checkExists = userRepository.findByUsernameEqualsAndPasswordEquals(newUser.getEmail(), newUser.getPassword());
         }
 
         if (checkExists != null) {

@@ -43,13 +43,21 @@ public class ModifyUserController {
 
     @RequestMapping(value="modify_first_name", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> modifyFirstName(@RequestBody User argUser) throws URISyntaxException {
+    public ResponseEntity<Integer> modifyFirstName(@RequestBody User argUser){
+
+        // TODO: All these functions only work with findByEmail() and not the getByUserID()
+        System.out.println("\t\tID: " + argUser.getUserID());
+        System.out.println("\t\tEmail: " + argUser.getEmail());
+        System.out.println("\t\tPassword: " + argUser.getPassword());
+        System.out.println("\t\tFirst Name: " + argUser.getFirstName());
+        System.out.println("\t\tLast Name: " + argUser.getLastName());
+        System.out.println("\t\tUsername: " + argUser.getUsername());
 
         HttpHeaders responseHeaders = new HttpHeaders();
         if (argUser.getFirstName().equals("")) {
             return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
-        User user = userRepository.findByEmailEquals(argUser.getEmail());
+        User user = userRepository.getByUserID(argUser.getUserID());
         user.setFirstName(argUser.getFirstName());
         userRepository.save(user);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
@@ -63,7 +71,7 @@ public class ModifyUserController {
         if (argUser.getLastName().equals("")) {
             return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
-        User user = userRepository.findByEmailEquals(argUser.getEmail());
+        User user = userRepository.getByUserID(argUser.getUserID());
         user.setLastName(argUser.getLastName());
         userRepository.save(user);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
@@ -83,7 +91,7 @@ public class ModifyUserController {
             return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
 
-        User user = userRepository.findByEmailEquals(argUser.getEmail());
+        User user = userRepository.getByUserID(argUser.getUserID());
         user.setUsername(argUser.getUsername().toLowerCase());
         userRepository.save(user);
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
@@ -96,7 +104,7 @@ public class ModifyUserController {
         if (argUser.getPassword().equals("")) {
             return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
-        User user = userRepository.findByEmailEquals(argUser.getEmail());
+        User user = userRepository.getByUserID(argUser.getUserID());
         user.setPassword(argUser.getPassword());
         System.out.printf("Changing password to: " + argUser.getPassword());
         userRepository.save(user);
@@ -106,10 +114,11 @@ public class ModifyUserController {
     // TODO: regex should be checked on frontend
     @RequestMapping(value="modify_phone_number", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> modifyPhoneNumber(@RequestBody User newUser) throws URISyntaxException {
+    public ResponseEntity<Integer> modifyPhoneNumber(@RequestBody User argUser) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.findByUserID(newUser.getUserID());
-        user.setPhoneNumber(newUser.getPhoneNumber());
+        User user = userRepository.getByUserID(argUser.getUserID());
+
+        user.setPhoneNumber(argUser.getPhoneNumber());
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 

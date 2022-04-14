@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface ReactionRepository extends JpaRepository<Reaction, Integer> {
         Reaction getReactionByPostAndUser(Post post, User user);
+        List<Reaction> getReactionsByUser(User user);
 }
