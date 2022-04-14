@@ -151,8 +151,14 @@ public class User {
         return blocked;
     }
 
-    public void setBlocked(Set<UserBlocked> blocked) {
-        this.blocked = blocked;
+    /* add topic to list of topics this user is following */
+    public void addBlockedUser(UserBlocked newUserBlocked) {
+        blocked.add(newUserBlocked);
+    }
+
+    /* remove topic to list of topics this user is following */
+    public void removeBlockedUser(UserBlocked newUserBlocked) {
+        blocked.remove(newUserBlocked);
     }
 
     /* add topic to list of topics this user is following */
@@ -182,7 +188,7 @@ public class User {
 
     /* remove topic to list of topics this user is following */
     public void removeFollowing(UserFollower newUserFollower) {
-        following.add(newUserFollower);
+        following.remove(newUserFollower);
     }
 
     public int getUserID() {

@@ -344,26 +344,46 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body(post.getNetReactions());
     }
 
-    // TODO: block user
-
-    // TODO: unblock user
-
-    @RequestMapping(value="save_post", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> savePost(@RequestBody SavedPostDTO savedPostDTO) throws URISyntaxException {
+    @RequestMapping(value="block_user/{userID}/{userToBlock}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> blockUser(@PathVariable("userID") int argUserID,
+                                              @PathVariable("userToBlock") int argUserToBlock) throws URISyntaxException {
         HttpHeaders responseHeaders = new HttpHeaders();
-        User user = userRepository.getByUserID(savedPostDTO.getUserID());
-        Post post = postRepository.findByPostID(savedPostDTO.getPostID());
-        SavedPost foundSavedPost = savedPostRepository.findByUserAndSavedPost(user, post);
-        if (foundSavedPost != null) {
-            // already saved
-            return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+        User userThatsBlocking = userRepository.findByUserID(argUserID);
+        User userToBlock = userRepository.findByUserID(argUserToBlock);
+
+        UserBlocked foundUserBlocked = userBlockedRepository.findByUserAndBlockedUser(userThatsBlocking, userToBlock);
+        if (foundUserBlocked != null) {
+            // Already blocked
+            return ResponseEntity.ok().headers(responseHeaders).body(userThatsBlocking.getUserID());
         }
 
-        SavedPost newSavedPost = new SavedPost(user, post);
-        savedPostRepository.save(newSavedPost);
+        UserBlocked newUserBlocked = new UserBlocked(userThatsBlocking, userToBlock);
+        userBlockedRepository.save(newUserBlocked);
+        userThatsBlocking.addBlockedUser(newUserBlocked);
+        return ResponseEntity.ok().headers(responseHeaders).body(userThatsBlocking.getUserID());
+    }
 
-        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+    @Transactional
+    @RequestMapping(value="unblock_user/{userID}/{userToUnblock}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> unblockUser(@PathVariable("userID") int argUserID,
+                                                @PathVariable("userToUnblock") int argUserToUnblock) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User userThatsUnblocking = userRepository.findByUserID(argUserID);
+        User userToUnblock = userRepository.findByUserID(argUserToUnblock);
+
+        UserBlocked foundUserBlocked = userBlockedRepository.findByUserAndBlockedUser(userThatsUnblocking, userToUnblock);
+        if (foundUserBlocked == null) {
+            // Already unblocked
+            return ResponseEntity.ok().headers(responseHeaders).body(userThatsUnblocking.getUserID());
+        }
+
+        // remove from blocked list
+        userThatsUnblocking.removeBlockedUser(foundUserBlocked);
+        // remove from table
+        userBlockedRepository.deleteByUserAndFollower(userThatsUnblocking, userToUnblock);
+        return ResponseEntity.ok().headers(responseHeaders).body(userThatsUnblocking.getUserID());
     }
 
     @RequestMapping(value="unsave_post", method = RequestMethod.POST,

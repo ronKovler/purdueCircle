@@ -9,7 +9,7 @@ public class UserBlocked {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_blocked_ID")
-    private int userFollowerID;
+    private int userBlockedID;
 
     @ManyToOne
     @JoinColumn(name = "blockedUserID")
@@ -27,11 +27,11 @@ public class UserBlocked {
     public UserBlocked(){}
 
     public int getUserFollowerID() {
-        return userFollowerID;
+        return userBlockedID;
     }
 
     public void setUserFollowerID(int userFollowerID) {
-        this.userFollowerID = userFollowerID;
+        this.userBlockedID = userFollowerID;
     }
 
     public User getBlockedUser() {
