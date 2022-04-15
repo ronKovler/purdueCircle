@@ -71,7 +71,7 @@ export default function EditProfileScreen({navigation}) {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': serverAddress,
                 },
                 body: JSON.stringify({
                     'userID': User.userID,
