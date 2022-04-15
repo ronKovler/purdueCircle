@@ -13,6 +13,7 @@ export default function EditProfileScreen({navigation}) {
     const [usernameError, setUsernameError] = useState("");
     const [isPrivate, setIsPrivate] = useState(false)
     const [newProfilePic, setNewProfilePic] = useState(User.profilePicture);
+    const [success, setSuccess] = useState('');
 
     const LogOut = async () => {
         await User.logout()
@@ -77,14 +78,17 @@ export default function EditProfileScreen({navigation}) {
                     'password': password === '' ? null : password,
                     'firstName': firstName,
                     'lastName': lastName,
-                    'username': username,
+                    'username': username === User.username ? null : username,
                     'email': User.email,
                     'isPrivate': isPrivate,
                     'profileImagePath': imagePath,
                 })
             })
-            if (!update) setUsernameError("Username already taken!");
-            else navigation.navigate('Home');
+            if (newPassword.status !== 200) setUsernameError("Username already taken!");
+            else {
+                setSuccess("Changes saved successfully")
+                navigation.navigate('Home');
+            }
         } catch (error){
             console.error(error)
         }
@@ -161,6 +165,7 @@ export default function EditProfileScreen({navigation}) {
                         <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}> Set private account</Text>
                     </View>
                     <Pressable onPress={() => SendUpdates()}><Text style={styles.button}>Save Changes</Text></Pressable>
+                    {success !== '' ? <Text style={{color: 'green', textAlign: 'center'}}>{success}</Text> : null}
                 </View>
               </View>
               <View style={{flex: 3}}/>
