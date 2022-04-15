@@ -350,7 +350,8 @@ const postStyles = StyleSheet.create({
         borderTopWidth: 4,
         borderTopColor: '#737373',
         padding: 12.5,
-        paddingBottom: 110,
+        paddingBottom: 120,
+        overflow: 'scroll',
         flex: 2
     },
     button: {
