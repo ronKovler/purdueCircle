@@ -46,6 +46,7 @@ export default function App() {
             User.firstName = items.firstName;
             User.lastName = items.lastName;
             User.password = items.password;
+            User.profilePicture = items.profileImagePath;
         }, () => {
             User.isLoggedIn = false;
         })

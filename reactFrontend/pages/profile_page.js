@@ -1,10 +1,9 @@
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react'
 import {Choo, HeaderLogo, styles} from './stylesheet';
 import {renderPost} from "./post";
 import User from "./user";
 import {Link, useIsFocused, useLinkTo} from "@react-navigation/native";
-import user from "./user";
 
 export default function ProfilePage({route, navigation}) {
     const LogOut = async () => {
@@ -29,6 +28,7 @@ export default function ProfilePage({route, navigation}) {
     const offFocusColor = "#ffde59";
     const [postColor, setPostColor] = useState(onFocusColor);
     const [reactedColor, setReactedColor] = useState(offFocusColor);
+    const [profilePic, setProfilePic] = useState(null)
 
     useEffect(async () => {
         setIsLoading(true)
@@ -50,12 +50,14 @@ export default function ProfilePage({route, navigation}) {
                     setFirstName(items.firstName)
                     setLastName(items.lastName)
                     setPrivate(items.isPrivate)
+                    setProfilePic(items.profileImagePath)
                 })
             } else {
                 setUsername(User.username)
                 setFirstName(User.firstName)
                 setLastName(User.lastName)
                 setPrivate(User.isPrivate)
+                setProfilePic(User.profilePicture)
             }
             setUserlineData(data);
             setFollowsData(followsData)
@@ -89,7 +91,7 @@ export default function ProfilePage({route, navigation}) {
     };
 
     async function getReactedTo() {
-        const response = fetch(serverAddress + '/api/user/get_reacted_to_posts/' + userID, {
+        fetch(serverAddress + '/api/user/get_reacted_to_posts/' + userID, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
@@ -213,6 +215,14 @@ export default function ProfilePage({route, navigation}) {
                     </View>
                     <View style={{flex: 5, flexDirection: 'column'}}>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
+                        <View style={{flexDirection: "row", padding: 20, paddingLeft: 40}}>
+                            <Image style={styled.profilePicture} source={{uri: profilePic}}/>
+                            <View style={{flexDirection: 'column', paddingLeft: 15}}>
+                                { isPrivate ? null :
+                                <Text style={{fontWeight: 'bold', fontSize: '28px', margin: 10, marginBottom: 3}}>{firstName} {lastName}</Text>}
+                                <Text style={{fontSize: '16px', margin: 13, marginTop: 0}}>{username}</Text>
+                            </View>
+                        </View>
                         <View style={{flex: 6, backgroundColor: '737373'}}>
                             {!onReactedTo ?
                                 <View style={{flexDirection: "row"}}>
@@ -287,5 +297,11 @@ const styled = StyleSheet.create({
         alignItems: 'stretch',
         justifyContent: 'center',
         minHeight: 'fit-content',
+    },
+    profilePicture: {
+        height: 150,
+        width: 150,
+        borderRadius: 300,
+        aspectRatio: 1,
     }
 })

@@ -1,20 +1,33 @@
 import React, { useState } from 'react';
-import {View, Text, TextInput, StyleSheet, Pressable, FlatList, ScrollView, TouchableOpacity, CheckBox} from 'react-native';
-import { styles, HeaderLogo, Choo, Logo } from './stylesheet';
+import {View, Text, TextInput, StyleSheet, Pressable, TouchableOpacity, CheckBox, Image} from 'react-native';
+import { styles, HeaderLogo, Choo } from './stylesheet';
 import User from "./user";
+import * as ImagePicker from "expo-image-picker";
 
 export default function EditProfileScreen({navigation}) {
     const [username, setUsername] = useState(User.username);
     const [firstName, setFirstName] = useState(User.firstName);
     const [lastName, setLastName] = useState(User.lastName);
-    const [password, setPassword] = useState(User.password);
-    const [checkPassword, setCheckPassword] = useState(User.password)
-    const [usernameError, setUsernameError] = useState("")
+    const [password, setPassword] = useState('');
+    const [checkPassword, setCheckPassword] = useState('');
+    const [usernameError, setUsernameError] = useState("");
     const [isPrivate, setIsPrivate] = useState(false)
+    const [newProfilePic, setNewProfilePic] = useState(User.profilePicture);
 
     const LogOut = async () => {
         await User.logout()
         navigation.navigate('Login');
+    }
+
+    const pickImage = async () =>{
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            quality: .1,
+        });
+
+        if(!result.cancelled){
+            setNewProfilePic(result.uri);
+        }
     }
 
     const DeleteAccount = async () => {
@@ -36,8 +49,24 @@ export default function EditProfileScreen({navigation}) {
     //helper functions
     const SendUpdates = async () => {
         try {
+            let imagePath;
+            if(newProfilePic !== User.profilePicture){
+                let formData = new FormData();
+                const response = await fetch(newProfilePic);
+                const blob = await response.blob();
+                formData.append("file", blob)
+                let ret = await fetch(serverAddress + '/api/post/upload_image', {
+                    method: "POST",
+                    headers: {
+                        'Access-Control-Allow-Origin': serverAddress,
+                    },
+                    body: formData
+                })
+                imagePath = await ret.json()
+                imagePath = serverAddress + '/images/'+ imagePath.content
+            }
             if(password.length > 32 || username.length > 24) return;
-            const newPassword = await fetch (serverAddress + "/api/modify/modify_password", {
+            const newPassword = await fetch (serverAddress + "/api/modify/modify_user", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -45,78 +74,13 @@ export default function EditProfileScreen({navigation}) {
                 },
                 body: JSON.stringify({
                     'userID': User.userID,
-                    'password': password,
+                    'password': password === '' ? null : password,
                     'firstName': firstName,
                     'lastName': lastName,
                     'username': username,
                     'email': User.email,
-                    'isPrivate': isPrivate
-                })
-            })
-            console.log(newPassword)
-            await fetch (serverAddress + "/api/modify/modify_first_name", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify({
-                    'userID': User.userID,
-                    'password': password,
-                    'firstName': firstName,
-                    'lastName': lastName,
-                    'username': username,
-                    'email': User.email,
-                    'isPrivate': isPrivate
-                })
-            })
-            await fetch (serverAddress + "/api/modify/modify_last_name", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify({
-                    'userID': User.userID,
-                    'password': password,
-                    'firstName': firstName,
-                    'lastName': lastName,
-                    'username': username,
-                    'email': User.email,
-                    'isPrivate': isPrivate
-                })
-            })
-            await fetch (serverAddress + "/api/modify/modify_private", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify({
-                    'userID': User.userID,
-                    'password': password,
-                    'firstName': firstName,
-                    'lastName': lastName,
-                    'username': username,
-                    'email': User.email,
-                    'isPrivate': isPrivate
-                })
-            })
-            
-            const update = await fetch (serverAddress + "/api/modify/modify_username", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify({
-                    'userID': User.userID,
-                    'password': password,
-                    'firstName': firstName,
-                    'lastName': lastName,
-                    'username': username,
-                    'email': User.email,
-                    'isPrivate': isPrivate
+                    'isPrivate': isPrivate,
+                    'profileImagePath': imagePath,
                 })
             })
             if (!update) setUsernameError("Username already taken!");
@@ -163,6 +127,9 @@ export default function EditProfileScreen({navigation}) {
               <View style={{flex: 3, backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
                 <Text style={styles.header}>{User.username}'s Profile Information</Text>
                 <View style={{justifyContent: 'center'}}>
+                    <Pressable onPress={() => pickImage()}>
+                        <Image style={styled.profilePicture} source={{uri: newProfilePic}}/>
+                    </Pressable>
                     {usernameError.length > 0 && <Text style={{color: 'red'}}>{usernameError}</Text>}
                     <TextInput
                         style={styles.accountInputBox}
@@ -179,12 +146,12 @@ export default function EditProfileScreen({navigation}) {
                         onChangeText={lastName => setLastName(lastName)}/>
                     <TextInput
                         style={styles.accountInputBox}
-                        placeholder={User.password}
+                        placeholder={'Password'}
                         textContentType={"password"}
                         secureTextEntry={true}
                         onChangeText={password => setPassword(password)}/>
                     {password.length > 32 && <Text style={{color: 'red'}}>Password cannot be longer than 32 characters</Text>}
-                    <TextInput style={styles.accountInputBox} secureTextEntry={true} onChangeText={double => setCheckPassword(double)} placeholder={User.password}/>
+                    <TextInput style={styles.accountInputBox} secureTextEntry={true} onChangeText={double => setCheckPassword(double)} placeholder={'Reenter Password'}/>
                     {password !== checkPassword && <Text style={{color: 'red'}}>Passwords do not match</Text>}
                     <View style={{flexDirection: "row"}}>
                         <CheckBox
@@ -212,5 +179,11 @@ const styled = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
     minHeight: 'fit-content',
-  }
+  },
+    profilePicture: {
+        height: 150,
+        width: 150,
+        borderRadius: 300,
+        aspectRatio: 1,
+    }
 })

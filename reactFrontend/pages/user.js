@@ -4,6 +4,11 @@ class UserAuth {
 	constructor() {
 		this.userID = -1;
 		this.username = null;
+		this.isLoggedIn = false;
+		this.firstName = null;
+		this.lastName = null;
+		this.password = null;
+		this.profilePicture = null;
 	}
 
 // TODO: add secondary auth key for persistent user sessions

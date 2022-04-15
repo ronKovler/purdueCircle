@@ -12,7 +12,7 @@ const renderPost = ({item}) => {
     return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
                  userID={item.userID} anonymous={item.anonymous} link={link} imagePath={item.imagePath}
                  netReactions={item.netReactions} reaction={item.reaction} userFollowed={item.userFollowed}
-                 topicFollowed={item.topicFollowed} isSaved={item.isSaved} comments={item.comments}/>
+                 topicFollowed={item.topicFollowed} isSaved={item.isSaved} comments={item.comments} profilePicture={item.profileImagePath}/>
     // TODO: check item fields for reactions
 };
 
@@ -33,6 +33,7 @@ function Post(props) {
     const postID = props.postID
     const link = props.link;
     const comments = props.comments;
+    const profilePicture = props.profilePicture;
 
     const [newComment, setNewComment] = useState("")
     const [topicFollowed, setTopicFollowed] = useState(props.topicFollowed)
@@ -238,14 +239,14 @@ function Post(props) {
                                 <Pressable
                                     onClick={() => linkto("/user/" + userID)}>
                                     <Image style={postStyles.icon}
-                                           source={{uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farchive.org%2Fdownload%2Ftwitter-default-pfp%2Fe.png&f=1&nofb=1'}}/>
+                                           source={{uri: profilePicture}}/>
                                 </Pressable>
                                 {anonymous ?
                                     <Text style={postStyles.username}>Anonymous</Text>
                                     :
                                     <Link style={postStyles.username} to={'/user/' + userID}>{user}</Link>
                                 }
-                                {(User.isLoggedIn && User.userID !== userID && !anonymous) ?
+                                {(User.isLoggedIn && User.userID !== userID && !anonymous && !props.userFollowed) ?
                                     <Pressable
                                         onPress={() => toggleFollowUser()}>
                                         {!userFollowed ?
@@ -256,7 +257,7 @@ function Post(props) {
                         }
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        {User.isLoggedIn ?
+                        {User.isLoggedIn && !props.topicFollowed ?
                             <Pressable style={{paddingRight: 10}}
                                        onPress={() => toggleFollowTopic()}>
                                 {!topicFollowed ?
