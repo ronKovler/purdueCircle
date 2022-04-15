@@ -1,13 +1,12 @@
-import {Pressable, StyleSheet, Text, View, Image, Linking, TextInput, FlatList} from "react-native";
-import React, {useEffect, useState} from "react";
+import {Pressable, StyleSheet, Text, View, Image, TextInput, FlatList} from "react-native";
+import React, {useState} from "react";
 import User from "./user";
-import {useNavigation} from '@react-navigation/native';
+import {useLinkTo} from '@react-navigation/native';
 import {Link} from "@react-navigation/native";
-import { styles } from "./stylesheet";
 
 const renderPost = ({item}) => {
     let link = item.link
-    if(item.link !== null && !item.link.includes('https://') && !item.link.includes('http://')){
+    if (item.link !== null && !item.link.includes('https://') && !item.link.includes('http://')) {
         link = 'https://' + item.link;
     }
     return <Post topic={item.topicName} user={item.username} content={item.content} postID={item.postID}
@@ -18,32 +17,41 @@ const renderPost = ({item}) => {
 };
 
 function Post(props) {
-    const [user, setUser] = useState(props.user)
-    const [topic, setTopic] = useState(props.topic)
-    const [comments, setComments] = useState(props.comments)
+    // const [user, setUser] = useState(props.user)
+    // const [topic, setTopic] = useState(props.topic)
+    // const [comments, setComments] = useState(props.comments)
+    // const [content, setContent] = useState(props.content)
+    // const [anonymous, setAnonymous] = useState(props.anonymous)
+    // const [userID, setUserID] = useState(props.userID)
+    // const [link, setLink] = useState(props.link);
+
+    const user = props.user;
+    const topic = props.topic;
+    const content = props.content;
+    const anonymous = props.anonymous;
+    const userID = props.userID;
+    const postID = props.postID
+    const link = props.link;
+    const comments = props.comments;
+
     const [newComment, setNewComment] = useState("")
-    const [content, setContent] = useState(props.content)
-    const [isLoading, setIsLoading] = useState(true)
     const [topicFollowed, setTopicFollowed] = useState(props.topicFollowed)
     const [userFollowed, setUserFollowed] = useState(props.userFollowed)
     const [reaction, setReaction] = useState(props.reaction)
-    const [anonymous, setAnonymous] = useState(props.anonymous)
-    const postID = props.postID
-    const [userID, setUserID] = useState(props.userID)
-    const navigation = useNavigation();
-    const [link, setLink] = useState(props.link);
-    const [image, setImage] = useState(props.imagePath);
     const [netReactions, setNetReactions] = useState(props.netReactions)
     const [isSaved, setIsSaved] = useState(props.isSaved)
+    const [image, setImage] = useState(props.imagePath);
+    const linkto = useLinkTo();
 
     const renderComment = ({item}) => {
         return (
-            <View style={{flex: 3, flexDirection: 'row', justifyContent: 'space-around'}}>
-                <Text style={postStyles.commentUsername}>{item.username}</Text>
+            <View style={postStyles.commentBoundary}>
+                <Link style={postStyles.commentUsername} to={"/user/" + item.userID}>{item.username}</Link>
                 <Text style={postStyles.commentContent}>{item.content}</Text>
             </View>
         )
     }
+
     //TODO: Force login if interacted while not logged in
     async function toggleFollowUser() {
         if (!User.isLoggedIn) {
@@ -145,7 +153,7 @@ function Post(props) {
         } else {
             url += "unsave_post"
         }
-        
+
         try {
             await fetch(url, {
                 method: 'POST',
@@ -157,7 +165,10 @@ function Post(props) {
                     'userID': await User.getuserID(),
                     'postID': postID
                 })
-            }).then(() => setIsSaved(!isSaved))
+            }).then((response) =>{
+                if(response.status === 200)
+                    setIsSaved(!isSaved)
+            })
         } catch (error) {
             console.log(error)
         }
@@ -225,15 +236,13 @@ function Post(props) {
                         {!props.moves ?
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Pressable
-                                    onClick={() => navigation.navigate('Profile Page')}>
+                                    onClick={() => linkto("/user/" + userID)}>
                                     <Image style={postStyles.icon}
                                            source={{uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farchive.org%2Fdownload%2Ftwitter-default-pfp%2Fe.png&f=1&nofb=1'}}/>
                                 </Pressable>
                                 {anonymous ?
-                                    <Pressable style={{paddingLeft: 10}}
-                                               onClick={() => console.log("printed?")}>
-                                        <Text style={postStyles.username}>Anonymous</Text>
-                                    </Pressable> :
+                                    <Text style={postStyles.username}>Anonymous</Text>
+                                    :
                                     <Link style={postStyles.username} to={'/user/' + userID}>{user}</Link>
                                 }
                                 {(User.isLoggedIn && User.userID !== userID && !anonymous) ?
@@ -266,57 +275,62 @@ function Post(props) {
                     {image !== null ?
                         <View style={{flex: 1}}>
                             <Image source={{uri: image}}
-                                   style={{height: 150, width: 150}}/>
+                                   style={{height: '250px', width: 'auto', resizeMode: 'center'}}/>
                         </View>
                         : null
                     }
                 </View>
                 {link !== null ?
-                    <Text style={{color: 'blue'}} onPress={() => window.open(link, '_blank')}>{link}</Text>
+                    <View style={{flexDirection: "row", margin: 4, marginBottom: 10}}>
+                        <Text style={[postStyles.text, {color: 'blue', alignSelf: 'flex-end'}]} onPress={() => window.open(link, '_blank')}>{link}</Text>
+                    </View>
                     : null
                 }
-                <View style={{flexBasis: 1, padding: 7}}>
+                <View style={{flexBasis: 1}}>
                     {User.isLoggedIn ?
-                    <>
-                        <View style={{flexDirection:"row", justifyContent: 'space-between'}}>
-                            <Pressable onPress={() => toggleLike()} style={{flex: 2}}>
-                                {reaction === 0 ?
-                                    <Image source={require('../assets/thumbs-up-full.svg')}
-                                           style={[postStyles.likeButton, {tintColor: 'red'}]}/> :
-                                    <Image source={require('../assets/thumbs-up-empty.svg')}
-                                           style={postStyles.likeButton}/>}
-                            </Pressable>
-                            <Text style={[postStyles.text, {paddingTop: 1}]}>{netReactions}</Text>
-                            <Pressable onPress={() => toggleDislike()} style={{flex: 2}}>
-                                {reaction === 1 ?
-                                    <Image source={require('../assets/thumbs-down-full.svg')} style={[postStyles.likeButton, {tintColor: 'blue'}]}/> :
-                                    <Image source={require('../assets/thumbs-down-empty.svg')} style={postStyles.likeButton}/>}
-                            </Pressable>
-                            <Pressable onPress={() => toggleSavePost()} style={{flex: 3}}>
-                                {!isSaved ?
-                                    <Text style={postStyles.followButton}>Save</Text> :
-                                    <Text style={postStyles.followButton}>Unsave</Text>}
-                            </Pressable>
-                            <View style={{flex: 16}}>
-                            </View>
-                        </View>
-                        <View style={{flexDirection:"column", justifyContent: 'space-between'}}>
-                            <View>
-                                <FlatList style={{flexGrow: 0}} data={comments} renderItem={renderComment} keyExtractor={item => item.userID}
-                                    extraData={comments} showsVerticalScrollIndicator={false}/>
-                            </View>
-                            <View style={{flexDirection:"row"}}>
-                                <TextInput
-                                  style={postStyles.commentInputBox}
-                                  onChangeText={setNewComment}
-                                  value={newComment}
-                                  placeholder="Write a comment..."
-                                />
-                                <Pressable onPress={() => postComment()}>
-                                    <Text style={postStyles.button}>Post</Text>
+                        <>
+                            <View style={{flexDirection: "row", justifyContent: 'space-between'}}>
+                                <Pressable onPress={() => toggleLike()} style={{flex: 2}}>
+                                    {reaction === 0 ?
+                                        <Image source={require('../assets/thumbs-up-full.svg')}
+                                               style={[postStyles.likeButton, {tintColor: 'red'}]}/> :
+                                        <Image source={require('../assets/thumbs-up-empty.svg')}
+                                               style={postStyles.likeButton}/>}
                                 </Pressable>
+                                <Text style={[postStyles.text, {paddingTop: 1}]}>{netReactions}</Text>
+                                <Pressable onPress={() => toggleDislike()} style={{flex: 2}}>
+                                    {reaction === 1 ?
+                                        <Image source={require('../assets/thumbs-down-full.svg')}
+                                               style={[postStyles.likeButton, {tintColor: 'blue'}]}/> :
+                                        <Image source={require('../assets/thumbs-down-empty.svg')}
+                                               style={postStyles.likeButton}/>}
+                                </Pressable>
+                                <Pressable onPress={() => toggleSavePost()} style={{flex: 3}}>
+                                    {!isSaved ?
+                                        <Text style={postStyles.followButton}>Save</Text> :
+                                        <Text style={postStyles.followButton}>Unsave</Text>}
+                                </Pressable>
+                                <View style={{flex: 16}}>
+                                </View>
                             </View>
-                        </View>
+                            <View style={{flexDirection: "column", justifyContent: 'space-between'}}>
+                                <View style={postStyles.commentWindow}>
+                                    <FlatList style={{flexGrow: 0}} data={comments} renderItem={renderComment}
+                                              keyExtractor={item => item.content}
+                                              extraData={comments} showsVerticalScrollIndicator={false}/>
+                                </View>
+                                <View style={{flexDirection: "row"}}>
+                                    <TextInput
+                                        style={postStyles.commentInputBox}
+                                        onChangeText={setNewComment}
+                                        value={newComment}
+                                        placeholder="Write a comment..."
+                                    />
+                                    <Pressable onPress={() => postComment()}>
+                                        <Text style={postStyles.button}>Post</Text>
+                                    </Pressable>
+                                </View>
+                            </View>
                         </>
                         : null}
 
@@ -325,6 +339,7 @@ function Post(props) {
         </View>
     )
 }
+
 /*
 Post.defaultProps = {
     moves: true
@@ -367,7 +382,7 @@ const postStyles = StyleSheet.create({
     username: {
         flex: 1,
         fontWeight: 'bold',
-        paddingLeft: 4,
+        paddingLeft: 10,
         paddingRight: 7,
     },
     topicStyle: {
@@ -407,12 +422,26 @@ const postStyles = StyleSheet.create({
         borderRadius: 15,
     },
     commentUsername: {
-        color: '#ffde59',
-        fontWeight: 'bold',
+        alignSelf: "left",
+        // color: '#ffde59',
+        color: 'black',
+        // fontWeight: 'bold',
     },
     commentContent: {
-        color: '#ffde59',
-        fontWeight: 'bold',
+        paddingLeft: 5,
+        alignSelf: "left",
+        // color: '#ffde59',
+        color: 'white',
+        // fontWeight: 'bold',
+    },
+    commentBoundary: {
+        flex: 3,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        padding: 2,
+    },
+    commentWindow: {
+        margin: 5,
     }
 })
 
