@@ -1,10 +1,7 @@
 import {Text, TextInput, View, Pressable, FlatList, Picker} from 'react-native';
 import React, { useState, useEffect } from 'react'
 import {HeaderLogo, styles} from './stylesheet';
-import Post from "./post";
-import Topic from "./topic";
-import User from "./user";
-import {useIsFocused} from "@react-navigation/native";
+import {Link, useIsFocused} from "@react-navigation/native";
 
 export default function SearchPage({navigation}) {
     const [search, setSearch] = useState('')
@@ -49,21 +46,11 @@ export default function SearchPage({navigation}) {
     }, [isFocused])
 
     const renderSearch = ({item}) => {
-        var nav
-        var param
-        if (selectedValue == "topic") {
-            nav = "Topic Page"
-            param = item.content
+        if (selectedValue === "topic") {
+            return(<Link style={styles.button} to={'/topic/' + item.content}>{item.content}</Link>)
         } else {
-            nav = "Profile Page"
-            param = {id: item.userID}
+            return(<Link style={styles.button} to={'/user/' + item.userID}>{item.content}</Link>)
         }
-        console.log("Param: " + param.id)
-        return (
-            <Pressable onPress={() => navigation.navigate(nav, param)}>
-                <Text style={styles.button}>{item.content}</Text>
-            </Pressable>
-        )
     };
 
     return (
