@@ -172,7 +172,10 @@ export default function ProfilePage({route, navigation}) {
                                 userID === User.userID.toString() || userID === User.userID ?
                                     <Pressable onPress={() => navigation.navigate('Edit Profile')}>
                                         <Text style={styles.button}>Edit Profile</Text>
-                                    </Pressable> : null}
+                                    </Pressable> : 
+                                    <Pressable>
+                                        <Text style={styles.button}>Block</Text>
+                                    </Pressable>}
                         </View>
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
