@@ -113,7 +113,15 @@ public class UserController {
             comments = commentRepository.getAllPostComments(getPost);
         }
 
-        PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed, isSaved, comments);
+        User postUser = getPost.getUser();
+        String path = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farchive.org%2Fdownload%2Ftwitter-" +
+                "default-pfp%2Fe.png&f=1&nofb=1";
+        if (!getPost.isAnonymous()) {
+            path = postUser.getProfileImagePath();
+        }
+
+        PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed, isSaved,
+                comments, path);
         //System.out.println("\t\t\tPOST reactiontype: "  );
         return postDTO;
     }
@@ -382,7 +390,7 @@ public class UserController {
         // remove from blocked list
         userThatsUnblocking.removeBlockedUser(foundUserBlocked);
         // remove from table
-        userBlockedRepository.deleteByUserAndFollower(userThatsUnblocking, userToUnblock);
+        userBlockedRepository.deleteByUserAndBlockedUser(userThatsUnblocking, userToUnblock);
         return ResponseEntity.ok().headers(responseHeaders).body(userThatsUnblocking.getUserID());
     }
 
@@ -399,6 +407,22 @@ public class UserController {
             return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
         }
         savedPostRepository.delete(foundSavedPost);
+
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+    }
+
+    @RequestMapping(value="save_post", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> savePost(@RequestBody SavedPostDTO savedPostDTO) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.getByUserID(savedPostDTO.getUserID());
+        Post post = postRepository.findByPostID(savedPostDTO.getPostID());
+        if (user == null || post == null) {
+            return ResponseEntity.badRequest().body(-1);
+        }
+        SavedPost savedPost = new SavedPost(user, post);
+
+        savedPostRepository.save(savedPost);
 
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
@@ -526,13 +550,15 @@ public class UserController {
                                                      @PathVariable("viewingUserID") int viewingUserID) {
         User user = userRepository.findByUserID(userID);
         User viewingUser = userRepository.findByUserID(viewingUserID);
-        if (user == null || viewingUser == null) {
-            return ResponseEntity.badRequest().body(null);
-        }
-
         List<Post> usersPosts;
         List<PostDTO> usersPostDTOs = new ArrayList<>();
-        UserBlocked userBlocked = userBlockedRepository.findByUserAndBlockedUser(user, viewingUser);
+        UserBlocked userBlocked = null;
+        if (user == null ) {
+            return ResponseEntity.badRequest().body(null);
+        } else if (viewingUser != null) {
+            userBlocked = userBlockedRepository.findByUserAndBlockedUser(user, viewingUser);
+
+        }
         if (userBlocked == null) {
             //user is not blocked, show posts.
             usersPosts = postRepository.findAllByUser(user);
@@ -546,6 +572,8 @@ public class UserController {
 
             }
         }
+
+
 
         return ResponseEntity.ok().body(usersPostDTOs);
     }
@@ -579,15 +607,15 @@ public class UserController {
         HttpHeaders responseHeaders = new HttpHeaders();
 
         User user = userRepository.getByUserID(userID);
-        List<SavedPost> savePostObjs = savedPostRepository.findAllByUser(user);
-
-        List<Post> savePostPostObjs = new ArrayList<>();
-        for (SavedPost savedPost : savePostObjs) {
-            savePostPostObjs.add(savedPost.getSavedPost());
-        }
-        
+//        List<SavedPost> savePostObjs = savedPostRepository.findAllByUser(user);
+//
+//        List<Post> savePostPostObjs = new ArrayList<>();
+//        for (SavedPost savedPost : savePostObjs) {
+//            savePostPostObjs.add(savedPost.getSavedPost());
+//        }
+        List<Post> savedPosts = savedPostRepository.findUsersSavedPost(user);
         List<PostDTO> savedPostsDTOs = new ArrayList<>();
-        for (Post post : savePostPostObjs) {
+        for (Post post : savedPosts) {
             savedPostsDTOs.add(createPostDTO(post.getPostID(), userID));
         }
 

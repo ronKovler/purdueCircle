@@ -96,7 +96,15 @@ public class PostController {
             comments = commentRepository.getAllPostComments(getPost);
         }
 
-        PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed, isSaved, comments);
+        User postUser = getPost.getUser();
+        String path = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Farchive.org%2Fdownload%2Ftwitter-" +
+                "default-pfp%2Fe.png&f=1&nofb=1";
+        if (!getPost.isAnonymous()) {
+            path = postUser.getProfileImagePath();
+        }
+
+        PostDTO postDTO = new PostDTO(getPost, reactionType, topicFollowed, userFollowed, isSaved,
+                comments, path);
         //System.out.println("\t\t\tPOST reactiontype: "  );
         return postDTO;
     }
@@ -268,8 +276,6 @@ public class PostController {
                     break;
                 }
             } while (test.exists());
-
-
 
             try {
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);

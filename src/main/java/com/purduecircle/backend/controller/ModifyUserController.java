@@ -150,6 +150,50 @@ public class ModifyUserController {
         return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
     }
 
+    @RequestMapping(value="modify_user", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> modifyUser(@RequestBody UserDTO argUser) throws URISyntaxException {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        User user = userRepository.getByUserID(argUser.getUserID());
+        User checkConflicting = userRepository.findByUsername(argUser.getUsername());
+        if (argUser.getUsername() != null) {
+            if (checkConflicting != null) {
+                return ResponseEntity.badRequest().body(-1);
+            }
+            user.setUsername((argUser.getUsername()));
+        }
+        if (argUser.getPassword() != null) {
+            user.setPassword(argUser.getPassword());
+        }
+        if (argUser.getFirstName() != null) {
+            user.setFirstName(argUser.getFirstName());
+        }
+        if (argUser.getLastName() != null) {
+            user.setLastName(argUser.getLastName());
+        }
+        if (argUser.getProfileImagePath() != null) {
+            String path = "userImages/" +
+                    argUser.getProfileImagePath().substring(argUser.getProfileImagePath().lastIndexOf('/') + 1);
+
+            File toDelete = new File(path);
+            if (toDelete.exists()) {
+                System.out.println(pColor("FILE EXISTS: " + toDelete.getName()));
+                if (toDelete.delete()) {
+                    System.out.println(pColor("FILE DELETED: " + toDelete.getName()));
+                } else {
+                    System.out.println(pColor("ERROR COULD NOT DELETE: " + toDelete.getName()));
+                }
+            }
+
+            user.setProfileImagePath(argUser.getProfileImagePath());
+        }
+
+        user.setPrivate((argUser.isPrivate()));
+        user.setRestricted(argUser.isRestricted());
+        userRepository.save(user);
+        return ResponseEntity.ok().headers(responseHeaders).body(user.getUserID());
+    }
+
     @RequestMapping(value="delete_account", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> deleteAccount(@RequestBody User argUser) throws URISyntaxException, IOException {

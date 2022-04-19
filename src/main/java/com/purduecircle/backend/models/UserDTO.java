@@ -19,6 +19,10 @@ public class UserDTO {
     @JsonProperty("isRestricted")
     private boolean isRestricted;
 
+    private String profileImagePath;
+
+    private String email;
+
     public String getEmail() {
         return email;
     }
@@ -27,7 +31,13 @@ public class UserDTO {
         this.email = email;
     }
 
-    private String email;
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
 
     public UserDTO(User user, User follower, boolean blocked) {
 
@@ -42,6 +52,7 @@ public class UserDTO {
         this.password = "";
         this.email = user.getEmail();
         this.isPrivate = user.isPrivate();
+        this.profileImagePath = user.getProfileImagePath();
     }
 
     // TODO: delete this and user constructor below and update wherever needed
