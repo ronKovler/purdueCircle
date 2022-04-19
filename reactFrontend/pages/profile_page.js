@@ -244,7 +244,7 @@ export default function ProfilePage({route, navigation}) {
                                 </View>
                             }
                         </View>
-                        <View style={{flexBasis: 1, flex: 100}}>
+                        <View style={{flexBasis: 1, flex: 100, paddingTop: 30}}>
                             {!onReactedTo ?
                                 <FlatList data={userlineData} renderItem={renderPost} keyExtractor={item => item.postId}
                                           extraData={userID} style={{flexGrow: 0}}

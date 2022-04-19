@@ -318,7 +318,8 @@ function Post(props) {
                                 <View style={postStyles.commentWindow}>
                                     <FlatList style={{flexGrow: 0}} data={comments} renderItem={renderComment}
                                               keyExtractor={item => item.content}
-                                              extraData={comments} showsVerticalScrollIndicator={false}/>
+                                              scrollEnabled={true}
+                                              extraData={comments} showsVerticalScrollIndicator={true}/>
                                 </View>
                                 <View style={{flexDirection: "row"}}>
                                     <TextInput
