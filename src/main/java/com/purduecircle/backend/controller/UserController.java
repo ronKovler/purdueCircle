@@ -363,7 +363,7 @@ public class UserController {
         UserBlocked foundUserBlocked = userBlockedRepository.findByUserAndBlockedUser(userThatsBlocking, userToBlock);
         if (foundUserBlocked != null) {
             // Already blocked
-            return ResponseEntity.ok().headers(responseHeaders).body(userThatsBlocking.getUserID());
+            return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
 
         UserBlocked newUserBlocked = new UserBlocked(userThatsBlocking, userToBlock);
@@ -384,7 +384,7 @@ public class UserController {
         UserBlocked foundUserBlocked = userBlockedRepository.findByUserAndBlockedUser(userThatsUnblocking, userToUnblock);
         if (foundUserBlocked == null) {
             // Already unblocked
-            return ResponseEntity.ok().headers(responseHeaders).body(userThatsUnblocking.getUserID());
+            return ResponseEntity.ok().headers(responseHeaders).body(-1);
         }
 
         // remove from blocked list
