@@ -21,15 +21,18 @@ public class DirectMessage {
     private int dmID;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fromUserID")
+    @JoinColumn(name = "from_userid")
     private User fromUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "toUserID")
+    @JoinColumn(name = "to_userid")
     private User toUser;
 
     @Column(name = "content")
     private String content;
+
+    @Column(name = "chatID")
+    private String chatID;
 
     @Column(name = "time_sent")
     private Timestamp timeSent;
@@ -42,6 +45,14 @@ public class DirectMessage {
     }
 
     public DirectMessage(){}
+
+    public String getChatID() {
+        return chatID;
+    }
+
+    public void setChatID(String chatID) {
+        this.chatID = chatID;
+    }
 
     public int getDmID() {
         return dmID;

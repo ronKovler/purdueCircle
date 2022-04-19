@@ -7,6 +7,7 @@ import java.util.List;
 public class PostDTO {
     private String content;
     private int userID;
+    private String profileImagePath;
     private String topicName;
     private int postID;
     private boolean anonymous;
@@ -178,6 +179,14 @@ public class PostDTO {
         this.netReactions = netReactions;
     }
 
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
+
     public PostDTO(Post post) {
         this.content = post.getContent();
         this.userID = post.getUser().getUserID();
@@ -191,7 +200,8 @@ public class PostDTO {
 
     }
 
-    public PostDTO(Post post, int reaction, boolean topicFollowed, boolean userFollowed, boolean isSaved, List<CommentDTO> comments) {
+    public PostDTO(Post post, int reaction, boolean topicFollowed, boolean userFollowed,
+                   boolean isSaved, List<CommentDTO> comments, String profileImagePath) {
         this.content = post.getContent();
         this.userID = post.getUser().getUserID();
         this.username = post.getUser().getUsername();
@@ -207,6 +217,7 @@ public class PostDTO {
         this.isSaved = isSaved;
         this.netReactions = post.getNetReactions();
         this.comments = comments;
+        this.profileImagePath = profileImagePath;
     }
 
     public PostDTO(int postID) {

@@ -52,6 +52,9 @@ public class User {
     @Column(name="phone_number")
     private String phoneNumber;
 
+    @Column(name = "profile_image_path")
+    private String profileImagePath;
+
     @OneToMany(mappedBy="user")
     private Set<Post> userPosts = new HashSet<>();
 
@@ -147,6 +150,14 @@ public class User {
     }
 
     public User() {}
+
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
 
     public Set<UserBlocked> getBlocked() {
         return blocked;

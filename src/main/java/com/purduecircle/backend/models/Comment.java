@@ -23,6 +23,7 @@ public class Comment {
         this.user = user;
         this.content = content;
         this.post = post;
+        this.timePosted = new Timestamp(System.currentTimeMillis());
     }
 
     @Id

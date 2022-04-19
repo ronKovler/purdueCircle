@@ -4,20 +4,21 @@ public class DirectMessageDTO {
     private int fromUserID;
     private int toUserID;
     private String content;
+    private int dmID;
 
-    public int getFromUser() {
+    public int getFromUserID() {
         return fromUserID;
     }
 
-    public void setFromUser(User fromUser) {
+    public void setFromUserID(int fromUserID) {
         this.fromUserID = fromUserID;
     }
 
-    public int getToUser() {
+    public int getToUserID() {
         return toUserID;
     }
 
-    public void setToUser(User toUser) {
+    public void setToUserID(int toUserID) {
         this.toUserID = toUserID;
     }
 
@@ -31,9 +32,10 @@ public class DirectMessageDTO {
 
     public DirectMessageDTO() {}
 
-    public DirectMessageDTO(int fromUserID, int toUserID, String content) {
+    public DirectMessageDTO(int fromUserID, int toUserID, String content, int dmID) {
         this.fromUserID = fromUserID;
         this.toUserID = toUserID;
         this.content = content;
+        this.dmID = dmID;
     }
 }
