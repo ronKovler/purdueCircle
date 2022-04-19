@@ -13,6 +13,7 @@ import {Text} from "react-native";
 import User from "./pages/user";
 import {Image} from "react-native-web";
 import {styles} from "./pages/stylesheet";
+import DirectMessagePage from "./pages/direct_message";
 
 global.serverAddress = "https://purduecircle.me:8443";
 
@@ -28,6 +29,7 @@ const linkConfig = {
         'Edit Profile': 'user/edit_profile',
         'Topic Page': 'topic/:topic',
         'Search': 'search',
+        'Direct Message': '/dm/:id'
     }
 }
 
@@ -46,6 +48,7 @@ export default function App() {
             User.firstName = items.firstName;
             User.lastName = items.lastName;
             User.password = items.password;
+            User.profilePicture = items.profileImagePath;
         }, () => {
             User.isLoggedIn = false;
         })
@@ -63,6 +66,7 @@ export default function App() {
                     <Stack.Screen name="Profile Page" component={ProfilePage}/>
                     <Stack.Screen name="Edit Profile" component={EditProfile}/>
                     <Stack.Screen name="Create Account" component={CreateAccountScreen}/>
+                    <Stack.Screen name="Direct Message" component={DirectMessagePage}/>
                 </Stack.Navigator>
             }
         </NavigationContainer>

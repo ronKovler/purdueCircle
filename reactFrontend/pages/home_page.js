@@ -1,6 +1,6 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Pressable, FlatList, Image} from 'react-native';
-import {styles, HeaderLogo, Choo, Logo} from './stylesheet';
+import {styles, HeaderLogo} from './stylesheet';
 import {renderPost} from "./post";
 import User from "./user";
 import {useIsFocused} from "@react-navigation/native";
@@ -113,7 +113,11 @@ export default function HomeScreen({navigation}) {
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
                     </View>
                 </View> :
-                <Image style={[styles.image, {alignSelf: 'center'}]} source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
+                <View>
+                    {isDown ? <Text style={{fontWeight: "bold", color: "red", alignSelf: "center", fontSize: 48}}>Cannot connect to server</Text> : null}
+                    <Image style={[styles.image, {alignSelf: 'center'}]}
+                           source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
+                </View>
             }
 
             {!loading && isFocused ?
@@ -130,7 +134,8 @@ export default function HomeScreen({navigation}) {
                         alignItems: 'space-between'
                     }}>
                         <View style={{flex: 3}}>
-                            <Image style={styles.image} source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
+                            <Image style={styles.image}
+                                   source={{uri: 'https://purduecircle.me:8443/UI_images/choo.png'}}/>
                         </View>
                         {isLoggedIn ?
                             <View style={{flex: 6, justifyContent: 'center'}}>
@@ -169,8 +174,9 @@ export default function HomeScreen({navigation}) {
                     <View style={{flex: 5, flexDirection: 'column'}}>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
                         <View style={{flexBasis: 1, flex: 100}}>
-                            <FlatList style={{flexGrow: 0}} data={timelineData} renderItem={renderPost} keyExtractor={item => item.postID}
-                              extraData={timelineData} showsVerticalScrollIndicator={false}/>
+                            <FlatList style={{flexGrow: 0}} data={timelineData} renderItem={renderPost}
+                                      keyExtractor={item => item.postID}
+                                      extraData={timelineData} showsVerticalScrollIndicator={false}/>
                         </View>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
                     </View>
