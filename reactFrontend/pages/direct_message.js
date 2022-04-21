@@ -149,8 +149,11 @@ const dmStyles = StyleSheet.create({
     },
     messageInput: {
         // flex: 1,
+        margin: 5,
         padding: 10,
         fontSize: 32,
+        backgroundColor: 'white',
+        borderRadius: 5,
     },
     headerBar: {
         padding: 10,
