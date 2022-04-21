@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text, View, Image, TextInput, FlatList} from "react-native";
+import {Pressable, StyleSheet, Text, View, Image, TextInput, FlatList, ScrollView} from "react-native";
 import React, {useState} from "react";
 import User from "./user";
 import {useLinkTo} from '@react-navigation/native';
@@ -268,7 +268,8 @@ function Post(props) {
                     </View>
                 </View>
             </View>
-            <View style={postStyles.box}>
+            <ScrollView style={postStyles.box} showsVerticalScrollIndicator={false}
+                        nestedScrollEnabled={true}>
                 <View style={{flex: 3, padding: 5, flexDirection: 'row'}}>
                     <View style={{flex: 2}}>
                         <Text style={postStyles.text}>{content}</Text>
@@ -319,7 +320,7 @@ function Post(props) {
                                     <FlatList style={{flexGrow: 0}} data={comments} renderItem={renderComment}
                                               keyExtractor={item => item.content}
                                               scrollEnabled={true}
-                                              extraData={comments} showsVerticalScrollIndicator={true}/>
+                                              extraData={comments} showsVerticalScrollIndicator={false}/>
                                 </View>
                                 <View style={{flexDirection: "row"}}>
                                     <TextInput
@@ -337,7 +338,7 @@ function Post(props) {
                         : null}
 
                 </View>
-            </View>
+            </ScrollView>
         </View>
     )
 }
@@ -368,7 +369,7 @@ const postStyles = StyleSheet.create({
         borderTopColor: '#737373',
         padding: 12.5,
         paddingBottom: 120,
-        overflow: 'scroll',
+        overflow: 'visible',
         flex: 2
     },
     button: {
