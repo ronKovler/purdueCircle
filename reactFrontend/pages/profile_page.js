@@ -29,6 +29,7 @@ export default function ProfilePage({route, navigation}) {
     const [postColor, setPostColor] = useState(onFocusColor);
     const [reactedColor, setReactedColor] = useState(offFocusColor);
     const [profilePic, setProfilePic] = useState(null)
+    const [isBlocked, setIsBlocked] = useState(false)
 
     useEffect(async () => {
         setIsLoading(true)
@@ -51,6 +52,7 @@ export default function ProfilePage({route, navigation}) {
                     setLastName(items.lastName)
                     setPrivate(items.isPrivate)
                     setProfilePic(items.profileImagePath)
+                    setIsBlocked(items.isBlocked)
                 })
             } else {
                 setUsername(User.username)
@@ -58,6 +60,7 @@ export default function ProfilePage({route, navigation}) {
                 setLastName(User.lastName)
                 setPrivate(User.isPrivate)
                 setProfilePic(User.profilePicture)
+                setIsBlocked(User.isBlocked)
             }
             setUserlineData(data);
             setFollowsData(followsData)
@@ -151,6 +154,30 @@ export default function ProfilePage({route, navigation}) {
         return await response.json()
     }
 
+    async function toggleBlock() {
+        let url = serverAddress + '/api/user'
+        if (!isBlocked) {
+            url += '/block_user/'
+        } else {
+            url += '/unblock_user/'
+        }
+        url += User.userID + "/" + userID
+        try {
+            await fetch(url, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': serverAddress,
+                },
+            }).then((response) => {
+                if (response.status == 200)
+                    setIsBlocked(!isBlocked)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <View style={styled.container}>
             {isLoading ? <Choo/> :
@@ -173,8 +200,11 @@ export default function ProfilePage({route, navigation}) {
                                     <Pressable onPress={() => navigation.navigate('Edit Profile')}>
                                         <Text style={styles.button}>Edit Profile</Text>
                                     </Pressable> : 
-                                    <Pressable>
-                                        <Text style={styles.button}>Block</Text>
+                                    <Pressable onPress={() => toggleBlock()}>
+                                        {!isBlocked ?
+                                            <Text style={styles.button}>Block</Text> : 
+                                            <Text style={styles.button}>Unblock</Text>
+                                        }
                                     </Pressable>}
                         </View>
                     </View>
