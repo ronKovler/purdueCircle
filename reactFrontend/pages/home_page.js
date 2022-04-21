@@ -1,19 +1,28 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Pressable, FlatList, Image} from 'react-native';
 import {styles, HeaderLogo} from './stylesheet';
-import {renderPost} from "./post";
+import {Post, renderPost} from "./post";
 import User from "./user";
-import {useIsFocused} from "@react-navigation/native";
+import {Link, useIsFocused} from "@react-navigation/native";
 
 export default function HomeScreen({navigation}) {
-    const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn);
+    const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
     const [loading, setLoading] = useState(true)
     const [timelineData, setTimelineData] = useState(null)
+    const [dmData, setDmData] = useState(null)
     const isFocused = useIsFocused()
     const [currentPage, setCurrentPage] = useState(null) //3 states: hotTimeline, userTimeline, savedPosts
     const [isDown, setIsDown] = useState(false)
 
     //TODO: Setup timer to get new posts
+
+    const renderDms = ({item}) => {
+        return <Link style={[styles.button, {alignItems: 'flex-start'}]} to={'/dm/' + item.toUserID}>
+            <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>{item.fromUsername}{'\n'}</Text>
+            <Text style={{fontWeight: 'normal'}}>{item.content}</Text>
+        </Link>
+        // TODO: check item fields for reactions
+    };
 
     const LogOut = async () => {
         await User.logout()
@@ -45,7 +54,26 @@ export default function HomeScreen({navigation}) {
     const GetLine = async (apiURL, page) => {
         setLoading(true);
         await setTimelineData(null)
+        await setDmData(null);
         // timelineData = null
+
+
+        await fetch(serverAddress + "/api/dm/get_conversations/" + User.userID, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Access-Control-Allow-Origin': serverAddress,
+            }
+        }).then(response => response.json()).then((json) => {
+            setDmData(json);
+            // timelineData = json
+        }).catch(() => {
+            console.error("Cannot connect to server")
+            setIsDown(true);
+            // isDown = true;
+        })
+
+
         await fetch(serverAddress + apiURL, {
             method: 'GET',
             headers: {
@@ -180,7 +208,13 @@ export default function HomeScreen({navigation}) {
                         </View>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
                     </View>
-                    <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
+                    <View style={{flex: 2, backgroundColor: 'dimgrey', alignItems: 'center',justifyContent: 'center'}}>
+                        <Text style={{fontSize: 24, color: 'black', fontWeight: 'bold', paddingBottom: 20}}>Current DMs</Text>
+                        <FlatList style={{flexGrow: 0}} data={dmData} renderItem={renderDms}
+                                    keyExtractor={item => item.dmID} extraData={dmData}
+                                    showsVerticalScrollIndicator={false}>
+                        </FlatList>
+                    </View>
                 </View>
                 : null
             }
