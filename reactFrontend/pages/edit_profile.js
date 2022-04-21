@@ -14,6 +14,7 @@ export default function EditProfileScreen({navigation}) {
     const [isPrivate, setIsPrivate] = useState(false)
     const [newProfilePic, setNewProfilePic] = useState(User.profilePicture);
     const [success, setSuccess] = useState('');
+    const [isRestricted, setIsRestricted] = useState(false);
 
     const LogOut = async () => {
         await User.logout()
@@ -82,6 +83,7 @@ export default function EditProfileScreen({navigation}) {
                     'email': User.email,
                     'isPrivate': isPrivate,
                     'profileImagePath': imagePath,
+                    'isResstricted': isRestricted,
                 })
             })
             if (newPassword.status !== 200) setUsernameError("Username already taken!");
@@ -128,7 +130,7 @@ export default function EditProfileScreen({navigation}) {
             </View>
             <View style={{flex: 5, flexDirection: 'column'}}>
               <View style={{flex: 2, backgroundColor: '737373'}}/>
-              <View style={{flex: 3, backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
+              <View style={{flex: 7, backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
                 <Text style={styles.header}>{User.username}'s Profile Information</Text>
                 <View style={{justifyContent: 'center'}}>
                     <Pressable onPress={() => pickImage()}>
@@ -157,12 +159,21 @@ export default function EditProfileScreen({navigation}) {
                     {password.length > 32 && <Text style={{color: 'red'}}>Password cannot be longer than 32 characters</Text>}
                     <TextInput style={styles.accountInputBox} secureTextEntry={true} onChangeText={double => setCheckPassword(double)} placeholder={'Reenter Password'}/>
                     {password !== checkPassword && <Text style={{color: 'red'}}>Passwords do not match</Text>}
-                    <View style={{flexDirection: "row"}}>
-                        <CheckBox
-                        value={isPrivate}
-                        onValueChange={setIsPrivate}
-                        />
-                        <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}> Set private account</Text>
+                    <View style={{flexDirection: "row", justifyContent: 'space-around'}}>
+                        <View style={{flex: 1, flexDirection: 'row'}}>
+                            <CheckBox
+                            value={isPrivate}
+                            onValueChange={setIsPrivate}
+                            />
+                            <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}> Set private account</Text>
+                        </View>
+                        <View style={{flex: 1, flexDirection: 'row'}}>
+                            <CheckBox
+                                value={isRestricted}
+                                onValueChange={setIsRestricted}
+                            />
+                            <Text style={{color: '#ffc000', fontWeight: 'bold', fontSize: 15}}> Set restricted dms</Text>
+                        </View>
                     </View>
                     <Pressable onPress={() => SendUpdates()}><Text style={styles.button}>Save Changes</Text></Pressable>
                     {success !== '' ? <Text style={{color: 'green', textAlign: 'center'}}>{success}</Text> : null}
