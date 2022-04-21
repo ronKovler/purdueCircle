@@ -202,18 +202,23 @@ export default function ProfilePage({route, navigation}) {
                                 <HeaderLogo style={styles.headerIcon}/>
                             </Pressable>
                         </View>
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
                             { // TODO: fix userID check
                                 userID === User.userID.toString() || userID === User.userID ?
                                     <Pressable onPress={() => navigation.navigate('Edit Profile')}>
                                         <Text style={styles.button}>Edit Profile</Text>
-                                    </Pressable> : 
-                                    <Pressable onPress={() => toggleBlock()}>
-                                        {!isBlocked ?
-                                            <Text style={styles.button}>Block</Text> : 
-                                            <Text style={styles.button}>Unblock</Text>
-                                        }
-                                    </Pressable>}
+                                    </Pressable> :
+                                    <View style={{flexDirection: 'row', flex: 1}}>
+                                        <Pressable onPress={() => linkTo("/dm/" + userID)}>
+                                            <Text style={styles.button}>DM</Text>
+                                        </Pressable>
+                                        <Pressable onPress={() => toggleBlock()}>
+                                            {!isBlocked ?
+                                                <Text style={styles.button}>Block</Text> :
+                                                <Text style={styles.button}>Unblock</Text>
+                                            }
+                                        </Pressable>
+                                    </View>}
                         </View>
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
