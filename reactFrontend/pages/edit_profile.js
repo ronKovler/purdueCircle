@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, Text, TextInput, StyleSheet, Pressable, TouchableOpacity, CheckBox, Image} from 'react-native';
+import {View, Text, TextInput, StyleSheet, Pressable, TouchableOpacity, CheckBox, Image, Modal} from 'react-native';
 import { styles, HeaderLogo, Choo } from './stylesheet';
 import User from "./user";
 import * as ImagePicker from "expo-image-picker";
@@ -14,6 +14,7 @@ export default function EditProfileScreen({navigation}) {
     const [isPrivate, setIsPrivate] = useState(false)
     const [newProfilePic, setNewProfilePic] = useState(User.profilePicture);
     const [success, setSuccess] = useState('');
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false)
     const [isRestricted, setIsRestricted] = useState(false);
 
     const LogOut = async () => {
@@ -43,6 +44,7 @@ export default function EditProfileScreen({navigation}) {
                 'userID': await User.getuserID()
             }),
         })
+        setDeleteModalVisible(false)
         await response.json()
         await User.logout()
         navigation.navigate('Login');
@@ -83,7 +85,7 @@ export default function EditProfileScreen({navigation}) {
                     'email': User.email,
                     'isPrivate': isPrivate,
                     'profileImagePath': imagePath,
-                    'isResstricted': isRestricted,
+                    'isRestricted': isRestricted,
                 })
             })
             if (newPassword.status !== 200) setUsernameError("Username already taken!");
@@ -98,6 +100,34 @@ export default function EditProfileScreen({navigation}) {
 
     return (
         <View style={styled.container}>
+            <View style={styles.centeredView}>
+                <Modal
+                    transparent={true}
+                    visible={deleteModalVisible}
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setDeleteModalVisible(!deleteModalVisible);
+                        }}
+                    >
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text>Are you sure you want to delete your account?</Text>
+                                <Pressable
+                                    style={styles.button}
+                                    onPress={() => DeleteAccount()}
+                                >
+                                    <Text style={styles.textStyle}>Yes</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.button}
+                                    onPress={() => setDeleteModalVisible(!deleteModalVisible)}
+                                >
+                                    <Text style={styles.textStyle}>Cancel</Text>
+                                </Pressable>
+                        </View>
+                    </View>
+                </Modal>
+            </View>
           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
             <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
             <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
@@ -113,8 +143,8 @@ export default function EditProfileScreen({navigation}) {
               </View>
               {User.isLoggedIn ?
                   <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
-                      <TouchableOpacity onPress={() => DeleteAccount()}><Text
-                          style={styles.button}>Delete Account</Text></TouchableOpacity>
+                      <TouchableOpacity onPress={() => setDeleteModalVisible(!deleteModalVisible)}>
+                          <Text style={styles.button}>Delete Account</Text></TouchableOpacity>
                   </View> : <View style={{flex: 1}}/>}
             </View>
             <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
