@@ -52,7 +52,6 @@ export default function ProfilePage({route, navigation}) {
                     setLastName(items.lastName)
                     setPrivate(items.isPrivate)
                     setProfilePic(items.profileImagePath)
-                    setIsBlocked(items.isBlocked)
                 })
             } else {
                 setUsername(User.username)
@@ -62,6 +61,15 @@ export default function ProfilePage({route, navigation}) {
                 setProfilePic(User.profilePicture)
                 setIsBlocked(User.isBlocked)
             }
+            await fetch(serverAddress + '/api/user/get_relationship/' + User.userID + '/' + userID, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': serverAddress,
+                }
+            }).then(items => items.json()).then(items => {
+                setIsBlocked(items.isBlocked)
+            })
             setUserlineData(data);
             setFollowsData(followsData)
             setTopicsData(topicData);
