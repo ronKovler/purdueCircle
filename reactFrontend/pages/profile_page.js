@@ -68,7 +68,7 @@ export default function ProfilePage({route, navigation}) {
                     'Access-Control-Allow-Origin': serverAddress,
                 }
             }).then(items => items.json()).then(items => {
-                setIsBlocked(items.isBlocked)
+                setIsBlocked(items.otherUserBlocked)
             })
             setUserlineData(data);
             setFollowsData(followsData)
