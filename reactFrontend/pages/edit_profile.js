@@ -160,7 +160,7 @@ export default function EditProfileScreen({navigation}) {
             </View>
             <View style={{flex: 5, flexDirection: 'column'}}>
               <View style={{flex: 2, backgroundColor: '737373'}}/>
-              <View style={{flex: 7, backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
+              <View style={{flex: 13, backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
                 <Text style={styles.header}>{User.username}'s Profile Information</Text>
                 <View style={{justifyContent: 'center'}}>
                     <Pressable onPress={() => pickImage()}>
