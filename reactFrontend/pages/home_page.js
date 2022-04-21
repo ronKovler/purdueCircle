@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, Pressable, FlatList, Image} from 'react-native';
 import {styles, HeaderLogo} from './stylesheet';
 import {Post, renderPost} from "./post";
 import User from "./user";
-import {useIsFocused} from "@react-navigation/native";
+import {Link, useIsFocused} from "@react-navigation/native";
 
 export default function HomeScreen({navigation}) {
     const [isLoggedIn, setIsLoggedIn] = useState(User.isLoggedIn)
@@ -17,9 +17,9 @@ export default function HomeScreen({navigation}) {
     //TODO: Setup timer to get new posts
 
     const renderDms = ({item}) => {
-        return <Link style={styles.button} to={'/dm/' + item.userID}>
-            <Text>{item.name}</Text>
-            <Text>{item.content}</Text>
+        return <Link style={[styles.button, {alignItems: 'flex-start'}]} to={'/dm/' + item.toUserID}>
+            <Text style={{fontWeight: 'bold', textDecorationLine: 'underline'}}>{item.fromUsername}{'\n'}</Text>
+            <Text style={{fontWeight: 'normal'}}>{item.content}</Text>
         </Link>
         // TODO: check item fields for reactions
     };
@@ -57,7 +57,7 @@ export default function HomeScreen({navigation}) {
         await setDmData(null);
         // timelineData = null
 
-        /*
+
         await fetch(serverAddress + "/api/dm/get_conversations/" + User.userID, {
             method: 'GET',
             headers: {
@@ -72,7 +72,7 @@ export default function HomeScreen({navigation}) {
             setIsDown(true);
             // isDown = true;
         })
-         */
+
 
         await fetch(serverAddress + apiURL, {
             method: 'GET',
@@ -208,10 +208,10 @@ export default function HomeScreen({navigation}) {
                         </View>
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
                     </View>
-                    <View style={{flex: 2, backgroundColor: 'dimgrey', alignItems: 'center'}}>
-                        <Text style={{fontSize: 24, color: 'black', fontWeight: 'bold'}}>Current DMs</Text>
+                    <View style={{flex: 2, backgroundColor: 'dimgrey', alignItems: 'center',justifyContent: 'center'}}>
+                        <Text style={{fontSize: 24, color: 'black', fontWeight: 'bold', paddingBottom: 20}}>Current DMs</Text>
                         <FlatList style={{flexGrow: 0}} data={dmData} renderItem={renderDms}
-                                    keyExtractor={item => item.userID} extraData={dmData}
+                                    keyExtractor={item => item.dmID} extraData={dmData}
                                     showsVerticalScrollIndicator={false}>
                         </FlatList>
                     </View>
