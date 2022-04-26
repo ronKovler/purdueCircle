@@ -132,7 +132,6 @@ export default function EditProfileScreen({navigation}) {
             </View>
             <View style={{flex: 5, flexDirection: 'column'}}>
               <View style={{flex: 2, backgroundColor: '737373'}}/>
-<<<<<<< HEAD
               <View style={{flex: 13, backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
                 <View style={styles.centeredView}>
                     <Modal
@@ -162,9 +161,6 @@ export default function EditProfileScreen({navigation}) {
                         </View>
                     </Modal>
                 </View>
-=======
-              <View style={{overflow: 'visible', backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
->>>>>>> 3e1860749663a9731d3bec67b4a7d02d6366aabd
                 <Text style={styles.header}>{User.username}'s Profile Information</Text>
                 <View style={{justifyContent: 'center'}}>
                     <Pressable onPress={() => pickImage()}>
