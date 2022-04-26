@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, Text, TextInput, StyleSheet, Pressable, TouchableOpacity, CheckBox, Image, Modal} from 'react-native';
+import {View, Text, TextInput, StyleSheet, Pressable, CheckBox, Image, Modal} from 'react-native';
 import { styles, HeaderLogo, Choo } from './stylesheet';
 import User from "./user";
 import * as ImagePicker from "expo-image-picker";
@@ -105,18 +105,18 @@ export default function EditProfileScreen({navigation}) {
             <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
               {User.isLoggedIn ?
                   <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
-                      <TouchableOpacity onPress={() => LogOut()}><Text
-                        style={styles.button}>Log Out</Text></TouchableOpacity>
+                      <Pressable onPress={() => LogOut()}><Text
+                        style={styles.button}>Log Out</Text></Pressable>
                   </View> : <View style={{flex: 1}}/>}
               <View style={{flexDirection: 'row', justifyContent: 'center', flex: 2}}>
-                <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                <Pressable onPress={() => navigation.navigate('Home')}>
                     <HeaderLogo style={styles.headerIcon}/>
-                </TouchableOpacity>
+                </Pressable>
               </View>
               {User.isLoggedIn ?
                   <View style={[styles.buttonContainer, {justifyContent: 'center'}]}>
-                      <TouchableOpacity onPress={() => setDeleteModalVisible(!deleteModalVisible)}>
-                          <Text style={styles.button}>Delete Account</Text></TouchableOpacity>
+                      <Pressable onPress={() => setDeleteModalVisible(!deleteModalVisible)}>
+                          <Text style={styles.button}>Delete Account</Text></Pressable>
                   </View> : <View style={{flex: 1}}/>}
             </View>
             <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
@@ -132,6 +132,7 @@ export default function EditProfileScreen({navigation}) {
             </View>
             <View style={{flex: 5, flexDirection: 'column'}}>
               <View style={{flex: 2, backgroundColor: '737373'}}/>
+<<<<<<< HEAD
               <View style={{flex: 13, backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
                 <View style={styles.centeredView}>
                     <Modal
@@ -161,6 +162,9 @@ export default function EditProfileScreen({navigation}) {
                         </View>
                     </Modal>
                 </View>
+=======
+              <View style={{overflow: 'visible', backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
+>>>>>>> 3e1860749663a9731d3bec67b4a7d02d6366aabd
                 <Text style={styles.header}>{User.username}'s Profile Information</Text>
                 <View style={{justifyContent: 'center'}}>
                     <Pressable onPress={() => pickImage()}>
