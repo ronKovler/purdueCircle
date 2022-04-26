@@ -33,6 +33,7 @@ export default function ProfilePage({route, navigation}) {
     const [currentFollows, setCurrentFollows] = useState(false);
     const [userBlocks, setUserBlocks] = useState(false);
     const [userFollows, setUserFollows] = useState(false);
+    const [isRestricted, setIsRectricted] = useState(false);
 
     useEffect(async () => {
         setIsLoading(true)
@@ -55,6 +56,7 @@ export default function ProfilePage({route, navigation}) {
                     setLastName(items.lastName)
                     setPrivate(items.isPrivate)
                     setProfilePic(items.profileImagePath)
+                    setIsRectricted(items.isRestricted)
                 })
             } else {
                 setUsername(User.username)
@@ -238,7 +240,7 @@ export default function ProfilePage({route, navigation}) {
                                     </Pressable> :
                                     <View style={{flexDirection: 'row', flex: 1}}>
                                         <Pressable onPress={() => linkTo("/dm/" + userID)}>
-                                            {!currentBlocks || !userBlocks ?
+                                            {!currentBlocks && !userBlocks && (!isRestricted || userFollows) ?
                                                 <Text style={styles.button}>DM</Text> : null}
                                         </Pressable>
                                         <Pressable onPress={() => toggleBlock()}>
