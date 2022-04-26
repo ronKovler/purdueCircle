@@ -29,7 +29,10 @@ export default function ProfilePage({route, navigation}) {
     const [postColor, setPostColor] = useState(onFocusColor);
     const [reactedColor, setReactedColor] = useState(offFocusColor);
     const [profilePic, setProfilePic] = useState(null)
-    const [isBlocked, setIsBlocked] = useState(false)
+    const [currentBlocks, setCurrentBlocks] = useState(false)
+    const [currentFollows, setCurrentFollows] = useState(false);
+    const [userBlocks, setUserBlocks] = useState(false);
+    const [userFollows, setUserFollows] = useState(false);
 
     useEffect(async () => {
         setIsLoading(true)
@@ -59,7 +62,7 @@ export default function ProfilePage({route, navigation}) {
                 setLastName(User.lastName)
                 setPrivate(User.isPrivate)
                 setProfilePic(User.profilePicture)
-                setIsBlocked(User.isBlocked)
+                setUserBlocks(User.isBlocked)
             }
             await fetch(serverAddress + '/api/user/get_relationship/' + User.userID + '/' + userID, {
                 method: 'GET',
@@ -68,7 +71,10 @@ export default function ProfilePage({route, navigation}) {
                     'Access-Control-Allow-Origin': serverAddress,
                 }
             }).then(items => items.json()).then(items => {
-                setIsBlocked(items.otherUserBlocked)
+                setCurrentBlocks(items.otherUserBlocked);
+                setUserBlocks(items.currentUserBlocked);
+                setCurrentFollows(items.currentUserFollowing);
+                setUserFollows(items.otherUserFollowing);
             })
             setUserlineData(data);
             setFollowsData(followsData)
@@ -164,7 +170,7 @@ export default function ProfilePage({route, navigation}) {
 
     async function toggleBlock() {
         let url = serverAddress + '/api/user'
-        if (!isBlocked) {
+        if (!currentBlocks) {
             url += '/block_user/'
         } else {
             url += '/unblock_user/'
@@ -179,10 +185,33 @@ export default function ProfilePage({route, navigation}) {
                 },
             }).then((response) => {
                 if (response.status == 200)
-                    setIsBlocked(!isBlocked)
+                    setCurrentBlocks(!currentBlocks)
             })
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    async function toggleFollow(){
+        if (!User.isLoggedIn) {
+            return
+        }
+        let url = serverAddress + "/api/user/"
+        if (!currentFollows) {
+            url += "follow_user/" + User.userID + "/" + userID
+        } else {
+            url += "unfollow_user/" + User.userID + "/" + userID
+        }
+        try {
+            await fetch(url, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Access-Control-Allow-Origin': serverAddress,
+                },
+            }).then(() => setCurrentFollows(!currentFollows), () => console.log("Promise unfulfilled"))
+        } catch (error) {
+            console.error(error)
         }
     }
 
@@ -203,20 +232,25 @@ export default function ProfilePage({route, navigation}) {
                             </Pressable>
                         </View>
                         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
-                            { // TODO: fix userID check
-                                userID === User.userID.toString() || userID === User.userID ?
+                            {userID == User.userID ?
                                     <Pressable onPress={() => navigation.navigate('Edit Profile')}>
                                         <Text style={styles.button}>Edit Profile</Text>
                                     </Pressable> :
                                     <View style={{flexDirection: 'row', flex: 1}}>
                                         <Pressable onPress={() => linkTo("/dm/" + userID)}>
-                                            <Text style={styles.button}>DM</Text>
+                                            {!currentBlocks || !userBlocks ?
+                                                <Text style={styles.button}>DM</Text> : null}
                                         </Pressable>
                                         <Pressable onPress={() => toggleBlock()}>
-                                            {!isBlocked ?
+                                            {!currentBlocks ?
                                                 <Text style={styles.button}>Block</Text> :
                                                 <Text style={styles.button}>Unblock</Text>
                                             }
+                                        </Pressable>
+                                        <Pressable onPress={() => toggleFollow()}>
+                                                {currentFollows ?
+                                                    <Text style={[styles.button, {backgroundColor: onFocusColor}]}>Following</Text>
+                                                : <Text style={[styles.button, {backgroundColor: offFocusColor}]}>Follow</Text>}
                                         </Pressable>
                                     </View>}
                         </View>
@@ -269,6 +303,7 @@ export default function ProfilePage({route, navigation}) {
                                 <Text style={{fontSize: '16px', margin: 13, marginTop: 0}}>{username}</Text>
                             </View>
                         </View>
+
                         <View style={{flex: 6, backgroundColor: '737373'}}>
                             {!onReactedTo ?
                                 <View style={{flexDirection: "row"}}>
