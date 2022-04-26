@@ -339,11 +339,6 @@ export default function ProfilePage({route, navigation}) {
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey'}}>
                         <View style={{flex: 3, alignItems: 'center'}}>
-                            {!isPrivate && <Text style={{
-                                color: 'black',
-                                fontWeight: 'bold',
-                                fontSize: 15
-                            }}>{firstName} {lastName}</Text>}
                         </View>
                         <View style={{flex: 6}}>
                             <View style={{flex: 1}}/>

@@ -100,34 +100,6 @@ export default function EditProfileScreen({navigation}) {
 
     return (
         <View style={styled.container}>
-            <View style={styles.centeredView}>
-                <Modal
-                    transparent={true}
-                    visible={deleteModalVisible}
-                    onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        setDeleteModalVisible(!deleteModalVisible);
-                        }}
-                    >
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text>Are you sure you want to delete your account?</Text>
-                                <Pressable
-                                    style={styles.button}
-                                    onPress={() => DeleteAccount()}
-                                >
-                                    <Text style={styles.textStyle}>Yes</Text>
-                                </Pressable>
-                                <Pressable
-                                    style={styles.button}
-                                    onPress={() => setDeleteModalVisible(!deleteModalVisible)}
-                                >
-                                    <Text style={styles.textStyle}>Cancel</Text>
-                                </Pressable>
-                        </View>
-                    </View>
-                </Modal>
-            </View>
           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
             <View style={{flex: 2, backgroundColor: 'dimgrey'}}/>
             <View style={{flex: 5, flexDirection: 'row', alignSelf: 'center'}}>
@@ -161,6 +133,34 @@ export default function EditProfileScreen({navigation}) {
             <View style={{flex: 5, flexDirection: 'column'}}>
               <View style={{flex: 2, backgroundColor: '737373'}}/>
               <View style={{flex: 13, backgroundColor: '#545454', paddingVertical: 20, paddingHorizontal: 10, justifyContent: 'center'}}>
+                <View style={styles.centeredView}>
+                    <Modal
+                        transparent={true}
+                        visible={deleteModalVisible}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setDeleteModalVisible(!deleteModalVisible);
+                        }}
+                    >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text>Are you sure you want to delete your account?</Text>
+                                    <Pressable
+                                        style={styles.button}
+                                        onPress={() => DeleteAccount()}
+                                    >
+                                        <Text style={styles.textStyle}>Yes</Text>
+                                    </Pressable>
+                                    <Pressable
+                                        style={styles.button}
+                                        onPress={() => setDeleteModalVisible(!deleteModalVisible)}
+                                    >
+                                        <Text style={styles.textStyle}>Cancel</Text>
+                                    </Pressable>
+                            </View>
+                        </View>
+                    </Modal>
+                </View>
                 <Text style={styles.header}>{User.username}'s Profile Information</Text>
                 <View style={{justifyContent: 'center'}}>
                     <Pressable onPress={() => pickImage()}>
