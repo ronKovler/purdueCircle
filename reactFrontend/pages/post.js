@@ -32,7 +32,6 @@ function Post(props) {
     const userID = props.userID;
     const postID = props.postID
     const link = props.link;
-    const comments = props.comments;
     const profilePicture = props.profilePicture;
 
     const [newComment, setNewComment] = useState("")
@@ -42,6 +41,7 @@ function Post(props) {
     const [netReactions, setNetReactions] = useState(props.netReactions)
     const [isSaved, setIsSaved] = useState(props.isSaved)
     const [image, setImage] = useState(props.imagePath);
+    const [comments, setComments] = useState(props.comments);
     const linkto = useLinkTo();
 
     const renderComment = ({item}) => {
@@ -205,19 +205,23 @@ function Post(props) {
         }
         let url = serverAddress + "/api/post/create_comment"
         try {
+            let comment = {
+                'userID': await User.getuserID(),
+                'postID': postID,
+                'content': newComment,
+                'username': User.username
+            }
             await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'Access-Control-Allow-Origin': serverAddress,
                 },
-                body: JSON.stringify({
-                    'userID': await User.getuserID(),
-                    'postID': postID,
-                    'content': newComment,
-                    'username': User.username
-                })
-            }).then(() => setNewComment(""))
+                body: JSON.stringify(comment)
+            }).then(() => {
+                setComments([...comments, comment])
+                setNewComment("")
+            })
         } catch (error) {
             console.log(error)
         }
