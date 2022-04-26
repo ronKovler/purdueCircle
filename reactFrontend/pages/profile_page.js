@@ -275,7 +275,7 @@ export default function ProfilePage({route, navigation}) {
                         </View>
                         <View style={{flex: 6}}>
                             <View style={{flex: 1}}/>
-                            <View style={{flex: 1}}>
+                            <View style={{overflow: 'visible', flex: 1}}>
                                 <Text style={styles.header}>
                                     {username}'s Followed Topics
                                 </Text>
@@ -333,7 +333,7 @@ export default function ProfilePage({route, navigation}) {
                                 :
                                 <FlatList data={reactedData} renderItem={renderPost} keyExtractor={item => item.postId}
                                           extraData={userID} style={{flexGrow: 0}}
-                                          showsVerticalScrollIndicator={false}/>}
+                                          showsVerticalScrollIndicator={false} />}
                         </View>
                         <View style={{flex: 2, backgroundColor: '737373'}}/>
                     </View>
@@ -342,7 +342,7 @@ export default function ProfilePage({route, navigation}) {
                         </View>
                         <View style={{flex: 6}}>
                             <View style={{flex: 1}}/>
-                            <View style={{flex: 1}}>
+                            <View style={{overflow: 'visible', flex: 1}}>
                                 <Text style={styles.header}>
                                     {username}'s Followed Users
                                 </Text>

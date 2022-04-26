@@ -120,16 +120,6 @@ export default function TopicPage({route, navigation}) {
                                     </Pressable>
                                 </View>
                                 <View style={{flex: 1}}>
-                                    <Pressable>
-                                        <Text style={styles.button}>Hot Posts</Text>
-                                    </Pressable>
-                                </View>
-                                <View style={{flex: 1}}>
-                                    <Pressable>
-                                        <Text style={styles.button}>Saved Posts</Text>
-                                    </Pressable>
-                                </View>
-                                <View style={{flex: 1}}>
                                     <Pressable onPress={() => navigation.navigate('Create Post')}>
                                         <Text style={styles.button}>Create Post</Text>
                                     </Pressable>

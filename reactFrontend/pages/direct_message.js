@@ -122,7 +122,8 @@ export default function DirectMessagePage({navigation, route}) {
                     </View>
                     <View style={dmStyles.messageList}>
                         {messageData !== null ? <FlatList data={messageData} renderItem={renderMessage} keyExtractor={item => item.dmID} ref = {list}
-                                  onContentSizeChange={() => list.current.scrollToEnd({animated: false})}/> : null}
+                                  onContentSizeChange={() => list.current.scrollToEnd({animated: false})}
+                                  showsVerticalScrollIndicator={false}/> : null}
                     </View>
                     <View style={dmStyles.messageInput}>
                         <TextInput placeholder={"Write a message..."} value={newMessage}

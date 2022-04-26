@@ -9,6 +9,7 @@ class UserAuth {
 		this.lastName = null;
 		this.password = null;
 		this.profilePicture = null;
+		this.isPrivate = false;
 	}
 
 // TODO: add secondary auth key for persistent user sessions

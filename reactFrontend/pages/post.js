@@ -246,7 +246,7 @@ function Post(props) {
                                     :
                                     <Link style={postStyles.username} to={'/user/' + userID}>{user}</Link>
                                 }
-                                {(User.isLoggedIn && User.userID !== userID && !anonymous && !props.userFollowed) ?
+                                {(User.isLoggedIn && User.userID !== userID && !anonymous) ?
                                     <Pressable
                                         onPress={() => toggleFollowUser()}>
                                         {!userFollowed ?
@@ -257,7 +257,7 @@ function Post(props) {
                         }
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        {User.isLoggedIn && !props.topicFollowed ?
+                        {User.isLoggedIn ?
                             <Pressable style={{paddingRight: 10}}
                                        onPress={() => toggleFollowTopic()}>
                                 {!topicFollowed ?
