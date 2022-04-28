@@ -7,8 +7,7 @@ import {
     Image,
     TouchableOpacity,
     Modal,
-    CheckBox,
-    Button
+    CheckBox
 } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import {styles} from './stylesheet'
@@ -28,6 +27,7 @@ export default function PostCreation({navigation}) {
     const [anonymous, setAnonymous] = useState(false)
     const isFocused = useIsFocused()
     const [attemptedSubmit, setAttemptedSubmit] = useState(false)
+    const [aspectRatio, setAspectRatio] = useState(1);
 
     useEffect(() => {
         //do nothing
@@ -38,6 +38,8 @@ export default function PostCreation({navigation}) {
             allowsEditing: true,
             quality: .3,
         });
+
+        setAspectRatio(result.width/result.height)
 
         if(!result.cancelled){
             setImage(result.uri);
@@ -177,7 +179,7 @@ export default function PostCreation({navigation}) {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <Pressable onPress={() => pickImage()}><Text>Pick Image</Text></Pressable>
-                            {image !== null ? <Image source={{uri : image}} style={{width: 200, height: 200}}/> : null}
+                            {image !== null ? <Image source={{uri : image}} style={{height: 200, aspectRatio: aspectRatio}}/> : null}
                                 <Pressable
                                     style={styles.button}
                                     onPress={() => setImageModalVisible(!imageModalVisible)}>
