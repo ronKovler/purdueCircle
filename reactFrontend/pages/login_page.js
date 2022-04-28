@@ -34,7 +34,7 @@ export default function LoginScreen({navigation}) {
             console.log(user.userID);
             console.log(user.username);
             if (user.userID >= 0) {
-                await User.login(user.userID);
+                await User.login(user);
 
                 navigation.navigate('Home');
             } else { //password failed

@@ -10,6 +10,8 @@ class UserAuth {
 		this.password = null;
 		this.profilePicture = null;
 		this.isPrivate = false;
+		this.email = null;
+		this.isRestricted = false;
 	}
 
 // TODO: add secondary auth key for persistent user sessions
@@ -44,17 +46,28 @@ class UserAuth {
 			this.lastName = null;
 			this.password = null;
 			this.isLoggedIn = false;
+			this.email = null;
+			this.isRestricted = false;
+			this.username = null;
 			console.log('-1')
 		} catch (error) {
 			console.error(error)
 		}
 	}
 
-	login = async (userID) => {
+	login = async (user) => {
 		try {
-			await AsyncStorage.setItem('user', userID)
+			await AsyncStorage.setItem('user', user.userID)
 			this.isLoggedIn = true;
-			this.userID = userID;
+			this.userID = user.userID;
+			this.email = user.email;
+			this.password = user.password;
+			this.firstName = user.firstName;
+			this.lastName = user.lastName;
+			this.isPrivate = user.isPrivate;
+			this.profilePicture = user.profilePicture;
+			this.isRestricted = user.isRestricted;
+			this.username = user.username;
 		} catch (error) {
 			console.error(error)
 		}

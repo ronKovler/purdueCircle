@@ -217,6 +217,11 @@ export default function ProfilePage({route, navigation}) {
         }
     }
 
+    function editProf() {
+
+        navigation.navigate('Edit Profile');
+    }
+
     return (
         <View style={styled.container}>
             {isLoading ? <Choo/> :

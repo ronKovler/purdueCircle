@@ -101,6 +101,9 @@ export default function HomeScreen({navigation}) {
     async function getTimeline() {
         if (User.isLoggedIn) {
             await UserTimeline();
+            if (timelineData == null) {
+                await HotPosts();
+            }
         } else {
             await HotPosts();
         }
@@ -209,7 +212,7 @@ export default function HomeScreen({navigation}) {
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey', alignItems: 'center',justifyContent: 'center'}}>
-                        {(User.userID != -1) ? <View style={{alignItems: 'center'}}>
+                        {(User.userID != -1 && dmData != 0) ? <View style={{alignItems: 'center'}}>
                             <Text style={{fontSize: 24, color: 'black', fontWeight: 'bold', paddingBottom: 20}}>Current DMs</Text>
                             <FlatList style={{flexGrow: 0}} data={dmData} renderItem={renderDms}
                                         keyExtractor={item => item.dmID} extraData={dmData}

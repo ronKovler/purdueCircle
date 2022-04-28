@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, TextInput, StyleSheet, Pressable, CheckBox, Image, Modal} from 'react-native';
 import { styles, HeaderLogo, Choo } from './stylesheet';
 import User from "./user";
 import * as ImagePicker from "expo-image-picker";
+import {Link, useIsFocused} from "@react-navigation/native";
 
 export default function EditProfileScreen({navigation}) {
     const [username, setUsername] = useState(User.username);
@@ -16,6 +17,20 @@ export default function EditProfileScreen({navigation}) {
     const [success, setSuccess] = useState('');
     const [deleteModalVisible, setDeleteModalVisible] = useState(false)
     const [isRestricted, setIsRestricted] = useState(false);
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused) {
+            console.log("Updating user information on edit profile page\n");
+            setNewProfilePic(User.profilePicture);
+            setIsRestricted(User.isRestricted);
+            setIsPrivate(User.isPrivate);
+            setUsername(User.username);
+            setFirstName(User.firstName);
+            setLastName(User.lastName);
+            setPassword(User.password);
+        }
+    }, [isFocused])
 
     const LogOut = async () => {
         await User.logout()
@@ -166,7 +181,7 @@ export default function EditProfileScreen({navigation}) {
                     <Pressable onPress={() => pickImage()}>
                         <Image style={styled.profilePicture} source={{uri: newProfilePic}}/>
                     </Pressable>
-                    {usernameError.length > 0 && <Text style={{color: 'red'}}>{usernameError}</Text>}
+                    {usernameError != null ? <Text style={{color: 'red'}}>{usernameError}</Text> : null}
                     <TextInput
                         style={styles.accountInputBox}
                         placeholder={User.username}
