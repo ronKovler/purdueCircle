@@ -243,7 +243,7 @@ export default function ProfilePage({route, navigation}) {
                                     <Pressable onPress={() => navigation.navigate('Edit Profile')}>
                                         <Text style={styles.button}>Edit Profile</Text>
                                     </Pressable> :
-                                    <View style={{flexDirection: 'row', flex: 1}}>
+                                    <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
                                         <Pressable onPress={() => linkTo("/dm/" + userID)}>
                                             {!currentBlocks && !userBlocks && (!isRestricted || userFollows) ?
                                                 <Text style={styles.button}>DM</Text> : null}
