@@ -329,11 +329,11 @@ export default function ProfilePage({route, navigation}) {
                         </View>
                         <View style={{flexBasis: 1, flex: 100, paddingTop: 30}}>
                             {!onReactedTo ?
-                                <FlatList data={userlineData} renderItem={renderPost} keyExtractor={item => item.postId}
+                                <FlatList data={userlineData} renderItem={renderPost} keyExtractor={item => item.postID}
                                           extraData={userID} style={{flexGrow: 0}}
                                           showsVerticalScrollIndicator={false}/>
                                 :
-                                <FlatList data={reactedData} renderItem={renderPost} keyExtractor={item => item.postId}
+                                <FlatList data={reactedData} renderItem={renderPost} keyExtractor={item => item.postID}
                                           extraData={userID} style={{flexGrow: 0}}
                                           showsVerticalScrollIndicator={false} />}
                         </View>
