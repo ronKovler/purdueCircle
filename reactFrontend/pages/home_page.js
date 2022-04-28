@@ -209,11 +209,13 @@ export default function HomeScreen({navigation}) {
                         <View style={{flex: 1, backgroundColor: '737373'}}/>
                     </View>
                     <View style={{flex: 2, backgroundColor: 'dimgrey', alignItems: 'center',justifyContent: 'center'}}>
-                        <Text style={{fontSize: 24, color: 'black', fontWeight: 'bold', paddingBottom: 20}}>Current DMs</Text>
-                        <FlatList style={{flexGrow: 0}} data={dmData} renderItem={renderDms}
-                                    keyExtractor={item => item.dmID} extraData={dmData}
-                                    showsVerticalScrollIndicator={false}>
-                        </FlatList>
+                        {(User.userID != -1) ? <View style={{alignItems: 'center'}}>
+                            <Text style={{fontSize: 24, color: 'black', fontWeight: 'bold', paddingBottom: 20}}>Current DMs</Text>
+                            <FlatList style={{flexGrow: 0}} data={dmData} renderItem={renderDms}
+                                        keyExtractor={item => item.dmID} extraData={dmData}
+                                        showsVerticalScrollIndicator={false}>
+                            </FlatList>
+                        </View> : null}
                     </View>
                 </View>
                 : null

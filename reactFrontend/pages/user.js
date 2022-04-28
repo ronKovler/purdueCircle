@@ -36,6 +36,13 @@ class UserAuth {
 	logout = async () => {
 		try {
 			await AsyncStorage.setItem('user', '-1')
+			this.userID = -1;
+			this.profilePicture = null;
+			this.firstName = null;
+			this.isPrivate = false;
+			this.isLoggedIn = false;
+			this.lastName = null;
+			this.password = null;
 			this.isLoggedIn = false;
 			console.log('-1')
 		} catch (error) {
